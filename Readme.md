@@ -1,7 +1,7 @@
 # Личный проект «YetiCave»
 
 * Студент: [Vladimir Finchuk](https://up.htmlacademy.ru/php/9/user/890035).
-* Наставник: `Неизвестно`.
+* Наставник: `Сергей Парфенов`.
 
 ---
 
