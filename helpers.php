@@ -118,3 +118,29 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
             return $many;
     }
 }
+
+
+/**
+ * Возвращает отформатированую цену
+ *
+ * @param int $price для форматирования
+ *
+ * @return string отформатированая цена, пример: 25 489 ₽
+ */
+
+function price_format(&$price)
+{
+    $rub = '<b class="rub">р</b>';
+
+    $price = strval(ceil($price));
+
+    if($price < 1000) {
+        $price .= $rub;
+    } else {
+        $strend = substr($price, -3);
+        $price = substr($price, 0, (strlen($price) - 3));
+        $price .= ' ' . $strend . $rub;
+    }
+
+    return $price;
+}

@@ -1,4 +1,9 @@
 <?php
+$path = dirname(__FILE__) . '/helpers.php';
+if(file_exists($path)){
+    require_once ($path);
+}
+
 $is_auth = rand(0, 1);
 $user_name = 'Vova'; // укажите здесь ваше имя
 
@@ -113,7 +118,7 @@ $lots = [
                             <div class="lot__state">
                                 <div class="lot__rate">
                                     <span class="lot__amount">Стартовая цена</span>
-                                    <span class="lot__cost"><?= $lot['price'] ?? null; ?><b class="rub">р</b></span>
+                                    <span class="lot__cost"><?= price_format($lot['price']) ?? null; ?></span>
                                 </div>
                                 <div class="lot__timer timer">
                                     12:23
