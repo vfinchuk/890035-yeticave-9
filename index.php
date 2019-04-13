@@ -9,32 +9,32 @@ $lots = [
         'name'      => '2014 Rossignol District Snowboard',
         'category'  => 'Доски и лыжи',
         'price'     => 10999,
-        'image-url' => 'img/lot-1.jpg'
+        'image' => 'img/lot-1.jpg'
     ], [
         'name'      => 'DC Ply Mens 2016/2017 Snowboard',
         'category'  => 'Доски и лыжи',
         'price'     => 159999,
-        'image-url' => 'img/lot-2.jpg'
+        'image' => 'img/lot-2.jpg'
     ], [
         'name'      => 'Крепления Union Contact Pro 2015 года размер L/XL',
         'category'  => 'Крепления',
         'price'     => 8000,
-        'image-url' => 'img/lot-3.jpg'
+        'image' => 'img/lot-3.jpg'
     ], [
         'name'      => 'Ботинки для сноуборда DC Mutiny Charocal',
         'category'  => 'Ботинки',
         'price'     => 10999,
-        'image-url' => 'img/lot-4.jpg'
+        'image' => 'img/lot-4.jpg'
     ], [
         'name'      => 'Куртка для сноуборда DC Mutiny Charocal',
         'category'  => 'Одежда',
         'price'     => 7500,
-        'image-url' => 'img/lot-5.jpg'
+        'image' => 'img/lot-5.jpg'
     ], [
         'name'      => 'Маска Oakley Canopy',
         'category'  => 'Разное',
         'price'     => 5400,
-        'image-url' => 'img/lot-6.jpg'
+        'image' => 'img/lot-6.jpg'
     ]
 ];
 
@@ -104,16 +104,16 @@ $lots = [
                 <?php foreach ($lots as $lot): ?>
                     <li class="lots__item lot">
                         <div class="lot__image">
-                            <img src="<?= $lot['image-url']; ?>" width="350" height="260" alt="<?= $lot['name']; ?>">
+                            <img src="<?= $lot['image'] ?? null; ?>" width="350" height="260" alt="<?= $lot['name'] ?? null; ?>">
                         </div>
                         <div class="lot__info">
-                            <span class="lot__category"><?= $lot['category']; ?></span>
-                            <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= $lot['name']; ?></a>
+                            <span class="lot__category"><?= $lot['category'] ?? null; ?></span>
+                            <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= $lot['name'] ?? null; ?></a>
                             </h3>
                             <div class="lot__state">
                                 <div class="lot__rate">
                                     <span class="lot__amount">Стартовая цена</span>
-                                    <span class="lot__cost"><?= $lot['price']; ?><b class="rub">р</b></span>
+                                    <span class="lot__cost"><?= $lot['price'] ?? null; ?><b class="rub">р</b></span>
                                 </div>
                                 <div class="lot__timer timer">
                                     12:23
