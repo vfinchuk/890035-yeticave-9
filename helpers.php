@@ -1,6 +1,4 @@
 <?php
-const RUB = '<b class="rub">р</b>';
-
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -12,6 +10,7 @@ const RUB = '<b class="rub">р</b>';
  * is_date_valid('10/10/2010'); // false
  *
  * @param string $date Дата в виде строки
+ *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
 function is_date_valid(string $date) : bool {
@@ -121,22 +120,27 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
     }
 }
 
-
 /**
- * Возвращает отформатированую цену
- *
- * @param int $price для форматирования
- *
- * @return string отформатированая цена, пример: 25 489 ₽
+ * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
+ * @param string $name Путь к файлу шаблона относительно папки templates
+ * @param array $data Ассоциативный массив с данными для шаблона
+ * @return string Итоговый HTML
  */
+function include_template($name, array $data = []) {
+    $name = 'templates/' . $name;
+    $result = '';
 
-function price_format($price)
-{
-    $price = strval(ceil($price));
-    if($price >= 1000) {
-        $strend = substr($price, -3);
-        $price = substr($price, 0, (strlen($price) - 3));
-        $price .= ' ' . $strend;
+    if (!is_readable($name)) {
+        return $result;
     }
-    return $price . RUB;
+
+    ob_start();
+    extract($data);
+    require $name;
+
+    $result = ob_get_clean();
+
+    return $result;
 }
+
+
