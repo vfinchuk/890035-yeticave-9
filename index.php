@@ -1,10 +1,7 @@
 <?php
-ini_set('display_errors', 1);
-
 
 /* Config file */
-include_once (__DIR__ . '/config.php');
-
+include_once(__DIR__ . '/config.php');
 
 
 $content = include_template('index.php', [
@@ -13,7 +10,7 @@ $content = include_template('index.php', [
 ]);
 
 $layout = include_template('layout.php', [
-    'title' => $title,
+    'title'      => $title,
     'categories' => $categories,
     'content'    => $content,
     'is_auth'    => $isAuth,

@@ -1,4 +1,5 @@
 <?php
+const SECOND_PER_HOUR = 3600;
 const RUB = '<b class="rub">р</b>';
 
 /**
@@ -175,4 +176,52 @@ function price_format($price)
         $price .= ' ' . $strend;
     }
     return $price . RUB;
+}
+
+
+/**
+ * Возвращает строку сколько часов и минут соталось до следующих суток
+ *
+ * @return string
+ */
+function time_to_end($endDate)
+{
+    $tsEnd = strtotime($endDate);
+    $secToEnd = $tsEnd - time();
+
+    if ($secToEnd <= 0) {
+        return '00:00';
+    }
+
+    $hours = floor($secToEnd / SECOND_PER_HOUR);
+    $minutes = floor(($secToEnd % SECOND_PER_HOUR ) / 60);
+    $minutes = $minutes < 10 ? '0' . $minutes : $minutes;
+    return $hours . ':' . $minutes;
+
+}
+
+/**
+ * Вернет true когда останется до следующих суток меньше чем $hours
+ *
+ * @param string $endDate дата в текстовом представлении
+ * @param int $hours количество часов до конца суток. Равен 1 по умолчанию
+ *
+ * @return boolean
+ */
+function is_timer_finishing($endDate, $hours = 1)
+{
+    $tsEnd = strtotime($endDate);
+    $secToEnd = $tsEnd - time();
+
+    if($secToEnd <= 0){
+        return false;
+    }
+
+    $hoursToEnd = floor($secToEnd / SECOND_PER_HOUR);
+
+    if($hoursToEnd > $hours){
+        return false;
+    }
+
+    return true;
 }
