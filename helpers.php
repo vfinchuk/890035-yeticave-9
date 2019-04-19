@@ -1,4 +1,6 @@
 <?php
+const RUB = '<b class="rub">р</b>';
+
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -13,7 +15,8 @@
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date) : bool {
+function is_date_valid(string $date): bool
+{
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
@@ -23,17 +26,19 @@ function is_date_valid(string $date) : bool {
 /**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
  *
- * @param $link mysqli Ресурс соединения
- * @param $sql string SQL запрос с плейсхолдерами вместо значений
+ * @param       $link mysqli Ресурс соединения
+ * @param       $sql  string SQL запрос с плейсхолдерами вместо значений
  * @param array $data Данные для вставки на место плейсхолдеров
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function db_get_prepare_stmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
-        $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
+        $errorMsg = 'Не удалось инициализировать подготовленное выражение: '
+            . mysqli_error($link);
         die($errorMsg);
     }
 
@@ -46,12 +51,14 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
             if (is_int($value)) {
                 $type = 'i';
-            }
-            else if (is_string($value)) {
-                $type = 's';
-            }
-            else if (is_double($value)) {
-                $type = 'd';
+            } else {
+                if (is_string($value)) {
+                    $type = 's';
+                } else {
+                    if (is_double($value)) {
+                        $type = 'd';
+                    }
+                }
             }
 
             if ($type) {
@@ -66,7 +73,9 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
         $func(...$values);
 
         if (mysqli_errno($link) > 0) {
-            $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
+            $errorMsg
+                = 'Не удалось связать подготовленное выражение с параметрами: '
+                . mysqli_error($link);
             die($errorMsg);
         }
     }
@@ -96,9 +105,13 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  *
  * @return string Рассчитанная форма множественнго числа
  */
-function get_noun_plural_form (int $number, string $one, string $two, string $many): string
-{
-    $number = (int) $number;
+function get_noun_plural_form(
+    int $number,
+    string $one,
+    string $two,
+    string $many
+): string {
+    $number = (int)$number;
     $mod10 = $number % 10;
     $mod100 = $number % 100;
 
@@ -122,11 +135,14 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
 
 /**
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
+ *
  * @param string $name Путь к файлу шаблона относительно папки templates
  * @param array $data Ассоциативный массив с данными для шаблона
+ *
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = []) {
+function include_template($name, array $data = [])
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -143,4 +159,20 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-
+/**
+ * Возвращает отформатированую цену
+ *
+ * @param int $price для форматирования
+ *
+ * @return string отформатированая цена, пример: 25 489 ₽
+ */
+function price_format($price)
+{
+    $price = strval(ceil($price));
+    if ($price >= 1000) {
+        $strend = substr($price, -3);
+        $price = substr($price, 0, (strlen($price) - 3));
+        $price .= ' ' . $strend;
+    }
+    return $price . RUB;
+}
