@@ -185,11 +185,11 @@ function price_format($price)
  */
 function time_to_end($endDate)
 {
-    $TsMidnight = strtotime($endDate);
-    $secToMidnight = $TsMidnight - time();
+    $tsEnd = strtotime($endDate);
+    $secToEnd = $tsEnd - time();
 
-    $hours = floor($secToMidnight / 3600);
-    $minutes = floor(($secToMidnight % 3600 ) / 60);
+    $hours = floor($secToEnd / 3600);
+    $minutes = floor(($secToEnd % 3600 ) / 60);
     $minutes = $minutes < 10 ? '0' . $minutes : $minutes;
     return $hours . ':' . $minutes;
 
