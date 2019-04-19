@@ -34,12 +34,8 @@
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost"><?= price_format($price = $lot['price'] ?? null); ?></span>
                         </div>
-                        <?php
-                        $nextDayTime = next_day_time();
-                        $nextDayHours = intval(str_replace(':', '.', $nextDayTime));
-                        ?>
-                        <div class="lot__timer timer <?php if($nextDayHours <= 1): ?>timer--finishing<?php endif; ?>">
-                            <?= $nextDayTime; ?>
+                        <div class="lot__timer timer <?= is_timer_finishing('tomorrow') ? 'timer--finishing' : ''; ?>">
+                            <?= time_to_end('tomorrow'); ?>
                         </div>
                     </div>
                 </div>

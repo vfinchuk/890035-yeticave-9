@@ -183,14 +183,32 @@ function price_format($price)
  *
  * @return string
  */
-function next_day_time()
+function time_to_end($endDate)
 {
-    $TsMidnight = strtotime('tomorrow');
+    $TsMidnight = strtotime($endDate);
     $secToMidnight = $TsMidnight - time();
 
     $hours = floor($secToMidnight / 3600);
     $minutes = floor(($secToMidnight % 3600 ) / 60);
-
+    $minutes = $minutes < 10 ? '0' . $minutes : $minutes;
     return $hours . ':' . $minutes;
 
+}
+
+/**
+ * Вернет true когда останется до следующих суток меньше чем $hours
+ *
+ * @param string $endDate дата в текстовом представлении
+ * @param int $hours количество часов до конца суток. Равен 1 по умолчанию
+ *
+ * @return boolean
+ */
+function is_timer_finishing($endDate, $hours = 1)
+{
+    $result;
+    $TsMidnight = strtotime($endDate);
+    $secToMidnight = $TsMidnight - time();
+    $hoursToMidnight = floor($secToMidnight / 3600);
+    $hoursToMidnight <= $hours ? $result = true : false;
+    return $result;
 }
