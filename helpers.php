@@ -179,12 +179,9 @@ function price_format($price)
 
 
 /**
- * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
+ * Возвращает строку сколько часов и минут соталось до следующих суток
  *
- * @param string $name Путь к файлу шаблона относительно папки templates
- * @param array $data Ассоциативный массив с данными для шаблона
- *
- * @return string Итоговый HTML
+ * @return string
  */
 function next_day_time()
 {
