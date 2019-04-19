@@ -35,7 +35,7 @@
                             <span class="lot__cost"><?= price_format($price = $lot['price'] ?? null); ?></span>
                         </div>
                         <div class="lot__timer timer">
-                            12:23
+                            <?= next_day_time(); ?>
                         </div>
                     </div>
                 </div>

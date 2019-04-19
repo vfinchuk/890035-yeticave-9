@@ -176,3 +176,24 @@ function price_format($price)
     }
     return $price . RUB;
 }
+
+
+/**
+ * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
+ *
+ * @param string $name Путь к файлу шаблона относительно папки templates
+ * @param array $data Ассоциативный массив с данными для шаблона
+ *
+ * @return string Итоговый HTML
+ */
+function next_day_time()
+{
+    $TsMidnight = strtotime('tomorrow');
+    $secToMidnight = $TsMidnight - time();
+
+    $hours = floor($secToMidnight / 3600);
+    $minutes = floor(($secToMidnight % 3600 ) / 60);
+
+    return $hours . ':' . $minutes;
+
+}
