@@ -205,7 +205,7 @@ function time_to_end($endDate)
  */
 function is_timer_finishing($endDate, $hours = 1)
 {
-    $result;
+    $result = false;
     $TsMidnight = strtotime($endDate);
     $secToMidnight = $TsMidnight - time();
     $hoursToMidnight = floor($secToMidnight / 3600);
