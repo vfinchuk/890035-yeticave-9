@@ -188,6 +188,10 @@ function time_to_end($endDate)
     $tsEnd = strtotime($endDate);
     $secToEnd = $tsEnd - time();
 
+    if ($secToEnd <= 0) {
+        return '00:00';
+    }
+
     $hours = floor($secToEnd / 3600);
     $minutes = floor(($secToEnd % 3600 ) / 60);
     $minutes = $minutes < 10 ? '0' . $minutes : $minutes;
