@@ -1,5 +1,8 @@
 <?php
 
+/* dev-configuration */
+ini_set('display_errors', 1);
+
 
 /* Settings */
 require_once(__DIR__ . '/includes/options.php');
