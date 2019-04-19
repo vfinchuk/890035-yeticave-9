@@ -1,4 +1,5 @@
 <?php
+const SECOND_PER_HOUR = 3600;
 const RUB = '<b class="rub">р</b>';
 
 /**
@@ -192,8 +193,8 @@ function time_to_end($endDate)
         return '00:00';
     }
 
-    $hours = floor($secToEnd / 3600);
-    $minutes = floor(($secToEnd % 3600 ) / 60);
+    $hours = floor($secToEnd / SECOND_PER_HOUR);
+    $minutes = floor(($secToEnd % SECOND_PER_HOUR ) / 60);
     $minutes = $minutes < 10 ? '0' . $minutes : $minutes;
     return $hours . ':' . $minutes;
 
@@ -209,10 +210,18 @@ function time_to_end($endDate)
  */
 function is_timer_finishing($endDate, $hours = 1)
 {
-    $result = false;
     $tsEnd = strtotime($endDate);
     $secToEnd = $tsEnd - time();
-    $hoursToEnd = floor($secToEnd / 3600);
-    $hoursToEnd <= $hours ? $result = true : false;
-    return $result;
+
+    if($secToEnd <= 0){
+        return false;
+    }
+
+    $hoursToEnd = floor($secToEnd / SECOND_PER_HOUR);
+
+    if($hoursToEnd > $hours){
+        return false;
+    }
+
+    return true;
 }
