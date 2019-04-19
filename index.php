@@ -1,19 +1,23 @@
 <?php
-require_once(__DIR__ . '/helpers.php');
-require_once(__DIR__ . '/includes/data.php');
+ini_set('display_errors', 1);
+
+
+/* Config file */
+include_once (__DIR__ . '/config.php');
+
 
 
 $content = include_template('index.php', [
     'categories' => $categories,
-    'lots'        => $lots,
+    'lots'       => $lots,
 ]);
 
 $layout = include_template('layout.php', [
-    'data_title'      => $title,
+    'title' => $title,
     'categories' => $categories,
-    'content'         => $content,
-    'is_auth'         => $isAuth,
-    'user_name'       => $userName
+    'content'    => $content,
+    'is_auth'    => $isAuth,
+    'user_name'  => $userName
 ]);
 
 print $layout;

@@ -4,7 +4,7 @@
         эксклюзивное сноубордическое и
         горнолыжное снаряжение.</p>
     <ul class="promo__list">
-        <?php foreach ($data['categories'] as $cat): ?>
+        <?php foreach ($categories as $cat): ?>
             <li class="promo__item promo__item--boards">
                 <a class="promo__link"
                    href="pages/all-lots.html"><?= $cat; ?></a>
@@ -17,7 +17,7 @@
         <h2>Открытые лоты</h2>
     </div>
     <ul class="lots__list">
-        <?php foreach ($data['lots'] as $lot): ?>
+        <?php foreach ($lots as $lot): ?>
             <li class="lots__item lot">
                 <div class="lot__image">
                     <img src="<?= $lot['image'] ?? null; ?>" width="350"
