@@ -1,7 +1,7 @@
 <?php
 
 /* Config file */
-include_once(__DIR__ . '/config.php');
+include_once(__DIR__ . '/bootstrap.php');
 
 
 $content = include_template('index.php', [
