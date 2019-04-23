@@ -13,14 +13,12 @@ $config = require(__DIR__ . '/config.sample.php');
 date_default_timezone_set($config['timezone']);
 
 
-/* Settings */
-require_once(__DIR__ . '/includes/options.php');
-
-/* Include DB site */
-require_once(__DIR__ . '/includes/data.php');
-
-/* Functions */
+/* Data Base */
 require_once(__DIR__ . '/functions/db.php');
+
+/* Template function */
 require_once(__DIR__ . '/functions/templates.php');
+
+/* validators */
 require_once(__DIR__ . '/functions/validators.php');
 
