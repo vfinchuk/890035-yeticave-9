@@ -1,34 +1,64 @@
 USE yeticave;
 
+/**
+  Таблица категорий
+ */
 CREATE TABLE categories (
   id   INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(128),
-  code CHAR(128)
-);
 
+  name VARCHAR(128),
+  code VARCHAR(128)
+);
+/**
+  Таблица зарегестрированых юзеров
+ */
 CREATE TABLE users (
   id       INT AUTO_INCREMENT PRIMARY KEY,
+  dt_add   TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+
+  email    VARCHAR(128),
   name     VARCHAR(128),
-  email    CHAR(128),
-  password CHAR(64),
-  avatar   CHAR(128),
-  contact  CHAR(128),
-  dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  password VARCHAR(64),
+  avatar   VARCHAR(128),
+  contact  VARCHAR(255)
 );
-
+/**
+  Таблица лотов
+ */
 CREATE TABLE lots (
-  id          INT       AUTO_INCREMENT PRIMARY KEY,
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  user_id     INT                                 NOT NULL,
+  category_id INT                                 NOT NULL,
+  dt_add      TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  dt_end      DATETIME,
+
   name        VARCHAR(128),
-  discription CHAR(128),
-  avatar      CHAR(128),
-  prise       INT,
-  rate        INT,
-  dt_add      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  dt_stop     INT
+  content     CHAR(128),
+  image       CHAR(128),
+  prise       INT                                 NOT NULL,
+  step_rate   INT
+
+
+);
+/**
+  Таблица ставок на лот
+ */
+CREATE TABLE bets (
+  id       INT AUTO_INCREMENT PRIMARY KEY,
+  user_id  INT                                 NOT NULL,
+  lot_id   INT                                 NOT NULL,
+  date_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  price    INT                                 NOT NULL
 );
 
-CREATE TABLE bets (
-  id   INT       AUTO_INCREMENT KEY,
-  date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  summ INT
-);
+/**
+  Индексы:
+    - c_name - названия категории
+    - l_name - название лота
+ */
+CREATE INDEX c_name
+  ON categories (name);
+
+
+CREATE INDEX l_name
+  ON lots (name);
