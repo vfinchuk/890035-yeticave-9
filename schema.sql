@@ -27,8 +27,8 @@ CREATE TABLE users (
  */
 CREATE TABLE lots (
   id          INT AUTO_INCREMENT PRIMARY KEY,
-  user_id     INT                                 NOT NULL,
-  category_id INT                                 NOT NULL,
+  user_id     INT REFERENCES users(id),
+  category_id INT REFERENCES categories(id),
   dt_add      TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
   dt_end      DATETIME,
 
@@ -44,11 +44,11 @@ CREATE TABLE lots (
   Таблица ставок на лот
  */
 CREATE TABLE bets (
-  id       INT AUTO_INCREMENT PRIMARY KEY,
-  user_id  INT                                 NOT NULL,
-  lot_id   INT                                 NOT NULL,
-  date_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  price    INT                                 NOT NULL
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  user_id     INT REFERENCES users(id),
+  lot_id      INT REFERENCES lots(id),
+  date_add    TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  price       INT                                 NOT NULL
 );
 
 /**
