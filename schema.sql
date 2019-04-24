@@ -33,8 +33,8 @@ CREATE TABLE lots (
   dt_end      DATETIME,
 
   name        VARCHAR(128),
-  content     CHAR(128),
-  image       CHAR(128),
+  content     VARCHAR(128),
+  image       VARCHAR(128),
   prise       INT                                 NOT NULL,
   step_rate   INT
 
