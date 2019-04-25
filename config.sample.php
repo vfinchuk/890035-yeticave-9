@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'timezone' => 'Europe/Kiev',
+    'timezone' => 'site timezone',
     'db' => [
-        'host' => 'localhost',
-        'user' => 'root',
-        'password' => 'root'
+        'host' => 'site db host',
+        'user' => 'db_user',
+        'password' => 'db_password'
     ]
 ];
