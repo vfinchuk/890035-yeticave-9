@@ -51,7 +51,7 @@ CREATE TABLE bets (
 /**
   Индексы:
  */
- CREATE INDEX users_email_udx
+ CREATE UNIQUE INDEX users_email_udx
   ON users (email);
 
 CREATE INDEX categories_name_idx
