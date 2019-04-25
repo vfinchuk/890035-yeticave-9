@@ -35,7 +35,7 @@ CREATE TABLE lots (
   name        VARCHAR(128),
   content     VARCHAR(128),
   image       VARCHAR(128),
-  prise       INT                                 NOT NULL,
+  price       INT                                 NOT NULL,
   step_rate   INT
 
 
@@ -47,7 +47,7 @@ CREATE TABLE bets (
   id          INT AUTO_INCREMENT PRIMARY KEY,
   user_id     INT REFERENCES users(id),
   lot_id      INT REFERENCES lots(id),
-  date_add    TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  dt_add    TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
   price       INT                                 NOT NULL
 );
 
