@@ -1,3 +1,7 @@
+CREATE DATABASE yeticave
+  DEFAULT CHARACTER SET utf8
+  DEFAULT COLLATE utf8_general_ci;
+
 USE yeticave;
 
 /**
@@ -5,8 +9,8 @@ USE yeticave;
  */
 CREATE TABLE categories (
   id    INT AUTO_INCREMENT PRIMARY KEY,
-  name  VARCHAR(128),
-  code  VARCHAR(128)
+  name  VARCHAR(128) NOT NULL,
+  code  VARCHAR(128) NOT NULL
 );
 /**
   Таблица зарегестрированых юзеров
@@ -66,11 +70,16 @@ ALTER TABLE bets
 /**
   Индексы:
  */
- CREATE UNIQUE INDEX users_email_udx
-  ON users (email);
+CREATE UNIQUE INDEX categories_code_udx
+  ON categories (code);
 
-CREATE INDEX categories_name_idx
+
+CREATE UNIQUE INDEX categories_name_udx
   ON categories (name);
+
+
+CREATE UNIQUE INDEX users_email_udx
+  ON users (email);
 
 
 CREATE INDEX lots_name_idx
