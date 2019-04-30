@@ -12,6 +12,7 @@ CREATE TABLE categories (
   name  VARCHAR(128) NOT NULL,
   code  VARCHAR(128) NOT NULL
 );
+
 /**
   Таблица зарегестрированых юзеров
  */
@@ -24,6 +25,7 @@ CREATE TABLE users (
   avatar        VARCHAR(128),
   contact       VARCHAR(255) NOT NULL
 );
+
 /**
   Таблица лотов
  */
