@@ -5,9 +5,9 @@
         горнолыжное снаряжение.</p>
     <ul class="promo__list">
         <?php foreach ($categories as $cat): ?>
-            <li class="promo__item promo__item--boards">
+            <li class="promo__item promo__item--<?= $cat['code']; ?>">
                 <a class="promo__link"
-                   href="pages/all-lots.html"><?= $cat; ?></a>
+                   href="pages/all-lots.html"><?= $cat['name']; ?></a>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -32,7 +32,7 @@
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?= price_format($price = $lot['price'] ?? null); ?></span>
+                            <span class="lot__cost"><?= price_format($price = $lot['start_price'] ?? null); ?></span>
                         </div>
                         <div class="lot__timer timer <?= is_timer_finishing('tomorrow', 1) ? 'timer--finishing' : ''; ?>">
                             <?= time_to_end('tomorrow'); ?>
