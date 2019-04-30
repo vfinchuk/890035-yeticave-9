@@ -81,7 +81,7 @@ function db_get_prepare_stmt($link, $sql, $data = [])
  *
  * @return array
  */
-function db_fetch_data($link, $sql, $data = [])
+function db_fetch_data($link, $sql, $data = [], $oneItem = false)
 {
     $result = [];
     $stmt = db_get_prepare_stmt($link, $sql, $data);
@@ -89,7 +89,11 @@ function db_fetch_data($link, $sql, $data = [])
     $res = mysqli_stmt_get_result($stmt);
 
     if ($res) {
-        $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+        if ($oneItem) {
+            $result = mysqli_fetch_array($res, MYSQLI_ASSOC);
+        } else {
+            $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+        }
     }
 
     return $result;

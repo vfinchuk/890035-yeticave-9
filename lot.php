@@ -2,6 +2,8 @@
 /* Config file */
 include_once(__DIR__ . '/bootstrap.php');
 
+$lotId = $_GET['id'] ?? null;
+
 
 if (!$yeticave_db) {
 
@@ -9,6 +11,7 @@ if (!$yeticave_db) {
     $content = include_template('error.php', ['error' => $error]);
 
 } else {
+
     /**
      * Вывод категорий из БД
      */
@@ -16,20 +19,24 @@ if (!$yeticave_db) {
     $categories = db_fetch_data($yeticave_db, $sql_category);
 
     /**
-     * Вывод массива лотов из БД
+     * Вывод лота по ID из БД
      */
-    $sql_lots = "SELECT l.id, l.name, start_price, image, c.name AS category_name
+    $sql_lot = "SELECT l.name, start_price, step_rate, content, image, c.name AS category_name
                 FROM lots l
-                JOIN categories c ON l.category_id = c.id
-                GROUP BY l.id
-                ORDER BY l.create_time DESC";
+                LEFT JOIN categories c ON l.category_id = c.id
+                WHERE l.id = ?";
 
-    $lots = db_fetch_data($yeticave_db, $sql_lots);
+    $lot = db_fetch_data($yeticave_db, $sql_lot, [$lotId], true);
+
 }
 
-$content = include_template('index.php', [
+if (!$lot) {
+    header('Location: /404.php');
+}
+
+$content = include_template('lot.php', [
     'categories' => $categories,
-    'lots'       => $lots,
+    'lot'        => $lot
 ]);
 
 $layout = include_template('layout.php', [
@@ -37,7 +44,8 @@ $layout = include_template('layout.php', [
     'categories' => $categories,
     'content'    => $content,
     'is_auth'    => $isAuth,
-    'user_name'  => $userName
+    'user_name'  => $userName,
+
 ]);
 
 print $layout;
