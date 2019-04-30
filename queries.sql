@@ -20,13 +20,13 @@ INSERT INTO users (email, name, password, contact)
           ('nataly@ukr.net', 'Наталья Смирнова', 'nata12345', 'Броварской проспект 34, кв123');
 
  /* Добавление новых лотов */
-INSERT INTO lots (user_id, category_id, create_time, end_time, name, content, image, start_price, step_rate)
-    VALUE (1, 1, NOW(), NOW() + 86400, '2014 Rossignol District Snowboard', 'Сноуборд находится в хорошем состоянии',  'img/lot-1.jpg', 10999, 200),
-          (2, 1, NOW(), NOW() + 86400, 'DC Ply Mens 2016/2017 Snowboard', 'В идельном состоянии', 'img/lot-2.jpg', 159999, 300),
-          (3, 2, NOW(), NOW() + 86400, 'Крепления Union Contact Pro 2015 года размер L/XL', 'Причина продажи - не подошли к моей доске', 'img/lot-3.jpg', 8000, 150),
-          (1, 3, NOW(), NOW() + 86400, 'Ботинки для сноуборда DC Mutiny Charocal', 'Абсолютно новые ботинки, не были в использовании', 'img/lot-4.jpg', 10999, 100),
-          (1, 4, NOW(), NOW() + 86400, 'Куртка для сноуборда DC Mutiny Charocal', 'Куртка, теплая, целая, в хорошем состоянии', 'img/lot-5.jpg', 7500, 185),
-          (1, 6, NOW(), NOW() + 86400, 'Маска Oakley Canopy', 'В нормальном состоянии, есть пару царапин на стекле', 'img/lot-6.jpg', 5400, 60);
+INSERT INTO lots (user_id, category_id, end_time, name, content, image, start_price, step_rate)
+    VALUE (1, 1, NOW() + INTERVAL 1 DAY, '2014 Rossignol District Snowboard', 'Сноуборд находится в хорошем состоянии',  'img/lot-1.jpg', 10999, 200),
+          (2, 1, NOW() + INTERVAL 1 DAY, 'DC Ply Mens 2016/2017 Snowboard', 'В идельном состоянии', 'img/lot-2.jpg', 159999, 300),
+          (3, 2, NOW() + INTERVAL 1 DAY, 'Крепления Union Contact Pro 2015 года размер L/XL', 'Причина продажи - не подошли к моей доске', 'img/lot-3.jpg', 8000, 150),
+          (1, 3, NOW() + INTERVAL 1 DAY, 'Ботинки для сноуборда DC Mutiny Charocal', 'Абсолютно новые ботинки, не были в использовании', 'img/lot-4.jpg', 10999, 100),
+          (1, 4, NOW() + INTERVAL 1 DAY, 'Куртка для сноуборда DC Mutiny Charocal', 'Куртка, теплая, целая, в хорошем состоянии', 'img/lot-5.jpg', 7500, 185),
+          (1, 6, NOW() + INTERVAL 1 DAY, 'Маска Oakley Canopy', 'В нормальном состоянии, есть пару царапин на стекле', 'img/lot-6.jpg', 5400, 60);
 
 
  /* Добавление новых ставок*/
