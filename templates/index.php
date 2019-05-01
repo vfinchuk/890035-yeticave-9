@@ -5,10 +5,10 @@
             эксклюзивное сноубордическое и
             горнолыжное снаряжение.</p>
         <ul class="promo__list">
-            <?php foreach ($categories as $cat): ?>
-                <li class="promo__item promo__item--<?= $cat['code']; ?>">
+            <?php foreach ($categories as $category): ?>
+                <li class="promo__item promo__item--<?= $category['code']; ?>">
                     <a class="promo__link"
-                       href="/all-lots.php?catId=<?= $cat['id']; ?>"><?= $cat['name']; ?></a>
+                       href="/category.php?id=<?= $category['id']; ?>"><?= $category['name']; ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>
@@ -35,7 +35,7 @@
                                 <span class="lot__cost"><?= price_format($price = $lot['start_price'] ?? null); ?></span>
                             </div>
                             <div class="lot__timer timer <?= is_timer_finishing('tomorrow', 1) ? 'timer--finishing' : ''; ?>">
-                                <?= time_to_end('tomorrow'); ?>
+                                <?= time_to_end($lot['end_time']); ?>
                             </div>
                         </div>
                     </div>

@@ -1,16 +1,17 @@
+<?php /** @var $current_category */  ?>
 <main>
     <nav class="nav">
         <ul class="nav__list container">
-            <?php foreach ($categories as $cat): ?>
-                <li class="nav__item <?php if ($cat_id == $cat['id']): ?>nav__item--current<?php endif; ?>">
-                    <a href="/all-lots.php?catId=<?= $cat['id']; ?>"><?= $cat['name']; ?></a>
+            <?php foreach ($categories as $category): ?>
+                <li class="nav__item <?php if ($current_category['id'] === $category['id']): ?>nav__item--current<?php endif; ?>">
+                    <a href="/category.php?id=<?= $category['id']; ?>"><?= $category['name']; ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>
     </nav>
     <div class="container">
         <section class="lots">
-            <h2>Все лоты в категории <span>«<?= $category['name']; ?>»</span></h2>
+            <h2>Все лоты в категории <span>«<?= $current_category['name']; ?>»</span></h2>
             <ul class="lots__list">
                 <?php foreach ($lots as $lot): ?>
                     <li class="lots__item lot">
@@ -29,7 +30,7 @@
                                     <span class="lot__cost"><?= price_format($price = $lot['start_price'] ?? null); ?></span>
                                 </div>
                                 <div class="lot__timer timer <?= is_timer_finishing('tomorrow', 1) ? 'timer--finishing' : ''; ?>">
-                                    <?= time_to_end('tomorrow'); ?>
+                                    <?= time_to_end($lot['end_time']); ?>
                                 </div>
                             </div>
                         </div>
