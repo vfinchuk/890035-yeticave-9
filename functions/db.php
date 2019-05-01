@@ -1,6 +1,10 @@
 <?php
 /**
- * Подключени к БД
+ * Функция подключения к БД
+ *
+ * @param $config_db array массив с данными на подключение к БД
+ *
+ * @return $connection ресурс подключения к БД
  */
 
 function db_connect($config_db)
@@ -21,7 +25,6 @@ function db_connect($config_db)
 
     return $connection;
 }
-
 
 /**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
@@ -83,7 +86,6 @@ function db_get_prepare_stmt($link, $sql, $data = [])
     return $stmt;
 }
 
-
 /**
  * Получение записей из БД
  *
@@ -132,7 +134,13 @@ function db_insert_data($link, $sql, $data = [])
     return $result;
 }
 
-
+/**
+ * Функция вывода категорий
+ *
+ * @param $connection array ресурс соединения к БД
+ *
+ * @return array
+ */
 function get_categories($connection)
 {
     $sql = "SELECT * FROM categories";
@@ -141,6 +149,30 @@ function get_categories($connection)
     return $categories;
 }
 
+/**
+ * Функция вывода категории по ID
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param $id string идентификатор категории
+ *
+ * @return array
+ */
+function get_category($connection, $id)
+{
+    $sql = "SELECT id, name, code FROM categories WHERE id = ?;";
+
+    $category = db_fetch_data($connection, $sql, ['id' => $id], true);
+
+    return $category;
+}
+
+/**
+ * Функция вывода лотов
+ *
+ * @param $connection array ресурс соединения к БД
+ *
+ * @return array
+ */
 function get_lots($connection)
 {
     $sql = "SELECT l.id, end_time, l.name, start_price, image, c.name AS category_name
@@ -153,6 +185,14 @@ function get_lots($connection)
     return $lots;
 }
 
+/**
+ * Функция вывода одного лота по его ID
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param $id string идентификатор лота
+ *
+ * @return array
+ */
 function get_lot($connection, $id)
 {
     $sql = "SELECT l.name, end_time, start_price, step_rate, content, image, c.name AS category_name
@@ -165,6 +205,14 @@ function get_lot($connection, $id)
     return $lot;
 }
 
+/**
+ * Функция вывода лотов категории по ID
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param $id string идентификатор категории
+ *
+ * @return array
+ */
 function get_lots_by_category($connection, $id)
 {
     $sql = "SELECT l.id, l.name, end_time, start_price, content, image, c.name AS category_name
@@ -175,13 +223,4 @@ function get_lots_by_category($connection, $id)
     $lots = db_fetch_data($connection, $sql, ['id' => $id]);
 
     return $lots;
-}
-
-function get_category($connection, $id)
-{
-    $sql = "SELECT id, name, code FROM categories WHERE id = ?;";
-
-    $category = db_fetch_data($connection, $sql, ['id' => $id], true);
-
-    return $category;
 }
