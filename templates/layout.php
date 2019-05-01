@@ -12,7 +12,7 @@
     <header class="main-header">
         <div class="main-header__container container">
             <h1 class="visually-hidden">YetiCave</h1>
-            <a class="main-header__logo">
+            <a href="/" class="main-header__logo">
                 <img src="../img/logo.svg" width="160" height="39"
                      alt="Логотип компании YetiCave">
             </a>
@@ -47,9 +47,8 @@
         </div>
     </header>
 
-    <main class="container">
-        <?= $content; ?>
-    </main>
+    <?= $content; ?>
+
 </div>
 
 <footer class="main-footer">
@@ -57,7 +56,7 @@
         <ul class="nav__list container">
             <?php foreach ($categories as $cat): ?>
                 <li class="nav__item">
-                    <a href="pages/all-lots.html"><?= $cat; ?></a>
+                    <a href="/all-lots.php?catId=<?= $cat['id']; ?>"><?= $cat['name']; ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>

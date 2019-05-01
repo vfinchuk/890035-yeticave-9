@@ -1,57 +1,27 @@
 <?php
+/**
+ * Подключени к БД
+ */
 
-$isAuth = rand(0, 1);
-$userName = 'Vova';
+function db_connect($config_db)
+{
+    $connection = mysqli_connect(
+        $config_db['host'],
+        $config_db['user'],
+        $config_db['password'],
+        $config_db['db_name']
+    );
 
-$title = 'Yeticave - main page';
+    if (!$connection) {
+        $error = mysqli_connect_error();
+        die('Ошибка при подключении к БД: ' . $error);
+    }
 
-$categories = [
-    'Доски и лыжи',
-    'Крепления',
-    'Ботинки',
-    'Одежда',
-    'Инструменты',
-    'Разное',
-];
+    mysqli_set_charset($connection, 'utf8');
 
-$lots = [
-    [
-        'name'     => '2014 Rossignol District Snowboard',
-        'category' => 'Доски и лыжи',
-        'price'    => 10999,
-        'image'    => 'img/lot-1.jpg',
-    ],
-    [
-        'name'     => 'DC Ply Mens 2016/2017 Snowboard',
-        'category' => 'Доски и лыжи',
-        'price'    => 159999,
-        'image'    => 'img/lot-2.jpg',
-    ],
-    [
-        'name'     => 'Крепления Union Contact Pro 2015 года размер L/XL',
-        'category' => 'Крепления',
-        'price'    => 8000,
-        'image'    => 'img/lot-3.jpg',
-    ],
-    [
-        'name'     => 'Ботинки для сноуборда DC Mutiny Charocal',
-        'category' => 'Ботинки',
-        'price'    => 10999,
-        'image'    => 'img/lot-4.jpg',
-    ],
-    [
-        'name'     => 'Куртка для сноуборда DC Mutiny Charocal',
-        'category' => 'Одежда',
-        'price'    => 7500,
-        'image'    => 'img/lot-5.jpg',
-    ],
-    [
-        'name'     => 'Маска Oakley Canopy',
-        'category' => 'Разное',
-        'price'    => 5400,
-        'image'    => 'img/lot-6.jpg',
-    ],
-];
+    return $connection;
+}
+
 
 
 /**
@@ -112,4 +82,73 @@ function db_get_prepare_stmt($link, $sql, $data = [])
     }
 
     return $stmt;
+}
+
+
+/**
+ * Получение записей из БД
+ *
+ * @param       $link mysqli Ресурс соединения
+ * @param       $sql  string SQL запрос с плейсхолдерами вместо значений
+ * @param array $data Данные для вставки на место плейсхолдеров
+ *
+ * @return array
+ */
+function db_fetch_data($link, $sql, $data = [], $oneItem = false)
+{
+    $result = [];
+    $stmt = db_get_prepare_stmt($link, $sql, $data);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+
+    if ($res) {
+        if ($oneItem) {
+            $result = mysqli_fetch_array($res, MYSQLI_ASSOC);
+        } else {
+            $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+        }
+    }
+
+    return $result;
+}
+
+/**
+ * Добавление / Обновление / Удаление записей в БД
+ *
+ * @param       $link mysqli Ресурс соединения
+ * @param       $sql  string SQL запрос с плейсхолдерами вместо значений
+ * @param array $data Данные для вставки на место плейсхолдеров
+ *
+ * @return boolean
+ */
+function db_insert_data($link, $sql, $data = []) {
+    $stmt = db_get_prepare_stmt($link, $sql, $data);
+    $result = mysqli_stmt_execute($stmt);
+
+    if ($result) {
+        $result = mysqli_insert_id($sql);
+    }
+
+    return $result;
+}
+
+
+function get_categories($connection)
+{
+    $sql = "SELECT * FROM categories";
+    $categories = db_fetch_data($connection, $sql);
+
+    return $categories;
+}
+
+function get_lots($connection)
+{
+    $sql= "SELECT l.id, l.name, start_price, image, c.name AS category_name
+                FROM lots l
+                JOIN categories c ON l.category_id = c.id
+                ORDER BY l.create_time DESC";
+
+    $lots = db_fetch_data($connection, $sql);
+
+    return $lots;
 }
