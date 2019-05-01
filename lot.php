@@ -2,6 +2,8 @@
 /* Config file */
 include_once(__DIR__ . '/bootstrap.php');
 
+$title = 'Yeticave - просмотр лота';
+
 $lotId = $_GET['id'] ?? null;
 
 

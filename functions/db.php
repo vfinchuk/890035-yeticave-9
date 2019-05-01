@@ -2,13 +2,26 @@
 /**
  * Подключени к БД
  */
-$yeticave_db = mysqli_connect(
-    $config['db']['host'],
-    $config['db']['user'],
-    $config['db']['password'],
-    $config['db']['db_name']
-);
-mysqli_set_charset($yeticave_db, 'utf8');
+
+function db_connect($config_db)
+{
+    $connection = mysqli_connect(
+        $config_db['host'],
+        $config_db['user'],
+        $config_db['password'],
+        $config_db['db_name']
+    );
+
+    if (!$connection) {
+        $error = mysqli_connect_error();
+        die('Ошибка при подключении к БД: ' . $error);
+    }
+
+    mysqli_set_charset($connection, 'utf8');
+
+    return $connection;
+}
+
 
 
 /**
@@ -120,8 +133,22 @@ function db_insert_data($link, $sql, $data = []) {
 }
 
 
+function get_categories($connection)
+{
+    $sql = "SELECT * FROM categories";
+    $categories = db_fetch_data($connection, $sql);
 
-$isAuth = rand(0, 1);
-$userName = 'Vova';
+    return $categories;
+}
 
-$title = 'Yeticave - main page';
+function get_lots($connection)
+{
+    $sql= "SELECT l.id, l.name, start_price, image, c.name AS category_name
+                FROM lots l
+                JOIN categories c ON l.category_id = c.id
+                ORDER BY l.create_time DESC";
+
+    $lots = db_fetch_data($connection, $sql);
+
+    return $lots;
+}
