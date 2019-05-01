@@ -23,7 +23,6 @@ function db_connect($config_db)
 }
 
 
-
 /**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
  *
@@ -121,7 +120,8 @@ function db_fetch_data($link, $sql, $data = [], $oneItem = false)
  *
  * @return boolean
  */
-function db_insert_data($link, $sql, $data = []) {
+function db_insert_data($link, $sql, $data = [])
+{
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     $result = mysqli_stmt_execute($stmt);
 
@@ -143,7 +143,7 @@ function get_categories($connection)
 
 function get_lots($connection)
 {
-    $sql= "SELECT l.id, l.name, start_price, image, c.name AS category_name
+    $sql = "SELECT l.id, l.name, start_price, image, c.name AS category_name
                 FROM lots l
                 JOIN categories c ON l.category_id = c.id
                 ORDER BY l.create_time DESC";
@@ -151,4 +151,37 @@ function get_lots($connection)
     $lots = db_fetch_data($connection, $sql);
 
     return $lots;
+}
+
+function get_lot($connection, $id)
+{
+    $sql = "SELECT l.name, start_price, step_rate, content, image, c.name AS category_name
+               FROM lots l
+               LEFT JOIN categories c ON l.category_id = c.id
+               WHERE l.id = ?";
+
+    $lot = db_fetch_data($connection, $sql, ['id' => $id], true);
+
+    return $lot;
+}
+
+function get_lots_by_category($connection, $id)
+{
+    $sql = "SELECT l.id, l.name, start_price, content, image, c.name AS category_name
+                FROM lots l
+                LEFT JOIN categories c ON l.category_id = c.id
+                WHERE c.id = ?";
+
+    $lots = db_fetch_data($connection, $sql, ['id' => $id]);
+
+    return $lots;
+}
+
+function get_category($connection, $id)
+{
+    $sql = "SELECT id, name, code FROM categories WHERE id = ?;";
+
+    $category = db_fetch_data($connection, $sql, ['id' => $id], true);
+
+    return $category;
 }

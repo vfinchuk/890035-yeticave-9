@@ -2,28 +2,32 @@
 /* Config file */
 include_once(__DIR__ . '/bootstrap.php');
 
-$lot_id = $_GET['id'] ?? null;
-$lot = null;
+$category_id = $_GET['id'] ?? null;
+$category = null;
 $categories = get_categories($connection);
 
-if ($lot_id) {
 
-    $lot = get_lot($connection, $lot_id);
+if ($category_id) {
+
+    $category = get_category($connection, $category_id);
 
 }
 
-if ($lot_id && $lot) {
+if ($category_id && $category) {
 
-    $title = "Лот - {$lot['name']}";
+    $title = "Категория - {$category['name']}";
 
-    $content = include_template('lot.php', [
+    $lots = get_lots_by_category($connection, $category_id);
+
+    $content = include_template('category.php', [
         'categories' => $categories,
-        'lot'        => $lot
+        'lots'        => $lots,
+        'current_category' => $category
     ]);
 
 } else {
 
-    $title = 'Лот не найден.';
+    $title = 'Категория не найдена.';
 
     http_response_code(404);
     $content = include_template('404.php', [
@@ -40,6 +44,5 @@ $layout = include_template('layout.php', [
     'user_name'  => $userName,
 
 ]);
-
 
 print $layout;

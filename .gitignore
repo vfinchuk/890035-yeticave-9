@@ -10,3 +10,4 @@ vendor
 uploads/*
 !uploads/.gitkeep
 config.php
+test.php
