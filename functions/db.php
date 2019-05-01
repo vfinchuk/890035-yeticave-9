@@ -143,7 +143,7 @@ function get_categories($connection)
 
 function get_lots($connection)
 {
-    $sql = "SELECT l.id, l.name, start_price, image, c.name AS category_name
+    $sql = "SELECT l.id, end_time, l.name, start_price, image, c.name AS category_name
                 FROM lots l
                 JOIN categories c ON l.category_id = c.id
                 ORDER BY l.create_time DESC";
@@ -155,7 +155,7 @@ function get_lots($connection)
 
 function get_lot($connection, $id)
 {
-    $sql = "SELECT l.name, start_price, step_rate, content, image, c.name AS category_name
+    $sql = "SELECT l.name, end_time, start_price, step_rate, content, image, c.name AS category_name
                FROM lots l
                LEFT JOIN categories c ON l.category_id = c.id
                WHERE l.id = ?";
@@ -167,7 +167,7 @@ function get_lot($connection, $id)
 
 function get_lots_by_category($connection, $id)
 {
-    $sql = "SELECT l.id, l.name, start_price, content, image, c.name AS category_name
+    $sql = "SELECT l.id, l.name, end_time, start_price, content, image, c.name AS category_name
                 FROM lots l
                 LEFT JOIN categories c ON l.category_id = c.id
                 WHERE c.id = ?";

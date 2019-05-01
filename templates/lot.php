@@ -21,7 +21,7 @@
             <div class="lot-item__right">
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer <?= is_timer_finishing('tomorrow', 1) ? 'timer--finishing' : ''; ?>">
-                        <?= time_to_end('tomorrow'); ?>
+                        <?= time_to_end($lot['end_time']); ?>
                     </div>
                     <div class="lot-item__cost-state">
                         <div class="lot-item__rate">

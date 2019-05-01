@@ -35,7 +35,7 @@
                                 <span class="lot__cost"><?= price_format($price = $lot['start_price'] ?? null); ?></span>
                             </div>
                             <div class="lot__timer timer <?= is_timer_finishing('tomorrow', 1) ? 'timer--finishing' : ''; ?>">
-                                <?= time_to_end('tomorrow'); ?>
+                                <?= time_to_end($lot['end_time']); ?>
                             </div>
                         </div>
                     </div>
