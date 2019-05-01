@@ -28,15 +28,28 @@ if (!$yeticave_db) {
 
     $lot = db_fetch_data($yeticave_db, $sql_lot, [$lotId], true);
 
+    /**
+     * Ставки этого лота
+     */
+    $sql_bets = "SELECT u.name, b.amount, b.create_time FROM bets b
+                 JOIN users u ON b.user_id = u.id
+                 WHERE b.lot_id = ?
+                 ORDER BY b.create_time DESC
+                 LIMIT 10;";
+
+    $bets = db_fetch_data($yeticave_db, $sql_bets, [$lotId]);
+
 }
 
 if (!$lot) {
     header('Location: /404.php');
 }
 
+
 $content = include_template('lot.php', [
     'categories' => $categories,
-    'lot'        => $lot
+    'lot'        => $lot,
+    'bets'       => $bets
 ]);
 
 $layout = include_template('layout.php', [
@@ -47,5 +60,6 @@ $layout = include_template('layout.php', [
     'user_name'  => $userName,
 
 ]);
+
 
 print $layout;

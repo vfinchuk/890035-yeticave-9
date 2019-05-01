@@ -30,12 +30,12 @@ INSERT INTO lots (user_id, category_id, end_time, name, content, image, start_pr
 
 
  /* Добавление новых ставок*/
-INSERT INTO bets (user_id, lot_id, amount)
-    VALUE (1, 1, 12000),
-          (1, 3, 4000),
-          (2, 3, 16000),
-          (3, 4, 10500),
-          (3, 3, 12300);
+INSERT INTO bets (user_id, lot_id, create_time, amount)
+    VALUE (1, 7, NOW(), 12000),
+          (1, 8, NOW(), 175000),
+          (2, 9, NOW(), 8900),
+          (3, 9, NOW(), 9500),
+          (3, 12, NOW(), 7500);
 
 /**
   SELECT
