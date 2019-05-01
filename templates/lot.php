@@ -32,6 +32,7 @@
                             Мин. ставка <span><?= $lot['step_rate']; ?> р</span>
                         </div>
                     </div>
+                    <?php /* ?>
                     <form class="lot-item__form" action="" method="post" autocomplete="off">
                         <p class="lot-item__form-item form__item form__item--invalid">
                             <label for="cost">Ваша ставка</label>
@@ -40,7 +41,9 @@
                         </p>
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
+                    <?php */ ?>
                 </div>
+                <?php /* ?>
                 <div class="history">
                     <h3>История ставок (<span>10</span>)</h3>
                     <table class="history__list">
@@ -54,6 +57,7 @@
                         <?php endforeach; ?>
                     </table>
                 </div>
+                <?php */ ?>
             </div>
         </div>
     </section>
