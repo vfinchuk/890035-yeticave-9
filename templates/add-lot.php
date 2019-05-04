@@ -72,12 +72,3 @@
         <button type="submit" name="" class="button">Добавить лот</button>
     </form>
 </main>
-<?php
-
-
-if(isset($errors)) {
-    var_dump($errors);
-}
-
-
-?>

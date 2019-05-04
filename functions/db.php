@@ -128,7 +128,7 @@ function db_insert_data($link, $sql, $data = [])
     $result = mysqli_stmt_execute($stmt);
 
     if ($result) {
-        $result = mysqli_insert_id($sql);
+        $result = mysqli_insert_id($link);
     }
 
     return $result;
@@ -223,4 +223,36 @@ function get_lots_by_category($connection, $id)
     $lots = db_fetch_data($connection, $sql, ['id' => $id]);
 
     return $lots;
+}
+
+/**
+ * Функция добавления лота в БД
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param $user_id integer идентификатор пользователья
+ * @param $category_id integer идентификатор категории
+ * @param $name string имя лота
+ * @param $content string описание лота
+ * @param $image string ссылка на изображения лота
+ * @param $start_price integer стартовая цена
+ * @param $step_rate integer шаг ставок
+ *
+ */
+function insert_lot_to_db($connection, $user_id, $category_id,  $end_time, $name, $content, $image, $start_price, $step_rate)
+{
+    $sql = "INSERT INTO lots (user_id, category_id, end_time, name, content, image, start_price, step_rate)
+            VALUE (?, ?, ?, ?, ?, ?, ?, ?);";
+
+    $add_lot = db_insert_data($connection, $sql, [
+        'user_id' => $user_id,
+        'category_id'=> $category_id,
+        'end_time' => $end_time,
+        'name' => $name,
+        'content' => $content,
+        'image' => $image,
+        'start_price' => $start_price,
+        'step_rate' => $step_rate,
+    ]);
+
+    return $add_lot;
 }

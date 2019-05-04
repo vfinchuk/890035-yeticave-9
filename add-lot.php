@@ -19,27 +19,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Валидация текстовых полей формы
     foreach ($required as $key) {
+
         if (empty($lot[$key])) {
             $errors[$key] = 'Это поле надо заполнить.';
-        }
+        } else {
 
-        if (!is_numeric($lot['category'])) {
-            $errors['category'] = 'Это поле надо заполнить.';
-        }
+            htmlspecialchars($lot[$key], ENT_QUOTES, "UTF-8");
 
-        if (!empty($lot['start-price']) && !is_numeric($lot['start-price'])) {
-            $errors['start-price'] = 'Это поле надо заполнить.';
-            $errors['start-price-not-number'] = 'Только числовое значение';
-        }
+            if (!is_numeric($lot['category'])) {
+                $errors['category'] = 'Это поле надо заполнить.';
+            }
 
-        if (!empty($lot['step-rate']) && !is_numeric($lot['step-rate'])) {
-            $errors['step-rate'] = 'Это поле надо заполнить.';
-            $errors['step-rate-not-number'] = 'Только числовое значение';
-        }
+            if (!is_numeric($lot['start-price'])) {
+                $errors['start-price'] = 'Это поле надо заполнить.';
+                $errors['start-price-not-number'] = 'Только числовое значение';
+            }
 
-        if (!empty($lot['end-time']) && (strtotime('now') > strtotime($lot['end-time']))) {
-            $errors['end-time'] = 'Это поле надо заполнить.';
-            $errors['end-time-no-future'] = 'Нужно указать дату из будущего';
+            if (!is_numeric($lot['step-rate'])) {
+                $errors['step-rate'] = 'Это поле надо заполнить.';
+                $errors['step-rate-not-number'] = 'Только числовое значение';
+            }
+
+            if (strtotime('now') > strtotime($lot['end-time'])) {
+                $errors['end-time'] = 'Это поле надо заполнить.';
+                $errors['end-time-no-future'] = 'Нужно указать дату из будущего';
+            }
         }
     }
 
@@ -54,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $file_name = uniqid() . '.jpeg';
         $image['path'] = $file_name;
         $file_path = __DIR__ . DIRECTORY_SEPARATOR . 'uploads/';
+        $file_link = DIRECTORY_SEPARATOR . 'uploads/' . $file_name;
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
@@ -71,9 +76,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['lot-image'] = 'Вы не загрузили файл';
     }
 
-
+    // Условие на вывод ошибок при валидации
     if (count($errors)) {
-        // Вывод ошибок при валидации
+
         $content = include_template('add-lot.php', [
             'categories' => $categories,
             'errors'     => $errors
@@ -81,11 +86,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     } else {
         // Все поля заполненвы верно, добавляем данные в БД и перенаправляем пользователя на добавленый лот
+        $lot_id = null;
 
-        $content = include_template('lot.php', [
-            'categories' => $categories,
-//            'lot'        => $lot
-        ]);
+        if (is_date_valid($lot['end-time'])) {
+            $lot_id = insert_lot_to_db($connection, 3, $lot['category'], $lot['end-time'], $lot['name'], $lot['content'], $file_link, $lot['start-price'], $lot['step-rate']);
+        }
+
+        if ($lot_id) {
+            $lot = get_lot($connection, $lot_id);
+
+            header('Location: lot.php?id=' . $lot_id);
+
+            $content = include_template('lot.php', [
+                'categories' => $categories,
+                'lot'        => $lot
+            ]);
+        }
 
     }
 
