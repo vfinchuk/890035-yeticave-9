@@ -97,7 +97,16 @@ function is_category_valid(string $category)
     return $error;
 }
 
-function is_image_valid(array $image, $save_image = false, $link = false)
+/**
+ * Проверяет изображение лота на наявность и верный формат
+ *
+ * @param array $image массив с данными изображения
+ * @param bool $save_image флаг на сохранения изображения
+ * @param bool $link флаг на возвращение ссылки на изображение из функции
+ *
+ * @return string Возвращает булевое значение если все условия true. Может вернуть ссылку на изображение если $save_image = true, или возвращает сообщение ошибки если не пройдена валидация.
+ */
+function is_lot_image_valid(array $image, $save_image = false, $link = false)
 {
 
     $tmp_name = $image['tmp_name'];
@@ -130,7 +139,46 @@ function is_image_valid(array $image, $save_image = false, $link = false)
     } else {
         return $error = 'Неверный формат изображения. Допустимые форматы JPEG и PNG';
     }
+}
 
+/**
+ * Функция валидации формы добавления лота
+ *
+ * @param array $lot_data массив с данными из формы для валидации
+ *
+ * @return array | bool Вернет true или массив с ошибками
+ */
+function validate_lot_form ($lot_data)
+{
+    $errors = [];
+    $required = ['name', 'category', 'content', 'start-price', 'step-rate', 'end-time'];
+    foreach ($required as $key) {
+        if (empty($lot_data[$key])) {
+            $errors[$key] = 'Это поле надо заполнить.';
+        } else {
+            htmlspecialchars($lot_data[$key]);
+            if (is_category_valid($lot_data['category']) !== true) {
+                $errors['category'] = is_category_valid($lot_data['category']);
+            }
+            if (!is_numeric(is_string_number_valid($lot_data['start-price']))) {
+                $errors['start-price'] = is_string_number_valid($lot_data['start-price']);
+            }
+            if (!is_numeric(is_string_number_valid($lot_data['step-rate']))) {
+                $errors['step-rate'] = is_string_number_valid($lot_data['step-rate']);
+            }
+            if (is_end_time_valid($lot_data['end-time']) !== true) {
+                $errors['end-time'] = is_end_time_valid($lot_data['end-time']);
+            }
+        }
+    }
 
+    if (is_lot_image_valid($_FILES['lot-image']) !== true) {
+        $errors['lot-image'] = is_lot_image_valid($_FILES['lot-image'], $errors);
+    }
 
+    if(count($errors)) {
+        return $errors;
+    }
+
+    return true;
 }
