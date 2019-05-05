@@ -25,8 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             htmlspecialchars($lot[$key]);
 
-            var_dump($lot['content']);
-
             if (is_category_valid($lot['category']) !== true) {
                 $errors['category'] = is_category_valid($lot['category']);
             }
