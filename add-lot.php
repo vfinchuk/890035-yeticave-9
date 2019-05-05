@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $errors = validate_lot_form($lot_data);
 
-    if ($errors == true) {
+    if (!is_array($errors)) {
 
         $lot_data_image = is_lot_image_valid($_FILES['lot-image'], true, true);
         $lot_id = insert_lot_to_db($connection,
