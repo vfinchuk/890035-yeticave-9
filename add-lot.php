@@ -13,7 +13,6 @@ $categories = get_categories($connection);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $lot = $_POST['lot'];
 
-
     $errors = [];
     $required = ['name', 'category', 'content', 'start-price', 'step-rate', 'end-time'];
 
@@ -24,57 +23,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors[$key] = 'Это поле надо заполнить.';
         } else {
 
-            htmlspecialchars($lot[$key], ENT_QUOTES, "UTF-8");
+            htmlspecialchars($lot[$key]);
 
-            if (!is_numeric($lot['category'])) {
-                $errors['category'] = 'Это поле надо заполнить.';
+            var_dump($lot['content']);
+
+            if (is_category_valid($lot['category']) !== true) {
+                $errors['category'] = is_category_valid($lot['category']);
             }
 
-            if (!is_numeric($lot['start-price'])) {
-                $errors['start-price'] = 'Это поле надо заполнить.';
-                $errors['start-price-not-number'] = 'Только числовое значение';
+            if (!is_numeric(is_string_number_valid($lot['start-price']))) {
+                $errors['start-price'] = is_string_number_valid($lot['start-price']);
             }
 
-            if (!is_numeric($lot['step-rate'])) {
-                $errors['step-rate'] = 'Это поле надо заполнить.';
-                $errors['step-rate-not-number'] = 'Только числовое значение';
+            if (!is_numeric(is_string_number_valid($lot['step-rate']))) {
+                $errors['step-rate'] = is_string_number_valid($lot['step-rate']);
             }
 
-            if (strtotime('now') > strtotime($lot['end-time'])) {
-                $errors['end-time'] = 'Это поле надо заполнить.';
-                $errors['end-time-no-future'] = 'Нужно указать дату из будущего';
+            if (is_end_time_valid($lot['end-time']) !== true) {
+                $errors['end-time'] = is_end_time_valid($lot['end-time']);
             }
+
         }
     }
 
-    // Валидация файла-изображения
-    if (!empty($_FILES['lot-image']['name'])) {
-
-        $image = $_FILES['lot-image'];
-
-        $tmp_name = $image['tmp_name'];
-        $path = $image['name'];
-
-        $file_name = uniqid() . '.jpeg';
-        $image['path'] = $file_name;
-        $file_path = __DIR__ . DIRECTORY_SEPARATOR . 'uploads/';
-        $file_link = DIRECTORY_SEPARATOR . 'uploads/' . $file_name;
-
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $file_type = finfo_file($finfo, $tmp_name);
-
-
-        if ($file_type === "image/png" || $file_type === "image/jpeg") {
-            if (!count($errors)) {
-                move_uploaded_file($tmp_name, $file_path . $file_name);
-            }
-        } else {
-            $errors['lot-image'] = 'Загрузите картинку в формате PNG или JPEG';
-        }
-
+    if (is_image_valid($_FILES['lot-image']) !== true) {
+        $errors['lot-image'] = is_image_valid($_FILES['lot-image'], $errors);
     } else {
-        $errors['lot-image'] = 'Вы не загрузили файл';
+        $lot_image = is_image_valid($_FILES['lot-image'], true, true);
     }
+
 
     // Условие на вывод ошибок при валидации
     if (count($errors)) {
@@ -85,12 +62,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ]);
 
     } else {
-        // Все поля заполненвы верно, добавляем данные в БД и перенаправляем пользователя на добавленый лот
-        $lot_id = null;
-
-        if (is_date_valid($lot['end-time'])) {
-            $lot_id = insert_lot_to_db($connection, 3, $lot['category'], $lot['end-time'], $lot['name'], $lot['content'], $file_link, $lot['start-price'], $lot['step-rate']);
-        }
+        // Ошибок не найдено, добавляем данные в БД и перенаправляем пользователя на страницу добавленого лота
+        $lot_id = insert_lot_to_db($connection,
+            3,
+            $lot['category'],
+            $lot['end-time'],
+            $lot['name'],
+            $lot['content'],
+            $lot_image,
+            $lot['start-price'],
+            $lot['step-rate']
+        );
 
         if ($lot_id) {
             $lot = get_lot($connection, $lot_id);

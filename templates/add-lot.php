@@ -24,12 +24,14 @@
                         <option value="<?= $category['id']; ?>"><?= $category['name']; ?></option>
                     <?php endforeach; ?>
                 </select>
-                <span class="form__error">Выберите категорию</span>
+                <span class="form__error">
+                    <?= $category_valid = isset($errors['category']) ? $errors['category'] : false; ?>
+                </span>
             </div>
         </div>
         <div class="form__item form__item--wide <?= $content_error = isset($errors['content']) ? 'form__item--invalid' : false; ?>">
             <label for="message">Описание <sup>*</sup></label>
-            <textarea id="message" name="lot[content]" placeholder="Напишите описание лота"></textarea>
+            <textarea id="message" name="lot[content]" maxlength="1000000" placeholder="Напишите описание лота"></textarea>
             <span class="form__error">Напишите описание лота</span>
         </div>
         <div class="form__item form__item--file <?= $image_error = isset($errors['lot-image']) ? 'form__item--invalid' : false; ?>">
@@ -40,31 +42,28 @@
                     Добавить
                 </label>
             </div>
-            <span class="form__error"><?= $errors['lot-image']; ?></span>
+            <span class="form__error"><?= $lot_image_valid = isset($errors['lot-image']) ? $errors['lot-image'] : false; ?></span>
         </div>
         <div class="form__container-three">
-            <div class="form__item form__item--small <?= $price_error = isset($errors['start-price']) ? 'form__item--invalid' : false; ?>">
+            <div class="form__item form__item--small <?= $start_price_error = isset($errors['start-price']) ? 'form__item--invalid' : false; ?>">
                 <label for="lot-rate">Начальная цена <sup>*</sup></label>
                 <input id="lot-rate" type="text" name="lot[start-price]" placeholder="0">
                 <span class="form__error">
-                    Введите начальную цену <br>
-                    <?= $rate_not_number = isset($errors['start-price-not-number']) ? $errors['start-price-not-number'] : false; ?>
+                    <?= $start_price_valid = isset($errors['start-price']) ? $errors['start-price'] : false; ?>
                 </span>
             </div>
-            <div class="form__item form__item--small <?= $rate_error = isset($errors['step-rate']) ? 'form__item--invalid' : false; ?>">
+            <div class="form__item form__item--small <?= $step_rate_error = isset($errors['step-rate']) ? 'form__item--invalid' : false; ?>">
                 <label for="lot-step">Шаг ставки <sup>*</sup></label>
                 <input id="lot-step" type="text" name="lot[step-rate]" placeholder="0">
                 <span class="form__error">
-                    Введите шаг ставки <br>
-                    <?= $rate_not_number = isset($errors['step-rate-not-number']) ? $errors['step-rate-not-number'] : false; ?>
+                    <?= $step_rate_valid = isset($errors['step-rate']) ? $errors['step-rate'] : false; ?>
                 </span>
             </div>
             <div class="form__item <?= $end_time_error = isset($errors['end-time']) ? 'form__item--invalid' : false; ?>">
                 <label for="lot-date">Дата окончания торгов <sup>*</sup></label>
                 <input class="form__input-date" id="lot-date" type="text" name="lot[end-time]" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
                 <span class="form__error">
-                    Введите дату завершения торгов<br>
-                    <?= $rate_time_not_future = isset($errors['end-time-no-future']) ? $errors['end-time-no-future'] : false; ?>
+                    <?= $end_time_valid = isset($errors['end-time']) ? $errors['end-time'] : false; ?>
                 </span>
             </div>
         </div>
