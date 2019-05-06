@@ -238,7 +238,7 @@ function get_lots_by_category($connection, $id)
  * @param $step_rate integer шаг ставок
  *
  */
-function insert_lot($connection, $lot_data, $lot_image)
+function insert_lot($connection, $lot_data)
 {
     $sql = "INSERT INTO lots (user_id, category_id, end_time, name, content, start_price, step_rate, image)
             VALUE (?, ?, ?, ?, ?, ?, ?, ?);";
@@ -251,7 +251,7 @@ function insert_lot($connection, $lot_data, $lot_image)
         'content' => $lot_data['content'],
         'start_price' => $lot_data['start-price'],
         'step_rate' => $lot_data['step-rate'],
-        'image' => $lot_image,
+        'image' => $lot_data['lot-image'],
     ]);
 
     return $add_lot;
