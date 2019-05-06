@@ -256,3 +256,13 @@ function insert_lot($connection, $lot_data)
 
     return $add_lot;
 }
+
+
+function get_category_by_id($connection, $id)
+{
+    $sql = "SELECT * FROM categories WHERE id LIKE ?;";
+
+    $category = db_fetch_data($connection, $sql, ['id' => $id]);
+
+    return $category;
+}
