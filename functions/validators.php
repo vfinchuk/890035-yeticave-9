@@ -22,79 +22,61 @@ function is_date_valid(string $date): bool
 }
 
 /**
- * Проверяет дату окончания лота
+ * Проверяет имя лота
  *
- * @param string $end_time Дата в виде строки
+ * @param string $name Имя лота
  *
- * @return string вернет true или текст ошибки в случае не валидности
+ * @return string вернет null или текст ошибки
  */
-function is_end_time_valid(string $end_time)
+function validate_lot_name($name)
 {
-    if (empty($end_time)) {
-        $error = 'Введите дату завершения торгов';
-    } elseif (is_date_valid($end_time)) {
-
-        $ts_end_time = strtotime($end_time);
-        $ts_nex_day = strtotime('+1 day') - time();
-
-        if ($ts_end_time <= time()) {
-            $error = 'Нельзя указывать дату из прошлого';
-        } elseif ($ts_nex_day > ($ts_end_time - time())) {
-            $error = 'Минимальный срок лота 1 день';
-        } else {
-            return true;
-        }
-
-    } else {
-        $error = 'Неверный формат даты';
+    if (empty($name)) {
+        return 'Необходимо ввести имя лота';
     }
 
-    return $error;
-}
-
-/**
- * Проверяет строку на числовое значение
- *
- * @param string $number число или строка
- *
- * @return string в случае ошибки возвращает текст ошибки. В случае успешной валидации целое число
- */
-function is_string_number_valid(string $number)
-{
-    $number = trim($number);
-    if (empty($number) && $number !== '0') {
-        $error = 'Это поле надо заполнить';
-    } elseif (is_numeric($number)) {
-
-        if (intval($number) <= 0) {
-            $error = 'Содержимое поля должно быть целым числом больше ноля';
-        } else {
-            return intval($number);
-        }
-
-    } else {
-        $error = 'Поле должно содержать только числовое значение';
+    if (mb_strlen($name) > 128) {
+        return 'Имя лота не может превышать 128 символов';
     }
 
-    return $error;
+    return null;
 }
 
 /**
  * Проверяет поле select категории на наличие ID
  *
- * @param string $category
+ * @param int $category
  *
- * @return string Вернет true или строку с текслом ошибки.
+ * @return string Вернет null или строку с текстом ошибки.
  */
-function is_category_valid(string $category)
+function validate_lot_category($category)
 {
     if (!is_numeric($category)) {
         $error = 'Выберите категорию';
     } else {
-        return true;
+        return null;
     }
 
     return $error;
+}
+
+/**
+ * Проверяет поле для описани лота
+ *
+ * @param string $name Имя лота
+ *
+ * @return string вернет null или текст ошибки
+ */
+function validate_lot_content($content)
+{
+    if (empty($content)) {
+        return 'Необходимо ввести описание для лота';
+    }
+
+    if (mb_strlen($content) > 1000) {
+        return 'Описание лота не может превышать 1000 символов';
+    }
+
+    return null;
 }
 
 /**
@@ -104,9 +86,9 @@ function is_category_valid(string $category)
  * @param bool $save_image флаг на сохранения изображения
  * @param bool $link флаг на возвращение ссылки на изображение из функции
  *
- * @return string Возвращает булевое значение если все условия true. Может вернуть ссылку на изображение если $save_image = true, или возвращает сообщение ошибки если не пройдена валидация.
+ * @return string | null Возвращает null или строку с ошибкой. Возвращает ссылку на изображение если $save_image = true.
  */
-function is_lot_image_valid(array $image, $save_image = false, $link = false)
+function validate_lot_image(array $image, $save_image = false, $link = false)
 {
 
     $tmp_name = $image['tmp_name'];
@@ -127,14 +109,14 @@ function is_lot_image_valid(array $image, $save_image = false, $link = false)
         $file_path = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'uploads/';
         $file_link = DIRECTORY_SEPARATOR . 'uploads/' . $file_name;
 
-        if ($save_image){
+        if ($save_image) {
             move_uploaded_file($tmp_name, $file_path . $file_name);
         }
         if ($link) {
             return $file_link;
         }
 
-        return true;
+        return null;
 
     } else {
         return $error = 'Неверный формат изображения. Допустимые форматы JPEG и PNG';
@@ -142,43 +124,135 @@ function is_lot_image_valid(array $image, $save_image = false, $link = false)
 }
 
 /**
+ * Проверяет стартовую цену лота
+ *
+ * @param integer $start_price число или строка
+ *
+ * @return string Возвращает null или текст ошибки
+ */
+function validate_lot_start_price($start_price)
+{
+    $start_price = trim($start_price);
+    if (empty($start_price) && $start_price !== '0') {
+        $error = 'Это поле надо заполнить';
+    } elseif (is_numeric($start_price)) {
+
+        if (intval($start_price) <= 0) {
+            $error = 'Содержимое поля должно быть целым числом больше ноля';
+        } else {
+            return null;
+        }
+
+    } else {
+        $error = 'Поле должно содержать только числовое значение';
+    }
+
+    return $error;
+}
+
+/**
+ * Проверяет шаг ставки лота
+ *
+ * @param integer $start_price число или строка
+ *
+ * @return string Возвращает null или текст ошибки
+ */
+function validate_lot_step_rate($step_rate)
+{
+    return validate_lot_start_price($step_rate);
+}
+
+/**
+ * Проверяет дату окончания лота
+ *
+ * @param string $end_time Дата в виде строки
+ *
+ * @return string вернет null или текст ошибки
+ */
+function validate_lot_end_time($end_time)
+{
+    if (empty($end_time)) {
+        $error = 'Введите дату завершения торгов';
+    } elseif (is_date_valid($end_time)) {
+
+        $ts_end_time = strtotime($end_time);
+        $ts_nex_day = strtotime('+1 day') - time();
+
+        if ($ts_end_time <= time()) {
+            $error = 'Нельзя указывать дату из прошлого';
+        } elseif ($ts_nex_day > ($ts_end_time - time())) {
+            $error = 'Минимальный срок лота 1 день';
+        } else {
+            return null;
+        }
+
+    } else {
+        $error = 'Неверный формат даты';
+    }
+
+    return $error;
+}
+
+/**
  * Функция валидации формы добавления лота
  *
  * @param array $lot_data массив с данными из формы для валидации
  *
- * @return array | bool Вернет true или массив с ошибками
+ * @return array | bool Вернет null или массив с ошибками
  */
-function validate_lot_form ($lot_data)
+function validate_lot_form($lot_data, $lot_image_data)
 {
     $errors = [];
-    $required = ['name', 'category', 'content', 'start-price', 'step-rate', 'end-time'];
-    foreach ($required as $key) {
-        if (empty($lot_data[$key])) {
-            $errors[$key] = 'Это поле надо заполнить.';
-        } else {
-            htmlspecialchars($lot_data[$key]);
-            if (is_category_valid($lot_data['category']) !== true) {
-                $errors['category'] = is_category_valid($lot_data['category']);
-            }
-            if (!is_numeric(is_string_number_valid($lot_data['start-price']))) {
-                $errors['start-price'] = is_string_number_valid($lot_data['start-price']);
-            }
-            if (!is_numeric(is_string_number_valid($lot_data['step-rate']))) {
-                $errors['step-rate'] = is_string_number_valid($lot_data['step-rate']);
-            }
-            if (is_end_time_valid($lot_data['end-time']) !== true) {
-                $errors['end-time'] = is_end_time_valid($lot_data['end-time']);
-            }
-        }
+
+    if ($error = validate_lot_name($lot_data['name'])) {
+        $errors['name'] = $error;
     }
 
-    if (is_lot_image_valid($_FILES['lot-image']) !== true) {
-        $errors['lot-image'] = is_lot_image_valid($_FILES['lot-image'], $errors);
+    if ($error = validate_lot_category($lot_data['category'])) {
+        $errors['category'] = $error;
     }
 
-    if(count($errors)) {
+    if ($error = validate_lot_content($lot_data['content'])) {
+        $errors['content'] = $error;
+    }
+
+    if ($error = validate_lot_image($lot_image_data)) {
+        $errors['lot-image'] = $error;
+    }
+
+    if ($error = validate_lot_start_price($lot_data['start-price'])) {
+        $errors['start-price'] = $error;
+    }
+
+    if ($error = validate_lot_step_rate($lot_data['step-rate'])) {
+        $errors['step-rate'] = $error;
+    }
+
+    if ($error = validate_lot_end_time($lot_data['end-time'])) {
+        $errors['end-time'] = $error;
+    }
+
+    if (count($errors)) {
         return $errors;
     }
 
-    return true;
+    return null;
+}
+
+/**
+ * Функция фильтрации данных из формы
+ *
+ * @param array $form_data массив с данными из формы
+ *
+ */
+function filter_form_data($form_data)
+{
+    $filter = '';
+    foreach ($form_data as $form_item) {
+        if(!empty($form_item)) {
+            $filter = htmlspecialchars($form_item);
+        }
+    }
+
+    return $filter;
 }

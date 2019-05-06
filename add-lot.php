@@ -1,22 +1,29 @@
 <?php
 include_once(__DIR__ . '/bootstrap.php');
 
-$title = 'Добавить новый лот.';
+$title = 'Добавить новый лот';
 
 $categories = get_categories($connection);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $lot_data = $_POST['lot'] ?? null;
-    if (!$lot_data) {
+    $lot_image = $_FILES['lot-image'] ?? null;
+    if (!$lot_data || !$lot_image) {
         die('Отсутствуют данные лота в запросе');
     }
 
-    $errors = validate_lot_form($lot_data);
+    $errors = validate_lot_form($lot_data, $lot_image);
 
-    if (!is_array($errors)) {
+    if ($errors) {
+        $content = include_template('add-lot.php', [
+            'categories' => $categories,
+            'errors'     => $errors
+        ]);
+    } else {
+        filter_form_data($lot_data);
 
-        $lot_data_image = is_lot_image_valid($_FILES['lot-image'], true, true);
+        $lot_data_image = validate_lot_image($_FILES['lot-image'], true, true);
         $lot_id = insert_lot_to_db($connection,
             3,
             $lot_data['category'],
@@ -37,14 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'lot'        => $lot
             ]);
         }
-
-    } else {
-
-        $content = include_template('add-lot.php', [
-            'categories' => $categories,
-            'errors'     => $errors
-        ]);
-
     }
 
 } else {
@@ -52,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'categories' => $categories
     ]);
 }
-
 
 $layout = include_template('layout.php', [
     'title'      => $title,

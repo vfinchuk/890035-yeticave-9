@@ -37,7 +37,7 @@
         <div class="form__item form__item--wide <?= $content_error = isset($errors['content']) ? 'form__item--invalid' : false; ?>">
             <label for="message">Описание <sup>*</sup></label>
             <textarea id="message" name="lot[content]" maxlength="10000" placeholder="Напишите описание лота"><?= $content = $_POST['lot']['content'] ?? null; ?></textarea>
-            <span class="form__error">Напишите описание лота</span>
+            <span class="form__error"><?= $content = $errors['content'] ?? false; ?></span>
         </div>
 
         <div class="form__item form__item--file <?= $image_error = isset($errors['lot-image']) ? 'form__item--invalid' : false; ?>">
