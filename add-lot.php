@@ -23,17 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         filter_form_data($lot_data);
 
-        $lot_data_image = validate_lot_image($_FILES['lot-image'], true, true);
-        $lot_id = insert_lot_to_db($connection,
-            3,
-            $lot_data['category'],
-            $lot_data['end-time'],
-            $lot_data['name'],
-            $lot_data['content'],
-            $lot_data_image,
-            $lot_data['start-price'],
-            $lot_data['step-rate']
-        );
+        $lot_image = upload_file($_FILES['lot-image']);
+
+        $lot_id = insert_lot($connection, $lot_data, $lot_image);
+
 
         if ($lot_id) {
             $lot = get_lot($connection, $lot_id);

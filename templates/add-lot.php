@@ -16,7 +16,7 @@
                 <label for="lot-name">Наименование <sup>*</sup></label>
                 <input id="lot-name" type="text" name="lot[name]" placeholder="Введите наименование лота"
                        value="<?= $name = $_POST['lot']['name'] ?? false; ?>">
-                <span class="form__error">Введите наименование лота</span>
+                <span class="form__error"><?= $category_valid = $errors['name'] ?? null; ?></span>
             </div>
 
             <div class="form__item <?= $category_error = isset($errors['category']) ? 'form__item--invalid' : false; ?>">

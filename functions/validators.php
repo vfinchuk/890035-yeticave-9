@@ -80,17 +80,14 @@ function validate_lot_content($content)
 }
 
 /**
- * Проверяет изображение лота на наявность и верный формат
+ * Проверяет изображение лота
  *
  * @param array $image массив с данными изображения
- * @param bool $save_image флаг на сохранения изображения
- * @param bool $link флаг на возвращение ссылки на изображение из функции
  *
- * @return string | null Возвращает null или строку с ошибкой. Возвращает ссылку на изображение если $save_image = true.
+ * @return string Возвращает null или строку с ошибкой
  */
-function validate_lot_image(array $image, $save_image = false, $link = false)
+function validate_lot_image($image)
 {
-
     $tmp_name = $image['tmp_name'];
     $path = $image['name'];
 
@@ -102,22 +99,7 @@ function validate_lot_image(array $image, $save_image = false, $link = false)
     $file_type = finfo_file($finfo, $tmp_name);
 
     if ($file_type === 'image/jpeg' || $file_type === 'image/png') {
-
-        $file_type = str_replace('/', '', strstr($file_type, '/'));
-        $file_name = uniqid() . '.' . $file_type;
-
-        $file_path = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'uploads/';
-        $file_link = DIRECTORY_SEPARATOR . 'uploads/' . $file_name;
-
-        if ($save_image) {
-            move_uploaded_file($tmp_name, $file_path . $file_name);
-        }
-        if ($link) {
-            return $file_link;
-        }
-
         return null;
-
     } else {
         return $error = 'Неверный формат изображения. Допустимые форматы JPEG и PNG';
     }
