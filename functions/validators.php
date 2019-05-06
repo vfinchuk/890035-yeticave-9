@@ -252,11 +252,11 @@ function validate_user_email($connection, $email)
     if (empty($email)) {
         return 'Введите Email';
     }
-    if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return 'Не коректно введен Email';
     }
 
-    if(get_user_by_email($connection, $email)) {
+    if (get_user_by_email($connection, $email)) {
         return 'Пользователь с таким Email уже существует';
     }
 
@@ -315,7 +315,7 @@ function validate_avatar($avatar)
 {
     $tmp_name = $avatar['tmp_name'];
 
-    if(!empty($tmp_name)) {
+    if (!empty($tmp_name)) {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
 
@@ -379,7 +379,60 @@ function validate_user_form($connection, $user_data, $avatar)
         $errors['avatar'] = $error;
     }
 
-    if(count($errors)) {
+    if (count($errors)) {
+        return $errors;
+    }
+
+    return null;
+}
+
+
+
+
+
+function validate_auth_login($connection, $email)
+{
+    if (empty($email)) {
+        return 'Введите Email';
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return 'Не коректно введен Email';
+    }
+    if (!get_user_by_email($connection, $email)) {
+        return 'Нет пользователя с таким Email';
+    }
+
+    return null;
+}
+
+function validate_auth_password($connection, $email, $password)
+{
+    if (empty($password)) {
+        return 'Введите пароль';
+    } else {
+        $password_hash = get_password_by_email($connection, $email);
+        if (!password_verify($password, $password_hash['password'])) {
+            return 'Неверный пароль';
+        }
+    }
+
+    return null;
+}
+
+
+function validate_auth_form($connection, $auth_data)
+{
+    $errors = [];
+
+    if ($error = validate_auth_login($connection, $auth_data['email'])) {
+        $errors['email'] = $error;
+    }
+
+    if ($error = validate_auth_password($connection, $auth_data['email'], $auth_data['password'])) {
+        $errors['password'] = $error;
+    }
+
+    if (count($errors)) {
         return $errors;
     }
 

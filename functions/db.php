@@ -315,5 +315,5 @@ function get_password_by_email($connection, $email)
 
     $password = db_fetch_data($connection, $sql, ['email' => $email], true);
 
-    return implode('', $password);
+    return $password;
 }
