@@ -229,19 +229,14 @@ function get_lots_by_category($connection, $id)
  * Функция добавления лота в БД
  *
  * @param $connection array ресурс соединения к БД
- * @param $user_id integer идентификатор пользователья
- * @param $category_id integer идентификатор категории
- * @param $name string имя лота
- * @param $content string описание лота
- * @param $image string ссылка на изображения лота
- * @param $start_price integer стартовая цена
- * @param $step_rate integer шаг ставок
+ * @param array $lot_data данные лота
+ * @param string $lot_image изображение лота
  *
+ * @return integer идетификатор нового лота
  */
 function insert_lot($connection, $lot_data, $lot_image)
 {
-    $sql = "INSERT INTO lots (user_id, category_id, end_time, name, content, start_price, step_rate, image)
-            VALUE (?, ?, ?, ?, ?, ?, ?, ?);";
+    $sql = "INSERT INTO lots (user_id, category_id, end_time, name, content, start_price, step_rate, image) VALUE (?, ?, ?, ?, ?, ?, ?, ?);";
 
     $add_lot = db_insert_data($connection, $sql, [
         'user_id' => 3,
@@ -255,4 +250,45 @@ function insert_lot($connection, $lot_data, $lot_image)
     ]);
 
     return $add_lot;
+}
+
+/**
+ * Функция добавления пользователя в БД
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param array $user_data данные пользователя
+ * @param string $avatar ссылка на аватар пользователя
+ *
+ * @return integer идетификатор нового пользователя
+ */
+function insert_user($connection, $user_data)
+{
+    $sql = "INSERT INTO users (email, password, name, contact, avatar) VALUE (?, ?, ?, ?, ?)";
+
+    $add_user = db_insert_data($connection, $sql, [
+        'email' => $user_data['email'],
+        'password' => $user_data['password'],
+        'name' => $user_data['name'],
+        'contact' => $user_data['contact'],
+        'avatar' => $user_data['avatar']
+    ]);
+
+    return $add_user;
+}
+
+/**
+ * Функция фильтрации пользователей по имейлу
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param string $email имейл для фильтрации
+ *
+ * @return array
+ */
+function get_user_by_email($connection, $email)
+{
+    $sql = "SELECT * FROM users WHERE email LIKE ?;";
+
+    $lots = db_fetch_data($connection, $sql, ['email' => $email]);
+
+    return $lots;
 }

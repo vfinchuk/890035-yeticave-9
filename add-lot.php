@@ -27,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $lot_id = insert_lot($connection, $lot_data, $lot_image);
 
-
         if ($lot_id) {
             $lot = get_lot($connection, $lot_id);
 
