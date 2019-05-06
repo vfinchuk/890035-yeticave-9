@@ -48,15 +48,16 @@ function validate_lot_name($name)
  *
  * @return string Вернет null или строку с текстом ошибки.
  */
-function validate_lot_category($category)
+function validate_lot_category($connection, $category)
 {
     if (!is_numeric($category)) {
-        $error = 'Выберите категорию';
-    } else {
-        return null;
+        return 'Выберите категорию';
+    }
+    if (!get_category_by_id($connection, $category)) {
+        return 'Категории с таким идентификатором нет';
     }
 
-    return $error;
+    return null;
 }
 
 /**
@@ -182,7 +183,7 @@ function validate_lot_end_time($end_time)
  *
  * @return array | bool Вернет null или массив с ошибками
  */
-function validate_lot_form($lot_data, $lot_image_data)
+function validate_lot_form($connection, $lot_data, $lot_image)
 {
     $errors = [];
 
@@ -190,7 +191,7 @@ function validate_lot_form($lot_data, $lot_image_data)
         $errors['name'] = $error;
     }
 
-    if ($error = validate_lot_category($lot_data['category'])) {
+    if ($error = validate_lot_category($connection, $lot_data['category'])) {
         $errors['category'] = $error;
     }
 
@@ -198,7 +199,7 @@ function validate_lot_form($lot_data, $lot_image_data)
         $errors['content'] = $error;
     }
 
-    if ($error = validate_lot_image($lot_image_data)) {
+    if ($error = validate_lot_image($lot_image)) {
         $errors['lot-image'] = $error;
     }
 
@@ -231,7 +232,7 @@ function filter_form_data($form_data)
 {
     $filter = '';
     foreach ($form_data as $form_item) {
-        if(!empty($form_item)) {
+        if (!empty($form_item)) {
             $filter = htmlspecialchars($form_item);
         }
     }

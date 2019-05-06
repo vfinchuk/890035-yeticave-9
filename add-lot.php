@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die('Отсутствуют данные лота в запросе');
     }
 
-    $errors = validate_lot_form($lot_data, $lot_image);
+    $errors = validate_lot_form($connection, $lot_data, $lot_image);
 
     if ($errors) {
         $content = include_template('add-lot.php', [
