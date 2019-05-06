@@ -234,7 +234,7 @@ function get_lots_by_category($connection, $id)
  *
  * @return integer идетификатор нового лота
  */
-function insert_lot($connection, $lot_data, $lot_image)
+function insert_lot($connection, $lot_data)
 {
     $sql = "INSERT INTO lots (user_id, category_id, end_time, name, content, start_price, step_rate, image) VALUE (?, ?, ?, ?, ?, ?, ?, ?);";
 
@@ -246,7 +246,7 @@ function insert_lot($connection, $lot_data, $lot_image)
         'content' => $lot_data['content'],
         'start_price' => $lot_data['start-price'],
         'step_rate' => $lot_data['step-rate'],
-        'image' => $lot_image,
+        'image' => $lot_data['lot-image'],
     ]);
 
     return $add_lot;
@@ -277,7 +277,7 @@ function insert_user($connection, $user_data)
 }
 
 /**
- * Функция фильтрации пользователей по имейлу
+ * Функция вывода пользователя по Email
  *
  * @param $connection array ресурс соединения к БД
  * @param string $email имейл для фильтрации
@@ -287,8 +287,23 @@ function insert_user($connection, $user_data)
 function get_user_by_email($connection, $email)
 {
     $sql = "SELECT * FROM users WHERE email LIKE ?;";
-
     $lots = db_fetch_data($connection, $sql, ['email' => $email]);
 
     return $lots;
+}
+
+/**
+ * Функция вывода категории по id
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param string $id идентификатор нужной категории
+ *
+ * @return array
+ */
+function get_category_by_id($connection, $id)
+{
+    $sql = "SELECT * FROM categories WHERE id LIKE ?;";
+    $category = db_fetch_data($connection, $sql, ['id' => $id]);
+
+    return $category;
 }
