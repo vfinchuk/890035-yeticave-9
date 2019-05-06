@@ -307,3 +307,13 @@ function get_category_by_id($connection, $id)
 
     return $category;
 }
+
+
+function get_password_by_email($connection, $email)
+{
+    $sql = "SELECT password FROM users WHERE users.email LIKE ?;";
+
+    $password = db_fetch_data($connection, $sql, ['email' => $email], true);
+
+    return implode('', $password);
+}
