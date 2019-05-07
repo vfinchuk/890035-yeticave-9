@@ -27,8 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $lot_id = insert_lot($connection, $lot_data);
 
         if ($lot_id) {
-            $lot = get_lot($connection, $lot_id);
-
             header('Location: lot.php?id=' . $lot_id);
             exit();
         }

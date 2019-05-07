@@ -229,13 +229,9 @@ function get_lots_by_category($connection, $id)
  * Функция добавления лота в БД
  *
  * @param $connection array ресурс соединения к БД
- * @param $user_id integer идентификатор пользователья
- * @param $category_id integer идентификатор категории
- * @param $name string имя лота
- * @param $content string описание лота
- * @param $image string ссылка на изображения лота
- * @param $start_price integer стартовая цена
- * @param $step_rate integer шаг ставок
+ * @param $lot_data array масив данных лота
+
+ * @return integer идентификатор добавленого лота
  *
  */
 function insert_lot($connection, $lot_data)
@@ -260,7 +256,7 @@ function insert_lot($connection, $lot_data)
 
 function get_category_by_id($connection, $id)
 {
-    $sql = "SELECT * FROM categories WHERE id LIKE ?;";
+    $sql = "SELECT * FROM categories WHERE id = ?;";
 
     $category = db_fetch_data($connection, $sql, ['id' => $id]);
 
