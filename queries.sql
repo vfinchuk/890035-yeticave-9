@@ -7,9 +7,9 @@ USE yeticave;
  /* Добавление новых категорий */
 INSERT INTO categories (name, code)
     VALUE ('Доски и лыжи', 'boards'),
-          ('Крепления','gears'),
+          ('Крепления','attachment'),
           ('Ботинки', 'boots'),
-          ('Одежда', 'wear'),
+          ('Одежда', 'clothing'),
           ('Инструменты', 'tools'),
           ('Разное', 'other');
 

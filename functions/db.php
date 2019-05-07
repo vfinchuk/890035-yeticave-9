@@ -1,6 +1,10 @@
 <?php
 /**
- * Подключени к БД
+ * Функция подключения к БД
+ *
+ * @param $config_db array массив с данными на подключение к БД
+ *
+ * @return $connection ресурс подключения к БД
  */
 
 function db_connect($config_db)
@@ -21,7 +25,6 @@ function db_connect($config_db)
 
     return $connection;
 }
-
 
 /**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
@@ -83,7 +86,6 @@ function db_get_prepare_stmt($link, $sql, $data = [])
     return $stmt;
 }
 
-
 /**
  * Получение записей из БД
  *
@@ -126,13 +128,19 @@ function db_insert_data($link, $sql, $data = [])
     $result = mysqli_stmt_execute($stmt);
 
     if ($result) {
-        $result = mysqli_insert_id($sql);
+        $result = mysqli_insert_id($link);
     }
 
     return $result;
 }
 
-
+/**
+ * Функция вывода категорий
+ *
+ * @param $connection array ресурс соединения к БД
+ *
+ * @return array
+ */
 function get_categories($connection)
 {
     $sql = "SELECT * FROM categories";
@@ -141,6 +149,30 @@ function get_categories($connection)
     return $categories;
 }
 
+/**
+ * Функция вывода категории по ID
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param $id string идентификатор категории
+ *
+ * @return array
+ */
+function get_category($connection, $id)
+{
+    $sql = "SELECT id, name, code FROM categories WHERE id = ?;";
+
+    $category = db_fetch_data($connection, $sql, ['id' => $id], true);
+
+    return $category;
+}
+
+/**
+ * Функция вывода лотов
+ *
+ * @param $connection array ресурс соединения к БД
+ *
+ * @return array
+ */
 function get_lots($connection)
 {
     $sql = "SELECT l.id, end_time, l.name, start_price, image, c.name AS category_name
@@ -153,6 +185,14 @@ function get_lots($connection)
     return $lots;
 }
 
+/**
+ * Функция вывода одного лота по его ID
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param $id string идентификатор лота
+ *
+ * @return array
+ */
 function get_lot($connection, $id)
 {
     $sql = "SELECT l.name, end_time, start_price, step_rate, content, image, c.name AS category_name
@@ -165,6 +205,14 @@ function get_lot($connection, $id)
     return $lot;
 }
 
+/**
+ * Функция вывода лотов категории по ID
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param $id string идентификатор категории
+ *
+ * @return array
+ */
 function get_lots_by_category($connection, $id)
 {
     $sql = "SELECT l.id, l.name, end_time, start_price, content, image, c.name AS category_name
@@ -177,11 +225,40 @@ function get_lots_by_category($connection, $id)
     return $lots;
 }
 
-function get_category($connection, $id)
-{
-    $sql = "SELECT id, name, code FROM categories WHERE id = ?;";
+/**
+ * Функция добавления лота в БД
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param $lot_data array масив данных лота
 
-    $category = db_fetch_data($connection, $sql, ['id' => $id], true);
+ * @return integer идентификатор добавленого лота
+ *
+ */
+function insert_lot($connection, $lot_data)
+{
+    $sql = "INSERT INTO lots (user_id, category_id, end_time, name, content, start_price, step_rate, image)
+            VALUE (?, ?, ?, ?, ?, ?, ?, ?);";
+
+    $add_lot = db_insert_data($connection, $sql, [
+        'user_id' => 3,
+        'category_id'=> $lot_data['category'],
+        'end_time' => $lot_data['end-time'],
+        'name' => $lot_data['name'],
+        'content' => $lot_data['content'],
+        'start_price' => $lot_data['start-price'],
+        'step_rate' => $lot_data['step-rate'],
+        'image' => $lot_data['lot-image'],
+    ]);
+
+    return $add_lot;
+}
+
+
+function get_category_by_id($connection, $id)
+{
+    $sql = "SELECT * FROM categories WHERE id = ?;";
+
+    $category = db_fetch_data($connection, $sql, ['id' => $id]);
 
     return $category;
 }

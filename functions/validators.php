@@ -20,3 +20,222 @@ function is_date_valid(string $date): bool
 
     return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
 }
+
+/**
+ * Проверяет имя лота
+ *
+ * @param string $name Имя лота
+ *
+ * @return string вернет null или текст ошибки
+ */
+function validate_lot_name($name)
+{
+    if (empty($name)) {
+        return 'Необходимо ввести имя лота';
+    }
+
+    if (mb_strlen($name) > 128) {
+        return 'Имя лота не может превышать 128 символов';
+    }
+
+    return null;
+}
+
+/**
+ * Проверяет поле select категории на наличие ID
+ *
+ * @param int $category
+ *
+ * @return string Вернет null или строку с текстом ошибки.
+ */
+function validate_lot_category($connection, $category)
+{
+    if (!is_numeric($category)) {
+        return 'Выберите категорию';
+    }
+    if (!get_category_by_id($connection, $category)) {
+        return 'Категории с таким идентификатором нет';
+    }
+
+    return null;
+}
+
+/**
+ * Проверяет поле для описани лота
+ *
+ * @param string $name Имя лота
+ *
+ * @return string вернет null или текст ошибки
+ */
+function validate_lot_content($content)
+{
+    if (empty($content)) {
+        return 'Необходимо ввести описание для лота';
+    }
+
+    if (mb_strlen($content) > 1000) {
+        return 'Описание лота не может превышать 1000 символов';
+    }
+
+    return null;
+}
+
+/**
+ * Проверяет изображение лота
+ *
+ * @param array $image массив с данными изображения
+ *
+ * @return string Возвращает null или строку с ошибкой
+ */
+function validate_lot_image($image)
+{
+    $tmp_name = $image['tmp_name'];
+    $path = $image['name'];
+
+    if (empty($path)) {
+        return $error = 'Нужно выбрать изображение для лота';
+    }
+
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $file_type = finfo_file($finfo, $tmp_name);
+
+    if ($file_type === 'image/jpeg' || $file_type === 'image/png') {
+        return null;
+    } else {
+        return $error = 'Неверный формат изображения. Допустимые форматы JPEG и PNG';
+    }
+}
+
+/**
+ * Проверяет стартовую цену лота
+ *
+ * @param integer $start_price число или строка
+ *
+ * @return string Возвращает null или текст ошибки
+ */
+function validate_lot_start_price($start_price)
+{
+    $start_price = trim($start_price);
+    if (empty($start_price) && $start_price !== '0') {
+        $error = 'Это поле надо заполнить';
+    } elseif (is_numeric($start_price)) {
+
+        if (intval($start_price) <= 0) {
+            $error = 'Содержимое поля должно быть целым числом больше ноля';
+        } else {
+            return null;
+        }
+
+    } else {
+        $error = 'Поле должно содержать только числовое значение';
+    }
+
+    return $error;
+}
+
+/**
+ * Проверяет шаг ставки лота
+ *
+ * @param integer $start_price число или строка
+ *
+ * @return string Возвращает null или текст ошибки
+ */
+function validate_lot_step_rate($step_rate)
+{
+    return validate_lot_start_price($step_rate);
+}
+
+/**
+ * Проверяет дату окончания лота
+ *
+ * @param string $end_time Дата в виде строки
+ *
+ * @return string вернет null или текст ошибки
+ */
+function validate_lot_end_time($end_time)
+{
+    if (empty($end_time)) {
+        $error = 'Введите дату завершения торгов';
+    } elseif (is_date_valid($end_time)) {
+
+        $ts_end_time = strtotime($end_time);
+        $ts_nex_day = strtotime('+1 day') - time();
+
+        if ($ts_end_time <= time()) {
+            $error = 'Нельзя указывать дату из прошлого';
+        } elseif ($ts_nex_day > ($ts_end_time - time())) {
+            $error = 'Минимальный срок лота 1 день';
+        } else {
+            return null;
+        }
+
+    } else {
+        $error = 'Неверный формат даты';
+    }
+
+    return $error;
+}
+
+/**
+ * Функция валидации формы добавления лота
+ *
+ * @param array $lot_data массив с данными из формы для валидации
+ *
+ * @return array | bool Вернет null или массив с ошибками
+ */
+function validate_lot_form($connection, $lot_data, $lot_image)
+{
+    $errors = [];
+
+    if ($error = validate_lot_name($lot_data['name'])) {
+        $errors['name'] = $error;
+    }
+
+    if ($error = validate_lot_category($connection, $lot_data['category'])) {
+        $errors['category'] = $error;
+    }
+
+    if ($error = validate_lot_content($lot_data['content'])) {
+        $errors['content'] = $error;
+    }
+
+    if ($error = validate_lot_image($lot_image)) {
+        $errors['lot-image'] = $error;
+    }
+
+    if ($error = validate_lot_start_price($lot_data['start-price'])) {
+        $errors['start-price'] = $error;
+    }
+
+    if ($error = validate_lot_step_rate($lot_data['step-rate'])) {
+        $errors['step-rate'] = $error;
+    }
+
+    if ($error = validate_lot_end_time($lot_data['end-time'])) {
+        $errors['end-time'] = $error;
+    }
+
+    if (count($errors)) {
+        return $errors;
+    }
+
+    return null;
+}
+
+/**
+ * Функция фильтрации данных из формы
+ *
+ * @param array $form_data массив с данными из формы
+ *
+ */
+function filter_form_data($form_data)
+{
+    $filter = '';
+    foreach ($form_data as $form_item) {
+        if (!empty($form_item)) {
+            $filter = htmlspecialchars($form_item);
+        }
+    }
+
+    return $filter;
+}
