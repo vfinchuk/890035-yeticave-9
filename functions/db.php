@@ -229,8 +229,7 @@ function get_lots_by_category($connection, $id)
  * Функция добавления лота в БД
  *
  * @param $connection array ресурс соединения к БД
- * @param array $lot_data данные лота
- * @param string $lot_image изображение лота
+ * @return integer идентификатор добавленого лота
  *
  * @return integer идетификатор нового лота
  */
@@ -302,7 +301,9 @@ function get_user_by_email($connection, $email)
  */
 function get_category_by_id($connection, $id)
 {
-    $sql = "SELECT * FROM categories WHERE id LIKE ?;";
+
+    $sql = "SELECT * FROM categories WHERE id = ?;";
+
     $category = db_fetch_data($connection, $sql, ['id' => $id]);
 
     return $category;
