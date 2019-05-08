@@ -7,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $lot_data = $_POST['lot'] ?? null;
     $lot_image = $_FILES['lot-image'] ?? null;
+    $lot_data['user_id'] = $session['id'] ?? null;
 
     if (!$lot_data || !$lot_image) {
         die('Отсутствуют данные лота в запросе');
@@ -22,8 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ]);
 
     } else {
-//        filter_form_data($lot_data);
-        $lot_data['user_id'] = $session['id'];
+        $lot_data = filter_form_data($lot_data);
 
         $lot_data['lot-image'] = upload_file($lot_image);
         $lot_id = insert_lot($connection, $lot_data);

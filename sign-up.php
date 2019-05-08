@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ]);
 
     } else {
-        echo filter_form_data($user_data);
+        $user_data = filter_form_data($user_data);
 
         $user_data['password'] = password_hash($user_data['password'], PASSWORD_DEFAULT);
         $user_data['avatar'] = upload_file($avatar);

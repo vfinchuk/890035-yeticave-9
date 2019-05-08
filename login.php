@@ -23,12 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'errors' => $errors
         ]);
     } else {
+        $auth_data = filter_form_data($auth_data);
+
         $user_data = get_user_by_email($connection, $auth_data['email']);
 
-
         $_SESSION['user'] = $user_data;
-
-        var_dump($_SESSION['user']);
 
         header('Location: index.php');
         exit();
