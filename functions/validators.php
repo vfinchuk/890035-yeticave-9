@@ -387,9 +387,6 @@ function validate_user_form($connection, $user_data, $avatar)
 }
 
 
-
-
-
 function validate_auth_login($connection, $email)
 {
     if (empty($email)) {

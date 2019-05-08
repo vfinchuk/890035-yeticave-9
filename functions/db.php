@@ -238,7 +238,7 @@ function insert_lot($connection, $lot_data)
     $sql = "INSERT INTO lots (user_id, category_id, end_time, name, content, start_price, step_rate, image) VALUE (?, ?, ?, ?, ?, ?, ?, ?);";
 
     $add_lot = db_insert_data($connection, $sql, [
-        'user_id' => 3,
+        'user_id' => $lot_data['user_id'],
         'category_id'=> $lot_data['category'],
         'end_time' => $lot_data['end-time'],
         'name' => $lot_data['name'],
@@ -249,7 +249,7 @@ function insert_lot($connection, $lot_data)
     ]);
 
     return $add_lot;
-}
+    }
 
 /**
  * Функция добавления пользователя в БД
@@ -286,7 +286,7 @@ function insert_user($connection, $user_data)
 function get_user_by_email($connection, $email)
 {
     $sql = "SELECT * FROM users WHERE email = ?;";
-    $lots = db_fetch_data($connection, $sql, ['email' => $email]);
+    $lots = db_fetch_data($connection, $sql, ['email' => $email], true);
 
     return $lots;
 }

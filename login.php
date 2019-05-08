@@ -23,15 +23,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'errors' => $errors
         ]);
     } else {
+        $user_data = get_user_by_email($connection, $auth_data['email']);
 
-        $_SERVER['user'] = get_user_by_email($connection, $auth_data['email']);
 
-        //        var_dump($auth_data);
-//        die;
-//        $content = include_template('login.php', [
-//            'categories' => $categories
-//        ]);
+        $_SESSION['user'] = $user_data;
 
+        var_dump($_SESSION['user']);
+
+        header('Location: index.php');
+        exit();
     }
 
 
@@ -46,9 +46,7 @@ $layout = include_template('layout.php', [
     'title'      => $title,
     'categories' => $categories,
     'content'    => $content,
-    'is_auth'    => $isAuth,
-    'user_name'  => $userName,
-
+    'session'    => $session,
 ]);
 
 print $layout;

@@ -23,16 +23,16 @@
                 <input class="main-header__search-btn" type="submit" name="find"
                        value="Найти">
             </form>
-            <a class="main-header__add-lot button" href="/add-lot.php">Добавить
-                лот</a>
-
+            <?php if ($session): ?>
+            <a class="main-header__add-lot button" href="/add-lot.php">Добавить лот</a>
+            <?php  endif; ?>
             <nav class="user-menu">
-                <?php if ($is_auth): ?>
+                <?php if ($session): ?>
                     <div class="user-menu__logged">
-                        <p><?= $user_name; ?></p>
-                        <a class="user-menu__bets" href="pages/my-bets.html">Мои
+                        <p><?= $session['name']; ?></p>
+                        <a class="user-menu__bets" href="pages/my-bets.php">Мои
                             ставки</a>
-                        <a class="user-menu__logout" href="#">Выход</a>
+                        <a class="user-menu__logout" href="/logout.php">Выход</a>
                     </div>
                 <?php else: ?>
                     <ul class="user-menu__list">

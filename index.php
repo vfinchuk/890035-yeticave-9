@@ -1,5 +1,6 @@
 <?php
 /* Config file */
+
 include_once(__DIR__ . '/bootstrap.php');
 
 $title = 'Yeticave - main page';
@@ -16,8 +17,7 @@ $layout = include_template('layout.php', [
     'title'      => $title,
     'categories' => $categories,
     'content'    => $content,
-    'is_auth'    => $isAuth,
-    'user_name'  => $userName
+    'session'    => $session,
 ]);
 
 print $layout;

@@ -44,8 +44,7 @@ $layout = include_template('layout.php', [
     'title'      => $title,
     'categories' => $categories,
     'content'    => $content,
-    'is_auth'    => $isAuth,
-    'user_name'  => $userName,
+    'session'    => $session,
 
 ]);
 

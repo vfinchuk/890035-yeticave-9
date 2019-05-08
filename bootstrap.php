@@ -20,5 +20,5 @@ require_once(__DIR__ . '/functions/validators.php');
 
 $connection = db_connect($config['db']);
 
-$isAuth = rand(0, 1);
-$userName = 'Vova';
+session_start();
+$session = $_SESSION['user'] ?? null;
