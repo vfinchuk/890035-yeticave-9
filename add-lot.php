@@ -8,6 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $lot_data = $_POST['lot'] ?? null;
     $lot_image = $_FILES['lot-image'] ?? null;
+
     if (!$lot_data || !$lot_image) {
         die('Отсутствуют данные лота в запросе');
     }
@@ -20,10 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'errors'     => $errors
         ]);
     } else {
-
-        $lot_data = filter_form_data($lot_data);
-
-        $lot_image = upload_file($_FILES['lot-image']);
+        filter_form_data($lot_data);
 
         $lot_data['lot-image'] = upload_file($lot_image);
         $lot_id = insert_lot($connection, $lot_data);
@@ -35,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
 } else {
-
     $content = include_template('add-lot.php', [
         'categories' => $categories
     ]);
