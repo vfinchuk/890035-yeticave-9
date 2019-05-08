@@ -227,15 +227,161 @@ function validate_lot_form($connection, $lot_data, $lot_image)
  *
  * @param array $form_data массив с данными из формы
  *
+ * @param return array
  */
 function filter_form_data($form_data)
 {
-    $filter = '';
-    foreach ($form_data as $form_item) {
+    $filter = [];
+    foreach ($form_data as $form_key => $form_item) {
         if (!empty($form_item)) {
-            $filter = htmlspecialchars($form_item);
+            $filter[$form_key] = htmlspecialchars($form_item);
+        }
+    }
+    return $filter;
+}
+
+/**
+ * Проверяет Email пользователя
+ *
+ * @param string $email
+ *
+ * @return string вернет null или текст ошибки
+ */
+function validate_user_email($connection, $email)
+{
+    if (empty($email)) {
+        return 'Введите Email';
+    }
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return 'Не коректно введен Email';
+    }
+
+    if(get_user_by_email($connection, $email)) {
+        return 'Пользователь с таким Email уже существует';
+    }
+
+    return null;
+}
+
+/**
+ * Проверяет пароль пользователя
+ *
+ * @param string $password
+ *
+ * @return string вернет null или текст ошибки
+ */
+function validate_user_password($password)
+{
+    if (empty($password)) {
+        return 'Введите пароль';
+    }
+    if (mb_strlen($password) < 8) {
+        return 'Минимальная длина пароля 8 символов';
+    }
+    if (mb_strlen($password) >= 64) {
+        return 'Максимальная длина пароля 64 символа';
+    }
+
+    return null;
+}
+
+/**
+ * Проверяет имя пользователя
+ *
+ * @param string $name
+ *
+ * @return string вернет null или текст ошибки
+ */
+function validate_user_name($name)
+{
+    if (empty($name)) {
+        return 'Введите Ваше имя';
+    }
+    if (mb_strlen($name) > 128) {
+        return 'Имя не может превышать 128 символов';
+    }
+
+    return null;
+}
+
+/**
+ * Проверяет аватар пользователя
+ *
+ * @param array $avatar
+ *
+ * @return string вернет null или текст ошибки
+ */
+function validate_avatar($avatar)
+{
+    $tmp_name = $avatar['tmp_name'];
+
+    if(!empty($tmp_name)) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $file_type = finfo_file($finfo, $tmp_name);
+
+        if ($file_type === 'image/jpeg' || $file_type === 'image/png') {
+            return null;
+        } else {
+            return $error = 'Неверный формат изображения. Допустимые форматы JPEG и PNG';
         }
     }
 
-    return $filter;
+    return null;
+}
+
+/**
+ * Проверяет контакты пользователя
+ *
+ * @param string $contact
+ *
+ * @return string вернет null или текст ошибки
+ */
+function validate_user_contact($contact)
+{
+    if (empty($contact)) {
+        return 'Необходимо ввести контактные даннные';
+    }
+    if (mb_strlen($contact) > 1000) {
+        return 'Максимальная длина 1000 символов';
+    }
+
+    return null;
+}
+
+/**
+ * Функция валидации формы нового пользователя
+ *
+ * @param array $user_data массив с данными нового пользовтаеля
+ *
+ * @return array | bool Вернет null или массив с ошибками
+ */
+function validate_user_form($connection, $user_data, $avatar)
+{
+    $errors = [];
+
+    if ($error = validate_user_email($connection, $user_data['email'])) {
+        $errors['email'] = $error;
+    }
+
+    if ($error = validate_user_password($user_data['password'])) {
+        $errors['password'] = $error;
+    }
+
+    if ($error = validate_user_name($user_data['name'])) {
+        $errors['name'] = $error;
+    }
+
+    if ($error = validate_user_contact($user_data['contact'])) {
+        $errors['contact'] = $error;
+    }
+
+    if ($error = validate_avatar($avatar)) {
+        $errors['avatar'] = $error;
+    }
+
+    if(count($errors)) {
+        return $errors;
+    }
+
+    return null;
 }

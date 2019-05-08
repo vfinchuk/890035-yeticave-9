@@ -229,18 +229,16 @@ function get_lots_by_category($connection, $id)
  * Функция добавления лота в БД
  *
  * @param $connection array ресурс соединения к БД
- * @param $lot_data array масив данных лота
-
  * @return integer идентификатор добавленого лота
  *
+ * @return integer идетификатор нового лота
  */
 function insert_lot($connection, $lot_data)
 {
-    $sql = "INSERT INTO lots (user_id, category_id, end_time, name, content, start_price, step_rate, image)
-            VALUE (?, ?, ?, ?, ?, ?, ?, ?);";
+    $sql = "INSERT INTO lots (user_id, category_id, end_time, name, content, start_price, step_rate, image) VALUE (?, ?, ?, ?, ?, ?, ?, ?);";
 
     $add_lot = db_insert_data($connection, $sql, [
-        'user_id' => 3,
+        'user_id' => 1,
         'category_id'=> $lot_data['category'],
         'end_time' => $lot_data['end-time'],
         'name' => $lot_data['name'],
@@ -253,9 +251,57 @@ function insert_lot($connection, $lot_data)
     return $add_lot;
 }
 
+/**
+ * Функция добавления пользователя в БД
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param array $user_data данные пользователя
+ * @param string $avatar ссылка на аватар пользователя
+ *
+ * @return integer идетификатор нового пользователя
+ */
+function insert_user($connection, $user_data)
+{
+    $sql = "INSERT INTO users (email, password, name, contact, avatar) VALUE (?, ?, ?, ?, ?)";
 
+    $add_user = db_insert_data($connection, $sql, [
+        'email' => $user_data['email'],
+        'password' => $user_data['password'],
+        'name' => $user_data['name'],
+        'contact' => $user_data['contact'],
+        'avatar' => $user_data['avatar']
+    ]);
+
+    return $add_user;
+}
+
+/**
+ * Функция вывода пользователя по Email
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param string $email имейл для фильтрации
+ *
+ * @return array
+ */
+function get_user_by_email($connection, $email)
+{
+    $sql = "SELECT * FROM users WHERE email = ?;";
+    $lots = db_fetch_data($connection, $sql, ['email' => $email]);
+
+    return $lots;
+}
+
+/**
+ * Функция вывода категории по id
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param string $id идентификатор нужной категории
+ *
+ * @return array
+ */
 function get_category_by_id($connection, $id)
 {
+
     $sql = "SELECT * FROM categories WHERE id = ?;";
 
     $category = db_fetch_data($connection, $sql, ['id' => $id]);
