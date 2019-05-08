@@ -227,6 +227,7 @@ function validate_lot_form($connection, $lot_data, $lot_image)
  *
  * @param array $form_data массив с данными из формы
  *
+ * @param return array
  */
 function filter_form_data($form_data)
 {
