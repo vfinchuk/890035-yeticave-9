@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'errors'     => $errors
         ]);
     } else {
-        filter_form_data($lot_data);
+        $user_data = filter_form_data($lot_data);
 
         $lot_image = upload_file($_FILES['lot-image']);
 
@@ -29,8 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $lot_id = insert_lot($connection, $lot_data);
 
         if ($lot_id) {
-            $lot = get_lot($connection, $lot_id);
-
             header('Location: lot.php?id=' . $lot_id);
             exit();
         }
