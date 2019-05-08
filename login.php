@@ -3,9 +3,7 @@
 include_once(__DIR__ . '/bootstrap.php');
 
 $title = 'Yeticave - форма аутентификации';
-
 $categories = get_categories($connection);
-
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -24,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ]);
     } else {
         $auth_data = filter_form_data($auth_data);
-
         $user_data = get_user_by_email($connection, $auth_data['email']);
 
         $_SESSION['user'] = $user_data;
