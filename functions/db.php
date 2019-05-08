@@ -238,7 +238,7 @@ function insert_lot($connection, $lot_data)
     $sql = "INSERT INTO lots (user_id, category_id, end_time, name, content, start_price, step_rate, image) VALUE (?, ?, ?, ?, ?, ?, ?, ?);";
 
     $add_lot = db_insert_data($connection, $sql, [
-        'user_id' => 3,
+        'user_id' => 1,
         'category_id'=> $lot_data['category'],
         'end_time' => $lot_data['end-time'],
         'name' => $lot_data['name'],
