@@ -1,5 +1,4 @@
 <?php
-/* Config file */
 include_once(__DIR__ . '/bootstrap.php');
 
 $title = 'Yeticave - форма аутентификации';

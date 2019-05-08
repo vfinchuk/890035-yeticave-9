@@ -24,8 +24,8 @@
                        value="Найти">
             </form>
             <?php if ($session): ?>
-            <a class="main-header__add-lot button" href="/add-lot.php">Добавить лот</a>
-            <?php  endif; ?>
+                <a class="main-header__add-lot button" href="/add-lot.php">Добавить лот</a>
+            <?php endif; ?>
             <nav class="user-menu">
                 <?php if ($session): ?>
                     <div class="user-menu__logged">
@@ -113,8 +113,9 @@
                 </svg>
             </a>
         </div>
-        <a class="main-footer__add-lot button" href="/add-lot.php">Добавить
-            лот</a>
+        <?php if ($session): ?>
+            <a class="main-footer__add-lot button" href="/add-lot.php">Добавить лот</a>
+        <?php endif; ?>
         <div class="main-footer__developed-by">
             <span class="visually-hidden">Разработано:</span>
             <a class="logo-academy" href="https://htmlacademy.ru/intensive/php">

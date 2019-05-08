@@ -2,7 +2,6 @@
 include_once(__DIR__ . '/bootstrap.php');
 
 $title = 'Yeticave - форма регистрации нового пользователя';
-
 $categories = get_categories($connection);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

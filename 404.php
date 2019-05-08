@@ -1,20 +1,9 @@
 <?php
-/* Config file */
 include_once(__DIR__ . '/bootstrap.php');
 
-if (!$yeticave_db) {
+$title = 'Yeticave - 404 Страница не найдена';
 
-    $error = mysqli_connect_error();
-    $content = include_template('error.php', ['error' => $error]);
-
-} else {
-    /**
-     * Вывод категорий из БД
-     */
-    $sql_category = "SELECT * FROM categories";
-    $categories = db_fetch_data($yeticave_db, $sql_category);
-
-}
+$categories = get_categories($connection);
 
 $content = include_template('404.php', [
     'categories' => $categories,

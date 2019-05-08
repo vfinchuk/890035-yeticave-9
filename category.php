@@ -3,15 +3,8 @@
 include_once(__DIR__ . '/bootstrap.php');
 
 $category_id = $_GET['id'] ?? null;
-$category = null;
 $categories = get_categories($connection);
-
-
-if ($category_id) {
-
-    $category = get_category($connection, $category_id);
-
-}
+$category = get_category($connection, $category_id);
 
 if ($category_id && $category) {
 
