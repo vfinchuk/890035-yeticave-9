@@ -227,16 +227,16 @@ function validate_lot_form($connection, $lot_data, $lot_image)
  *
  * @param array $form_data массив с данными из формы
  *
+ * @param return array
  */
 function filter_form_data($form_data)
 {
-    $filter = '';
-    foreach ($form_data as $form_item) {
+    $filter = [];
+    foreach ($form_data as $form_key => $form_item) {
         if (!empty($form_item)) {
-            $filter = htmlspecialchars($form_item);
+            $filter[$form_key] = htmlspecialchars($form_item);
         }
     }
-
     return $filter;
 }
 
