@@ -2,7 +2,7 @@
 /* Config file */
 include_once(__DIR__ . '/bootstrap.php');
 
-$title = 'Yeticave - форма регистрации нового пользователя';
+$title = 'Yeticave - форма аутентификации';
 
 $categories = get_categories($connection);
 
@@ -24,7 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ]);
     } else {
 
-//        var_dump($auth_data);
+        $_SERVER['user'] = get_user_by_email($connection, $auth_data['email']);
+
+        //        var_dump($auth_data);
 //        die;
 //        $content = include_template('login.php', [
 //            'categories' => $categories
