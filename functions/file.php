@@ -10,6 +10,10 @@ function upload_file($image)
 {
     $tmp_name = $image['tmp_name'] ?? null;
 
+    if (empty($tmp_name)) {
+        return null;
+    }
+
     $finfo = finfo_open(FILEINFO_MIME_TYPE);
     $file_type = finfo_file($finfo, $tmp_name);
 
