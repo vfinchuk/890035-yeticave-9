@@ -44,7 +44,8 @@ function validate_lot_name($name)
 /**
  * Проверяет поле select категории на наличие ID
  *
- * @param int $category
+ * @param array $connection подключение к базе
+ * @param int $category идентификатор категории
  *
  * @return string Вернет null или строку с текстом ошибки.
  */
@@ -63,7 +64,7 @@ function validate_lot_category($connection, $category)
 /**
  * Проверяет поле для описани лота
  *
- * @param string $name Имя лота
+ * @param string $content контентнт лота
  *
  * @return string вернет null или текст ошибки
  */
@@ -386,47 +387,75 @@ function validate_user_form($connection, $user_data, $avatar)
     return null;
 }
 
-
-function validate_auth_login($connection, $email)
+/**
+ * Проверяет логин пользователя
+ *
+ * @param array $login имейл пользователя
+ *
+ * @return string вернет null или текст ошибки
+ */
+function validate_auth_login($connection, $login)
 {
-    if (empty($email)) {
+    if (empty($login)) {
         return 'Введите Email';
     }
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if (!filter_var($login, FILTER_VALIDATE_EMAIL)) {
         return 'Не коректно введен Email';
     }
-    if (!get_user_by_email($connection, $email)) {
+    if (!get_user_by_email($connection, $login)) {
         return 'Нет пользователя с таким Email';
     }
 
     return null;
 }
 
-function validate_auth_password($connection, $email, $password)
+/**
+ * Проверяет логин пользователя
+ *
+ * @param array $connection подключение к базе
+ * @param string $login логин
+ * @param string $password пароль
+ *
+ * @return string вернет null или текст ошибки
+ */
+function validate_auth_password($connection, $login, $password)
 {
     if (empty($password)) {
         return 'Введите пароль';
     } else {
-        $password_hash = get_password_by_email($connection, $email);
-        if (!password_verify($password, $password_hash['password'])) {
-            return 'Неверный пароль';
+        if (mb_strlen($password) < 8) {
+            return 'Минимальная длина пароля 8символов';
+        } else {
+            $password_hash = get_password_by_email($connection, $login);
+            if (!password_verify($password, $password_hash['password'])) {
+                return 'Неверный пароль';
+            }
         }
     }
 
     return null;
 }
 
-
+/**
+ * Функция валидации формы авторизации
+ *
+ * @param array $connection подключение к базе
+ * @param array $auth_data массив данных авторизации пользователя
+ *
+ * @return array вернет null или массив ошибок
+ */
 function validate_auth_form($connection, $auth_data)
 {
     $errors = [];
 
-    if ($error = validate_auth_login($connection, $auth_data['email'])) {
-        $errors['email'] = $error;
-    }
-
-    if ($error = validate_auth_password($connection, $auth_data['email'], $auth_data['password'])) {
-        $errors['password'] = $error;
+    if (validate_auth_login($connection, $auth_data['email'])) {
+        $errors['email'] = validate_auth_login($connection, $auth_data['email']);
+    } elseif (
+        validate_auth_login($connection, $auth_data['email']) ||
+        validate_auth_password($connection, $auth_data['email'], $auth_data['password'])
+    ) {
+        $errors['email'] = validate_auth_login($connection, $auth_data['email']);
+        $errors['password'] = validate_auth_password($connection, $auth_data['email'], $auth_data['password']);
     }
 
     if (count($errors)) {
