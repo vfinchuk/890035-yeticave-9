@@ -36,7 +36,7 @@ CREATE TABLE lots (
   create_time   DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
   end_time      DATETIME NOT NULL,
   name          VARCHAR(128) NOT NULL,
-  content       VARCHAR(128) NOT NULL,
+  content       VARCHAR(1024) NOT NULL,
   image         VARCHAR(128) NOT NULL,
   start_price   INT NOT NULL,
   step_rate     INT NOT NULL
