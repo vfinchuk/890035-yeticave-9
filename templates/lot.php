@@ -33,28 +33,28 @@
                         </div>
                     </div>
                     <?php if($session && ($lot['user_id'] !== $session['id'])): ?>
-                    <form class="lot-item__form" action="" method="post" autocomplete="off">
-                        <p class="lot-item__form-item form__item form__item--invalid">
+                    <form class="lot-item__form <?= isset($errors) ? 'form--invalid' : false; ?>" action="" method="post" autocomplete="off">
+                        <p class="lot-item__form-item form__item <?= isset($errors['bet']) ? 'form__item--invalid' : false; ?>">
                             <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="text" name="cost" placeholder="12 000">
-                            <span class="form__error">Введите наименование лота</span>
+                            <input id="cost" type="text" name="bet[amount]" placeholder="12 000" value="<?= $_POST['bet-sum'] ?? false; ?>">
+                            <span class="form__error"><?= $errors['bet'] ?? null; ?></span>
                         </p>
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
                     <?php endif; ?>
                 </div>
-                <?php if($session): ?>
+                <?php if($session && $bets): ?>
                 <div class="history">
                     <h3>История ставок (<span>10</span>)</h3>
                     <table class="history__list">
 
-<!--                        --><?php //foreach ($bets as $bet): ?>
-<!--                            <tr class="history__item">-->
-<!--                                <td class="history__name">--><?//= strstr($bet['name'], ' ', true); ?><!--</td>-->
-<!--                                <td class="history__price">--><?//= $bet['amount']; ?><!-- р</td>-->
-<!--                                <td class="history__time">--><?//= $bet['create_time']; ?><!--</td>-->
-<!--                            </tr>-->
-<!--                        --><?php //endforeach; ?>
+                        <?php foreach ($bets as $bet): ?>
+                            <tr class="history__item">
+                                <td class="history__name"></td>
+                                <td class="history__price"><?= $bet['amount']; ?> р</td>
+                                <td class="history__time"><?= $bet['create_time']; ?></td>
+                            </tr>
+                        <?php endforeach; ?>
                     </table>
                 </div>
                 <?php endif; ?>
