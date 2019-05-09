@@ -26,7 +26,7 @@
                     <div class="lot-item__cost-state">
                         <div class="lot-item__rate">
                             <span class="lot-item__amount">Текущая цена</span>
-                            <span class="lot-item__cost"><?= $lot['start_price'] . RUB; ?></span>
+                            <span class="lot-item__cost"><?= $lot['price'] . RUB; ?></span>
                         </div>
                         <div class="lot-item__min-cost">
                             Мин. ставка <span><?= $lot['step_rate']; ?> р</span>
@@ -50,8 +50,8 @@
 
                         <?php foreach ($bets as $bet): ?>
                             <tr class="history__item">
-                                <td class="history__name"></td>
-                                <td class="history__price"><?= $bet['amount']; ?> р</td>
+                                <td class="history__name"><?= $bet['user_name']; ?></td>
+                                <td class="history__price"><?= $bet['amount'] .RUB; ?></td>
                                 <td class="history__time"><?= $bet['create_time']; ?></td>
                             </tr>
                         <?php endforeach; ?>

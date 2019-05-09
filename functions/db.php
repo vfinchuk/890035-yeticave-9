@@ -358,9 +358,43 @@ function get_password_by_email($connection, $email)
  */
 function get_bets_by_lot($connection, $lot_id)
 {
-    $sql = "SELECT * FROM bets b WHERE b.lot_id = ?;";
+    $sql = "SELECT u.name AS user_name, b.amount, b.create_time
+              FROM bets b 
+              LEFT JOIN users u ON u.id = b.user_id
+              WHERE b.lot_id = ?
+              ORDER BY b.create_time DESC";
 
     $bets = db_fetch_data($connection, $sql, ['lot_id' => $lot_id]);
 
     return $bets;
+}
+
+/**
+ * Функция возвращает текущую цену на лот
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param integer $lot_id идентификатор лота
+ *
+ * @return string
+ */
+function get_lot_price($connection, $lot_id, $start_price)
+{
+    $price = $start_price;
+
+    $sql = "SELECT SUM(b.amount) sum_bets
+               FROM lots l
+               LEFT JOIN bets b ON l.id = b.lot_id
+               WHERE l.id = ?";
+
+    $bets = db_fetch_data($connection, $sql, ['lot_id' => $lot_id], true);
+
+    if(!count($bets)) {
+        return $price;
+    }
+
+    if($start_price) {
+        $price = $start_price + intval($bets['sum_bets']);
+    }
+
+    return $price;
 }

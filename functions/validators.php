@@ -483,6 +483,7 @@ function validate_bet_form($connection, $bet_amount)
         if(!is_numeric($bet_amount)){
             $errors['bet'] = 'Только числовое значение';
         }
+
     }
 
     if(count($errors)) {
