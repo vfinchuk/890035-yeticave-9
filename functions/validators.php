@@ -464,3 +464,30 @@ function validate_auth_form($connection, $auth_data)
 
     return null;
 }
+
+/**
+ * Функция валидации формы новой ставки
+ *
+ * @param array $connection подключение к базе
+ * @param array $bet_amount массив данных о ставке
+ *
+ * @return array вернет null или массив ошибок
+ */
+function validate_bet_form($connection, $bet_amount)
+{
+    $errors = [];
+
+    if(empty($bet_amount)){
+        $errors['bet'] = 'Введите сумму ставки';
+    } else {
+        if(!is_numeric($bet_amount)){
+            $errors['bet'] = 'Только числовое значение';
+        }
+    }
+
+    if(count($errors)) {
+        return $errors;
+    }
+
+    return null;
+}

@@ -195,7 +195,7 @@ function get_lots($connection)
  */
 function get_lot($connection, $id)
 {
-    $sql = "SELECT l.name, user_id, end_time, start_price, step_rate, content, image, c.name AS category_name
+    $sql = "SELECT l.name, l.id, user_id, end_time, start_price, step_rate, content, image, c.name AS category_name
                FROM lots l
                LEFT JOIN categories c ON l.category_id = c.id
                WHERE l.id = ?";
@@ -238,18 +238,18 @@ function insert_lot($connection, $lot_data)
     $sql = "INSERT INTO lots (user_id, category_id, end_time, name, content, start_price, step_rate, image) VALUE (?, ?, ?, ?, ?, ?, ?, ?);";
 
     $add_lot = db_insert_data($connection, $sql, [
-        'user_id' => $lot_data['user_id'],
-        'category_id'=> $lot_data['category'],
-        'end_time' => $lot_data['end-time'],
-        'name' => $lot_data['name'],
-        'content' => $lot_data['content'],
+        'user_id'     => $lot_data['user_id'],
+        'category_id' => $lot_data['category'],
+        'end_time'    => $lot_data['end-time'],
+        'name'        => $lot_data['name'],
+        'content'     => $lot_data['content'],
         'start_price' => $lot_data['start-price'],
-        'step_rate' => $lot_data['step-rate'],
-        'image' => $lot_data['lot-image'],
+        'step_rate'   => $lot_data['step-rate'],
+        'image'       => $lot_data['lot-image'],
     ]);
 
     return $add_lot;
-    }
+}
 
 /**
  * Функция добавления пользователя в БД
@@ -265,11 +265,33 @@ function insert_user($connection, $user_data)
     $sql = "INSERT INTO users (email, password, name, contact, avatar) VALUE (?, ?, ?, ?, ?)";
 
     $add_user = db_insert_data($connection, $sql, [
-        'email' => $user_data['email'],
+        'email'    => $user_data['email'],
         'password' => $user_data['password'],
-        'name' => $user_data['name'],
-        'contact' => $user_data['contact'],
-        'avatar' => $user_data['avatar']
+        'name'     => $user_data['name'],
+        'contact'  => $user_data['contact'],
+        'avatar'   => $user_data['avatar']
+    ]);
+
+    return $add_user;
+}
+
+/**
+ * Функция добавления пользователя в БД
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param array $user_data данные пользователя
+ * @param string $avatar ссылка на аватар пользователя
+ *
+ * @return integer идетификатор нового пользователя
+ */
+function insert_bet($connection, $bet_data)
+{
+    $sql = "INSERT INTO bets (user_id, lot_id, amount) VALUE (?, ?, ?)";
+
+    $add_user = db_insert_data($connection, $sql, [
+        'user_id' => $bet_data['user_id'],
+        'lot_id'  => $bet_data['lot_id'],
+        'amount'  => $bet_data['amount'],
     ]);
 
     return $add_user;
@@ -309,12 +331,36 @@ function get_category_by_id($connection, $id)
     return $category;
 }
 
-
+/**
+ * Функция возвращает хеш пароля по имейлу пользователя
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param string $email имейл пользователя
+ *
+ * @return array
+ */
 function get_password_by_email($connection, $email)
 {
-    $sql = "SELECT password FROM users WHERE users.email LIKE ?;";
+    $sql = "SELECT password FROM users WHERE users.email = ?;";
 
     $password = db_fetch_data($connection, $sql, ['email' => $email], true);
 
     return $password;
+}
+
+/**
+ * Функция возвращает ставки лота
+ *
+ * @param $connection array ресурс соединения к БД
+ * @param integer $lot_id идентификатор лота
+ *
+ * @return array
+ */
+function get_bets_by_lot($connection, $lot_id)
+{
+    $sql = "SELECT * FROM bets b WHERE b.lot_id = ?;";
+
+    $bets = db_fetch_data($connection, $sql, ['lot_id' => $lot_id]);
+
+    return $bets;
 }
