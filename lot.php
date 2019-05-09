@@ -17,7 +17,8 @@ if ($lot_id && $lot) {
 
     $content = include_template('lot.php', [
         'categories' => $categories,
-        'lot'        => $lot
+        'lot'        => $lot,
+        'session'    => $session,
     ]);
 
 } else {

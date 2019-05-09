@@ -32,7 +32,7 @@
                             Мин. ставка <span><?= $lot['step_rate']; ?> р</span>
                         </div>
                     </div>
-                    <?php /* ?>
+                    <?php if($session && ($lot['user_id'] !== $session['id'])): ?>
                     <form class="lot-item__form" action="" method="post" autocomplete="off">
                         <p class="lot-item__form-item form__item form__item--invalid">
                             <label for="cost">Ваша ставка</label>
@@ -41,23 +41,23 @@
                         </p>
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
-                    <?php */ ?>
+                    <?php endif; ?>
                 </div>
-                <?php /* ?>
+                <?php if($session): ?>
                 <div class="history">
                     <h3>История ставок (<span>10</span>)</h3>
                     <table class="history__list">
 
-                        <?php foreach ($bets as $bet): ?>
-                            <tr class="history__item">
-                                <td class="history__name"><?= strstr($bet['name'], ' ', true); ?></td>
-                                <td class="history__price"><?= $bet['amount']; ?> р</td>
-                                <td class="history__time"><?= $bet['create_time']; ?></td>
-                            </tr>
-                        <?php endforeach; ?>
+<!--                        --><?php //foreach ($bets as $bet): ?>
+<!--                            <tr class="history__item">-->
+<!--                                <td class="history__name">--><?//= strstr($bet['name'], ' ', true); ?><!--</td>-->
+<!--                                <td class="history__price">--><?//= $bet['amount']; ?><!-- р</td>-->
+<!--                                <td class="history__time">--><?//= $bet['create_time']; ?><!--</td>-->
+<!--                            </tr>-->
+<!--                        --><?php //endforeach; ?>
                     </table>
                 </div>
-                <?php */ ?>
+                <?php endif; ?>
             </div>
         </div>
     </section>

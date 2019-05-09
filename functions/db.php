@@ -195,7 +195,7 @@ function get_lots($connection)
  */
 function get_lot($connection, $id)
 {
-    $sql = "SELECT l.name, end_time, start_price, step_rate, content, image, c.name AS category_name
+    $sql = "SELECT l.name, user_id, end_time, start_price, step_rate, content, image, c.name AS category_name
                FROM lots l
                LEFT JOIN categories c ON l.category_id = c.id
                WHERE l.id = ?";
