@@ -468,22 +468,25 @@ function validate_auth_form($connection, $auth_data)
 /**
  * Функция валидации формы новой ставки
  *
- * @param array $connection подключение к базе
- * @param array $bet_amount массив данных о ставке
+ * @param array $step_rate миниальная ставка
+ * @param array $bet_amount размер ставки
  *
  * @return array вернет null или массив ошибок
  */
-function validate_bet_form($connection, $bet_amount)
+function validate_bet_form($price, $step_rate, $amount)
 {
     $errors = [];
 
-    if(empty($bet_amount)){
+    if(empty($amount)){
         $errors['bet'] = 'Введите сумму ставки';
     } else {
-        if(!is_numeric($bet_amount)){
-            $errors['bet'] = 'Только числовое значение';
-        }
 
+        if(!is_numeric($amount)){
+            $errors['bet'] = 'Только числовое значение';
+        } elseif(($price + $step_rate) >= $amount) {
+            $errors['bet'] = 'Минимальная ставка на этот товар '. ($price + $step_rate) . ' ';
+            $errors['bet'] .= get_noun_plural_form($step_rate, 'рубль', 'рубля', 'рублей');
+        }
     }
 
     if(count($errors)) {

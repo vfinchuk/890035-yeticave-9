@@ -17,7 +17,6 @@ require_once(__DIR__ . '/functions/db.php');
 require_once(__DIR__ . '/functions/file.php');
 require_once(__DIR__ . '/functions/templates.php');
 require_once(__DIR__ . '/functions/validators.php');
-
 $connection = db_connect($config['db']);
 
 session_start();

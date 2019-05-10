@@ -381,7 +381,7 @@ function get_lot_price($connection, $lot_id, $start_price)
 {
     $price = $start_price;
 
-    $sql = "SELECT SUM(b.amount) sum_bets
+    $sql = "SELECT b.amount 
                FROM lots l
                LEFT JOIN bets b ON l.id = b.lot_id
                WHERE l.id = ?";
@@ -393,7 +393,7 @@ function get_lot_price($connection, $lot_id, $start_price)
     }
 
     if($start_price) {
-        $price = $start_price + intval($bets['sum_bets']);
+        $price = $start_price + intval($bets['amount']);
     }
 
     return $price;

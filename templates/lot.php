@@ -36,7 +36,7 @@
                     <form class="lot-item__form <?= isset($errors) ? 'form--invalid' : false; ?>" action="" method="post" autocomplete="off">
                         <p class="lot-item__form-item form__item <?= isset($errors['bet']) ? 'form__item--invalid' : false; ?>">
                             <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="text" name="bet[amount]" placeholder="12 000" value="<?= $_POST['bet-sum'] ?? false; ?>">
+                            <input id="cost" type="text" name="bet[amount]" maxlength="5" placeholder="12 000" value="<?= $_POST['bet']['amount'] ?? false; ?>">
                             <span class="form__error"><?= $errors['bet'] ?? null; ?></span>
                         </p>
                         <button type="submit" class="button">Сделать ставку</button>
