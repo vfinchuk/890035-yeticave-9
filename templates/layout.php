@@ -23,13 +23,13 @@
                 <input class="main-header__search-btn" type="submit" name="find"
                        value="Найти">
             </form>
-            <?php if ($session): ?>
+            <?php if ($user): ?>
                 <a class="main-header__add-lot button" href="/add-lot.php">Добавить лот</a>
             <?php endif; ?>
             <nav class="user-menu">
-                <?php if ($session): ?>
+                <?php if ($user): ?>
                     <div class="user-menu__logged">
-                        <p><?= $session['name']; ?></p>
+                        <p><?= $user['name']; ?></p>
                         <a class="user-menu__bets" href="pages/my-bets.php">Мои
                             ставки</a>
                         <a class="user-menu__logout" href="/logout.php">Выход</a>
@@ -113,7 +113,7 @@
                 </svg>
             </a>
         </div>
-        <?php if ($session): ?>
+        <?php if ($user): ?>
             <a class="main-footer__add-lot button" href="/add-lot.php">Добавить лот</a>
         <?php endif; ?>
         <div class="main-footer__developed-by">

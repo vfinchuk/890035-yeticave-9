@@ -312,7 +312,7 @@ function get_category_by_id($connection, $id)
 
 function get_password_by_email($connection, $email)
 {
-    $sql = "SELECT password FROM users WHERE users.email LIKE ?;";
+    $sql = "SELECT password FROM users WHERE users.email = ?;";
 
     $password = db_fetch_data($connection, $sql, ['email' => $email], true);
 
