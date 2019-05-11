@@ -407,10 +407,8 @@ function validate_auth_login($login)
 }
 
 /**
- * Проверяет логин пользователя
+ * Проверяет  пароль
  *
- * @param array $connection подключение к базе
- * @param string $login логин
  * @param string $password пароль
  *
  * @return string вернет null или текст ошибки
@@ -429,8 +427,8 @@ function validate_auth_password($password)
 /**
  * Функция валидации формы авторизации
  *
- * @param array $connection подключение к базе
- * @param array $auth_data массив данных авторизации пользователя
+ * @param array $user массив данных пользователя
+ * @param array $password массив данных авторизации пользователя
  *
  * @return array вернет null или массив ошибок
  */
