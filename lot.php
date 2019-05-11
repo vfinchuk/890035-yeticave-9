@@ -1,5 +1,4 @@
 <?php
-/* Config file */
 include_once(__DIR__ . '/bootstrap.php');
 
 $lot_id = $_GET['id'] ?? null;
@@ -36,8 +35,7 @@ $layout = include_template('layout.php', [
     'title'      => $title,
     'categories' => $categories,
     'content'    => $content,
-    'is_auth'    => $isAuth,
-    'user_name'  => $userName,
+    'user'       => $user,
 
 ]);
 

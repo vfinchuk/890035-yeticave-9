@@ -2,7 +2,6 @@
 include_once(__DIR__ . '/bootstrap.php');
 
 $title = 'Yeticave - форма регистрации нового пользователя';
-
 $categories = get_categories($connection);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -10,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user_data = $_POST['user'] ?? null;
     $avatar = $_FILES['avatar'] ?? null;
 
-    if(!$user_data) {
+    if (!$user_data) {
         die('Отсутствуют данные пользователя');
     }
 
@@ -20,17 +19,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $content = include_template('sign-up.php', [
             'categories' => $categories,
-            'errors' => $errors
+            'errors'     => $errors
         ]);
 
     } else {
-        echo filter_form_data($user_data);
+        $user_data = filter_form_data($user_data);
 
         $user_data['password'] = password_hash($user_data['password'], PASSWORD_DEFAULT);
         $user_data['avatar'] = upload_file($avatar);
         $user_id = insert_user($connection, $user_data);
 
-        header('Location: login.php');
+        header('Location: index.php');
         exit();
     }
 
@@ -44,8 +43,7 @@ $layout = include_template('layout.php', [
     'title'      => $title,
     'categories' => $categories,
     'content'    => $content,
-    'is_auth'    => $isAuth,
-    'user_name'  => $userName,
+    'user'       => $user,
 
 ]);
 

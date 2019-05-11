@@ -44,7 +44,8 @@ function validate_lot_name($name)
 /**
  * Проверяет поле select категории на наличие ID
  *
- * @param int $category
+ * @param array $connection подключение к базе
+ * @param int $category идентификатор категории
  *
  * @return string Вернет null или строку с текстом ошибки.
  */
@@ -63,7 +64,7 @@ function validate_lot_category($connection, $category)
 /**
  * Проверяет поле для описани лота
  *
- * @param string $name Имя лота
+ * @param string $content контентнт лота
  *
  * @return string вернет null или текст ошибки
  */
@@ -252,11 +253,11 @@ function validate_user_email($connection, $email)
     if (empty($email)) {
         return 'Введите Email';
     }
-    if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return 'Не коректно введен Email';
     }
 
-    if(get_user_by_email($connection, $email)) {
+    if (get_user_by_email($connection, $email)) {
         return 'Пользователь с таким Email уже существует';
     }
 
@@ -315,7 +316,7 @@ function validate_avatar($avatar)
 {
     $tmp_name = $avatar['tmp_name'];
 
-    if(!empty($tmp_name)) {
+    if (!empty($tmp_name)) {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
 
@@ -379,7 +380,69 @@ function validate_user_form($connection, $user_data, $avatar)
         $errors['avatar'] = $error;
     }
 
-    if(count($errors)) {
+    if (count($errors)) {
+        return $errors;
+    }
+
+    return null;
+}
+
+/**
+ * Проверяет логин пользователя
+ *
+ * @param array $login имейл пользователя
+ *
+ * @return string вернет null или текст ошибки
+ */
+function validate_auth_login($login)
+{
+    if (empty($login)) {
+        return 'Введите Email';
+    }
+    if (!filter_var($login, FILTER_VALIDATE_EMAIL)) {
+        return 'Не коректно введен Email';
+    }
+
+    return null;
+}
+
+/**
+ * Проверяет  пароль
+ *
+ * @param string $password пароль
+ *
+ * @return string вернет null или текст ошибки
+ */
+function validate_auth_password($password)
+{
+    if (empty($password)) {
+        return 'Введите пароль';
+    }
+    if (mb_strlen($password) < 8) {
+        return 'Минимальная длина пароля 8символов';
+    }
+    return null;
+}
+
+/**
+ * Функция валидации формы авторизации
+ *
+ * @param array $user массив данных пользователя
+ * @param array $password массив данных авторизации пользователя
+ *
+ * @return array вернет null или массив ошибок
+ */
+function validate_login($user, $password)
+{
+    $errors = [];
+
+    if (!$user) {
+        $errors['email'] = 'Пользователь с таким email не найден';
+    } elseif (!password_verify($password, $user['password'])) {
+        $errors['password'] = 'Неверный пароль';
+    }
+
+    if (count($errors)) {
         return $errors;
     }
 

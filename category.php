@@ -3,15 +3,8 @@
 include_once(__DIR__ . '/bootstrap.php');
 
 $category_id = $_GET['id'] ?? null;
-$category = null;
 $categories = get_categories($connection);
-
-
-if ($category_id) {
-
-    $category = get_category($connection, $category_id);
-
-}
+$category = get_category($connection, $category_id);
 
 if ($category_id && $category) {
 
@@ -20,8 +13,8 @@ if ($category_id && $category) {
     $lots = get_lots_by_category($connection, $category_id);
 
     $content = include_template('category.php', [
-        'categories' => $categories,
-        'lots'        => $lots,
+        'categories'       => $categories,
+        'lots'             => $lots,
         'current_category' => $category
     ]);
 
@@ -40,8 +33,7 @@ $layout = include_template('layout.php', [
     'title'      => $title,
     'categories' => $categories,
     'content'    => $content,
-    'is_auth'    => $isAuth,
-    'user_name'  => $userName,
+    'user'       => $user,
 
 ]);
 
