@@ -457,7 +457,7 @@ function validate_login($user, $password)
  *
  * @return array вернет null или массив ошибок
  */
-function validate_bet_form($price, $step_rate, $amount)
+function validate_bet_form($lot_data, $amount)
 {
     $errors = [];
 
@@ -467,9 +467,9 @@ function validate_bet_form($price, $step_rate, $amount)
 
         if(!is_numeric($amount)){
             $errors['bet'] = 'Только числовое значение';
-        } elseif(($price + $step_rate) >= $amount) {
-            $errors['bet'] = 'Минимальная ставка на этот товар '. ($price + $step_rate) . ' ';
-            $errors['bet'] .= get_noun_plural_form($step_rate, 'рубль', 'рубля', 'рублей');
+        } elseif(($lot_data['price'] + $lot_data['step_rate']) > $amount) {
+            $errors['bet'] = 'Минимальная ставка на этот товар '. ($lot_data['price'] + $lot_data['step_rate']) . ' ';
+            $errors['bet'] .= get_noun_plural_form($lot_data['step_rate'], 'рубль', 'рубля', 'рублей');
         }
     }
 

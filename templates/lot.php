@@ -32,7 +32,7 @@
                             Мин. ставка <span><?= $lot['step_rate']; ?> р</span>
                         </div>
                     </div>
-                    <?php if($session && ($lot['user_id'] !== $session['id'])): ?>
+                    <?php if($user && ($lot['user_id'] !== $user['id'])): ?>
                     <form class="lot-item__form <?= isset($errors) ? 'form--invalid' : false; ?>" action="" method="post" autocomplete="off">
                         <p class="lot-item__form-item form__item <?= isset($errors['bet']) ? 'form__item--invalid' : false; ?>">
                             <label for="cost">Ваша ставка</label>
@@ -43,7 +43,7 @@
                     </form>
                     <?php endif; ?>
                 </div>
-                <?php if($session && $bets): ?>
+                <?php if($user && $bets): ?>
                 <div class="history">
                     <h3>История ставок (<span>10</span>)</h3>
                     <table class="history__list">

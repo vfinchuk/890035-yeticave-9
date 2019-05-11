@@ -5,6 +5,7 @@ $lot_id = $_GET['id'] ?? null;
 $categories = get_categories($connection);
 $lot = get_lot($connection, $lot_id);
 $bets = get_bets_by_lot($connection, $lot['id']);
+
 if ($bets) {
     $bets = array_slice($bets, 0, 10);
 }
@@ -13,7 +14,7 @@ if ($lot) {
 
     $title = "Лот - {$lot['name']}";
 
-    $lot['price'] = get_lot_price($connection, $lot['id'], $lot['start_price']);
+    $lot['price'] = get_lot_price($connection, $lot);
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -23,16 +24,16 @@ if ($lot) {
         }
 
         $bet_data['lot_id'] = $lot['id'];
-        $bet_data['user_id'] = $session['id'];
+        $bet_data['user_id'] = $user['id'];
 
-        $errors = validate_bet_form($lot['price'],$lot['step_rate'], $bet_data['amount']);
+        $errors = validate_bet_form($lot, $bet_data['amount']);
 
         if ($errors) {
 
             $content = include_template('lot.php', [
                 'categories' => $categories,
                 'lot'        => $lot,
-                'session'    => $session,
+                'user'       => $user,
                 'bets'       => $bets,
                 'errors'     => $errors
             ]);
@@ -50,7 +51,7 @@ if ($lot) {
         $content = include_template('lot.php', [
             'categories' => $categories,
             'lot'        => $lot,
-            'session'    => $session,
+            'user'       => $user,
             'bets'       => $bets
         ]);
 

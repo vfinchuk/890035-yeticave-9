@@ -377,23 +377,20 @@ function get_bets_by_lot($connection, $lot_id)
  *
  * @return string
  */
-function get_lot_price($connection, $lot_id, $start_price)
+function get_lot_price($connection, $lot)
 {
-    $price = $start_price;
+    $price = $lot['start_price'];
 
     $sql = "SELECT b.amount 
                FROM lots l
                LEFT JOIN bets b ON l.id = b.lot_id
-               WHERE l.id = ?";
+               WHERE l.id = ?
+               ORDER BY b.create_time DESC";
 
-    $bets = db_fetch_data($connection, $sql, ['lot_id' => $lot_id], true);
+    $bets = db_fetch_data($connection, $sql, ['lot_id' => $lot['id']], true);
 
-    if(!count($bets)) {
-        return $price;
-    }
-
-    if($start_price) {
-        $price = $start_price + intval($bets['amount']);
+    if($bets['amount']) {
+        $price = $bets['amount'];
     }
 
     return $price;
