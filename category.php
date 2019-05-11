@@ -13,8 +13,8 @@ if ($category_id && $category) {
     $lots = get_lots_by_category($connection, $category_id);
 
     $content = include_template('category.php', [
-        'categories' => $categories,
-        'lots'        => $lots,
+        'categories'       => $categories,
+        'lots'             => $lots,
         'current_category' => $category
     ]);
 
@@ -33,7 +33,7 @@ $layout = include_template('layout.php', [
     'title'      => $title,
     'categories' => $categories,
     'content'    => $content,
-    'session'    => $session,
+    'user'       => $user,
 
 ]);
 

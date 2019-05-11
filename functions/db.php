@@ -308,9 +308,9 @@ function insert_bet($connection, $bet_data)
 function get_user_by_email($connection, $email)
 {
     $sql = "SELECT * FROM users WHERE email = ?;";
-    $lots = db_fetch_data($connection, $sql, ['email' => $email], true);
+    $user = db_fetch_data($connection, $sql, ['email' => $email], true);
 
-    return $lots;
+    return $user;
 }
 
 /**

@@ -394,16 +394,13 @@ function validate_user_form($connection, $user_data, $avatar)
  *
  * @return string вернет null или текст ошибки
  */
-function validate_auth_login($connection, $login)
+function validate_auth_login($login)
 {
     if (empty($login)) {
         return 'Введите Email';
     }
     if (!filter_var($login, FILTER_VALIDATE_EMAIL)) {
         return 'Не коректно введен Email';
-    }
-    if (!get_user_by_email($connection, $login)) {
-        return 'Нет пользователя с таким Email';
     }
 
     return null;
@@ -418,21 +415,14 @@ function validate_auth_login($connection, $login)
  *
  * @return string вернет null или текст ошибки
  */
-function validate_auth_password($connection, $login, $password)
+function validate_auth_password($password)
 {
     if (empty($password)) {
         return 'Введите пароль';
-    } else {
-        if (mb_strlen($password) < 8) {
-            return 'Минимальная длина пароля 8символов';
-        } else {
-            $password_hash = get_password_by_email($connection, $login);
-            if (!password_verify($password, $password_hash['password'])) {
-                return 'Неверный пароль';
-            }
-        }
     }
-
+    if (mb_strlen($password) < 8) {
+        return 'Минимальная длина пароля 8символов';
+    }
     return null;
 }
 
@@ -444,18 +434,14 @@ function validate_auth_password($connection, $login, $password)
  *
  * @return array вернет null или массив ошибок
  */
-function validate_auth_form($connection, $auth_data)
+function validate_login($user, $password)
 {
     $errors = [];
 
-    if (validate_auth_login($connection, $auth_data['email'])) {
-        $errors['email'] = validate_auth_login($connection, $auth_data['email']);
-    } elseif (
-        validate_auth_login($connection, $auth_data['email']) ||
-        validate_auth_password($connection, $auth_data['email'], $auth_data['password'])
-    ) {
-        $errors['email'] = validate_auth_login($connection, $auth_data['email']);
-        $errors['password'] = validate_auth_password($connection, $auth_data['email'], $auth_data['password']);
+    if (!$user) {
+        $errors['email'] = 'Пользователь с таким email не найден';
+    } elseif (!password_verify($password, $user['password'])) {
+        $errors['password'] = 'Неверный пароль';
     }
 
     if (count($errors)) {

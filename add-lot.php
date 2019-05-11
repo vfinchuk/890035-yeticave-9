@@ -3,6 +3,11 @@ include_once(__DIR__ . '/bootstrap.php');
 $title = 'Добавить новый лот';
 $categories = get_categories($connection);
 
+if(!$user) {
+    header('Location: login.php');
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $lot_data = $_POST['lot'] ?? null;
@@ -43,7 +48,7 @@ $layout = include_template('layout.php', [
     'title'      => $title,
     'categories' => $categories,
     'content'    => $content,
-    'session'    => $session,
+    'user'       => $user,
 
 ]);
 

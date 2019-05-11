@@ -13,7 +13,7 @@ $layout = include_template('layout.php', [
     'title'      => $title,
     'categories' => $categories,
     'content'    => $content,
-    'session'    => $session,
+    'user'    => $user,
 
 ]);
 
