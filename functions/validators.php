@@ -452,7 +452,7 @@ function validate_login($user, $password)
 /**
  * Функция валидации формы новой ставки
  *
- * @param array $step_rate миниальная ставка
+ * @param array $lot_data массив данных лота
  * @param array $bet_amount размер ставки
  *
  * @return array вернет null или массив ошибок
@@ -466,10 +466,14 @@ function validate_bet_form($lot_data, $amount)
     } else {
 
         if(!is_numeric($amount)){
+
             $errors['bet'] = 'Только числовое значение';
+
         } elseif(($lot_data['price'] + $lot_data['step_rate']) > $amount) {
+
             $errors['bet'] = 'Минимальная ставка на этот товар '. ($lot_data['price'] + $lot_data['step_rate']) . ' ';
             $errors['bet'] .= get_noun_plural_form($lot_data['step_rate'], 'рубль', 'рубля', 'рублей');
+
         }
     }
 

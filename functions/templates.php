@@ -1,6 +1,8 @@
 <?php
 const SECOND_PER_HOUR = 3600;
+const SECOND_PER_MINUTE = 3600;
 const RUB = '<b class="rub">р</b>';
+const rub = '<b> р</b>';
 
 /**
  * Возвращает отформатированую цену
