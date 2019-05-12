@@ -54,7 +54,7 @@ function validate_lot_category($connection, $category)
     if (!is_numeric($category)) {
         return 'Выберите категорию';
     }
-    if (!get_category_by_id($connection, $category)) {
+    if (!get_category($connection, $category)) {
         return 'Категории с таким идентификатором нет';
     }
 

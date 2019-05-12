@@ -2,12 +2,11 @@
 /**
  * Функция подключения к БД
  *
- * @param $config_db array массив с данными на подключение к БД
+ * @param       $config_db array массив с данными на подключение к БД
  *
- * @return $connection ресурс подключения к БД
+ * @return      $connection mysqli ресурс подключения к БД
  */
-
-function db_connect($config_db)
+function db_connect(array $config_db): mysqli
 {
     $connection = mysqli_connect(
         $config_db['host'],
@@ -15,12 +14,10 @@ function db_connect($config_db)
         $config_db['password'],
         $config_db['db_name']
     );
-
     if (!$connection) {
         $error = mysqli_connect_error();
         die('Ошибка при подключении к БД: ' . $error);
     }
-
     mysqli_set_charset($connection, 'utf8');
 
     return $connection;
@@ -31,17 +28,17 @@ function db_connect($config_db)
  *
  * @param       $link mysqli Ресурс соединения
  * @param       $sql  string SQL запрос с плейсхолдерами вместо значений
- * @param array $data Данные для вставки на место плейсхолдеров
+ * @param       $data array Данные для вставки на место плейсхолдеров
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = [])
+function db_get_prepare_stmt(mysqli $connection, string $sql, array $data = []): mysqli_stmt
 {
-    $stmt = mysqli_prepare($link, $sql);
+    $stmt = mysqli_prepare($connection, $sql);
 
     if ($stmt === false) {
         $errorMsg = 'Не удалось инициализировать подготовленное выражение: '
-            . mysqli_error($link);
+            . mysqli_error($connection);
         die($errorMsg);
     }
 
@@ -75,10 +72,10 @@ function db_get_prepare_stmt($link, $sql, $data = [])
         $func = 'mysqli_stmt_bind_param';
         $func(...$values);
 
-        if (mysqli_errno($link) > 0) {
+        if (mysqli_errno($connection) > 0) {
             $errorMsg
                 = 'Не удалось связать подготовленное выражение с параметрами: '
-                . mysqli_error($link);
+                . mysqli_error($connection);
             die($errorMsg);
         }
     }
@@ -89,16 +86,17 @@ function db_get_prepare_stmt($link, $sql, $data = [])
 /**
  * Получение записей из БД
  *
- * @param       $link mysqli Ресурс соединения
+ * @param       $connection mysqli Ресурс соединения
  * @param       $sql  string SQL запрос с плейсхолдерами вместо значений
- * @param array $data Данные для вставки на место плейсхолдеров
+ * @param       $data array данные для вставки на место плейсхолдеров
+ * @param       $oneItem boolean флаг для вывода одной строки из базы
  *
- * @return array
+ * @return array массив с данными из БД
  */
-function db_fetch_data($link, $sql, $data = [], $oneItem = false)
+function db_fetch_data(mysqli $connection, string $sql, array $data = [], bool $oneItem = false)
 {
     $result = [];
-    $stmt = db_get_prepare_stmt($link, $sql, $data);
+    $stmt = db_get_prepare_stmt($connection, $sql, $data);
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
 
@@ -116,19 +114,19 @@ function db_fetch_data($link, $sql, $data = [], $oneItem = false)
 /**
  * Добавление / Обновление / Удаление записей в БД
  *
- * @param       $link mysqli Ресурс соединения
+ * @param       $connection mysqli Ресурс соединения
  * @param       $sql  string SQL запрос с плейсхолдерами вместо значений
- * @param array $data Данные для вставки на место плейсхолдеров
+ * @param       $data array Данные для вставки на место плейсхолдеров
  *
- * @return boolean
+ * @return integer вернет идентификатор добалвеного елемента в талицу
  */
-function db_insert_data($link, $sql, $data = [])
+function db_insert_data(mysqli $connection, string $sql, array $data = []): int
 {
-    $stmt = db_get_prepare_stmt($link, $sql, $data);
+    $stmt = db_get_prepare_stmt($connection, $sql, $data);
     $result = mysqli_stmt_execute($stmt);
 
     if ($result) {
-        $result = mysqli_insert_id($link);
+        $result = mysqli_insert_id($connection);
     }
 
     return $result;
@@ -137,11 +135,11 @@ function db_insert_data($link, $sql, $data = [])
 /**
  * Функция вывода категорий
  *
- * @param $connection array ресурс соединения к БД
+ * @param       $connection mysqli Ресурс соединения
  *
- * @return array
+ * @return      array массив категорий
  */
-function get_categories($connection)
+function get_categories(mysqli $connection): array
 {
     $sql = "SELECT * FROM categories";
     $categories = db_fetch_data($connection, $sql);
@@ -150,17 +148,16 @@ function get_categories($connection)
 }
 
 /**
- * Функция вывода категории по ID
+ * Функция вывода категории по идетификатору
  *
- * @param $connection array ресурс соединения к БД
- * @param $id string идентификатор категории
+ * @param       $connection mysqli Ресурс соединения
+ * @param       $id int идентификатор категории
  *
- * @return array
+ * @return array масив категории
  */
-function get_category($connection, $id)
+function get_category(mysqli $connection, int $id): array
 {
     $sql = "SELECT id, name, code FROM categories WHERE id = ?;";
-
     $category = db_fetch_data($connection, $sql, ['id' => $id], true);
 
     return $category;
@@ -169,57 +166,54 @@ function get_category($connection, $id)
 /**
  * Функция вывода лотов
  *
- * @param $connection array ресурс соединения к БД
+ * @param       $connection mysqli Ресурс соединения
  *
- * @return array
+ * @return array массив лотов
  */
-function get_lots($connection)
+function get_lots(mysqli $connection): array
 {
     $sql = "SELECT l.id, end_time, l.name, start_price, image, c.name AS category_name
                 FROM lots l
                 JOIN categories c ON l.category_id = c.id
                 ORDER BY l.create_time DESC";
-
     $lots = db_fetch_data($connection, $sql);
 
     return $lots;
 }
 
 /**
- * Функция вывода одного лота по его ID
+ * Функция вывода лота по его идентификатору
  *
- * @param $connection array ресурс соединения к БД
- * @param $id string идентификатор лота
+ * @param       $connection mysqli Ресурс соединения
+ * @param       $id int идентификатор лота
  *
- * @return array
+ * @return array массив лота
  */
-function get_lot($connection, $id)
+function get_lot(mysqli $connection, int $id): array
 {
     $sql = "SELECT l.name, l.id, user_id, end_time, start_price, step_rate, content, image, c.name AS category_name
                FROM lots l
                LEFT JOIN categories c ON l.category_id = c.id
                WHERE l.id = ?";
-
     $lot = db_fetch_data($connection, $sql, ['id' => $id], true);
 
     return $lot;
 }
 
 /**
- * Функция вывода лотов категории по ID
+ * Функция вывода лотов категории по идентификатору
  *
- * @param $connection array ресурс соединения к БД
- * @param $id string идентификатор категории
+ * @param       $connection mysqli Ресурс соединения
+ * @param       $id int идентификатор категории
  *
- * @return array
+ * @return array массив лотов
  */
-function get_lots_by_category($connection, $id)
+function get_lots_by_category(mysqli $connection, int $id): array
 {
     $sql = "SELECT l.id, l.name, end_time, start_price, content, image, c.name AS category_name
                 FROM lots l
                 LEFT JOIN categories c ON l.category_id = c.id
                 WHERE c.id = ?";
-
     $lots = db_fetch_data($connection, $sql, ['id' => $id]);
 
     return $lots;
@@ -228,15 +222,14 @@ function get_lots_by_category($connection, $id)
 /**
  * Функция добавления лота в БД
  *
- * @param $connection array ресурс соединения к БД
- * @return integer идентификатор добавленого лота
+ * @param       $connection mysqli Ресурс соединения
+ * @return      $lot_data array массив данных лота
  *
  * @return integer идетификатор нового лота
  */
-function insert_lot($connection, $lot_data)
+function insert_lot(mysqli $connection, array $lot_data): int
 {
     $sql = "INSERT INTO lots (user_id, category_id, end_time, name, content, start_price, step_rate, image) VALUE (?, ?, ?, ?, ?, ?, ?, ?);";
-
     $add_lot = db_insert_data($connection, $sql, [
         'user_id'     => $lot_data['user_id'],
         'category_id' => $lot_data['category'],
@@ -254,16 +247,14 @@ function insert_lot($connection, $lot_data)
 /**
  * Функция добавления пользователя в БД
  *
- * @param $connection array ресурс соединения к БД
- * @param array $user_data данные пользователя
- * @param string $avatar ссылка на аватар пользователя
+ * @param       $connection mysqli Ресурс соединения
+ * @param       $user_data array данные пользователя
  *
  * @return integer идетификатор нового пользователя
  */
-function insert_user($connection, $user_data)
+function insert_user(mysqli $connection, array $user_data): int
 {
     $sql = "INSERT INTO users (email, password, name, contact, avatar) VALUE (?, ?, ?, ?, ?)";
-
     $add_user = db_insert_data($connection, $sql, [
         'email'    => $user_data['email'],
         'password' => $user_data['password'],
@@ -276,36 +267,34 @@ function insert_user($connection, $user_data)
 }
 
 /**
- * Функция добавления пользователя в БД
+ * Функция добавления ставки в БД
  *
- * @param $connection array ресурс соединения к БД
- * @param array $user_data данные пользователя
- * @param string $avatar ссылка на аватар пользователя
+ * @param       $connection mysqli Ресурс соединения
+ * @param       $user_data array данные ставки
  *
- * @return integer идетификатор нового пользователя
+ * @return integer идентификатор новой ставки
  */
-function insert_bet($connection, $bet_data)
+function insert_bet(mysqli $connection, array $bet_data): int
 {
     $sql = "INSERT INTO bets (user_id, lot_id, amount) VALUE (?, ?, ?)";
-
-    $add_user = db_insert_data($connection, $sql, [
+    $add_bet = db_insert_data($connection, $sql, [
         'user_id' => $bet_data['user_id'],
         'lot_id'  => $bet_data['lot_id'],
         'amount'  => $bet_data['amount'],
     ]);
 
-    return $add_user;
+    return $add_bet;
 }
 
 /**
  * Функция вывода пользователя по Email
  *
- * @param $connection array ресурс соединения к БД
- * @param string $email имейл для фильтрации
+ * @param       $connection mysqli Ресурс соединения
+ * @param       $email string имейл
  *
- * @return array
+ * @return array массив пользователя
  */
-function get_user_by_email($connection, $email)
+function get_user_by_email(mysqli $connection, string $email)
 {
     $sql = "SELECT * FROM users WHERE email = ?;";
     $user = db_fetch_data($connection, $sql, ['email' => $email], true);
@@ -314,56 +303,36 @@ function get_user_by_email($connection, $email)
 }
 
 /**
- * Функция вывода категории по id
- *
- * @param $connection array ресурс соединения к БД
- * @param string $id идентификатор нужной категории
- *
- * @return array
- */
-function get_category_by_id($connection, $id)
-{
-
-    $sql = "SELECT * FROM categories WHERE id = ?;";
-
-    $category = db_fetch_data($connection, $sql, ['id' => $id]);
-
-    return $category;
-}
-
-/**
  * Функция возвращает хеш пароля по имейлу пользователя
  *
- * @param $connection array ресурс соединения к БД
- * @param string $email имейл пользователя
+ * @param       $connection mysqli Ресурс соединения
+ * @param       $email string имейл пользователя
  *
- * @return array
+ * @return array массив с хешом пароля
  */
-function get_password_by_email($connection, $email)
+function get_password_by_email(mysqli $connection, string $email)
 {
     $sql = "SELECT password FROM users WHERE users.email = ?;";
-
     $password = db_fetch_data($connection, $sql, ['email' => $email], true);
 
     return $password;
 }
 
 /**
- * Функция возвращает ставки лота
+ * Функция возвращает ставки лота по идентификатору
  *
- * @param $connection array ресурс соединения к БД
- * @param integer $lot_id идентификатор лота
+ * @param       $connection mysqli Ресурс соединения
+ * @param       $lot_id integer идентификатор лота
  *
- * @return array
+ * @return array массив ставок
  */
-function get_bets_by_lot($connection, $lot_id)
+function get_bets_by_lot(mysqli $connection, int $lot_id): array
 {
     $sql = "SELECT u.name AS user_name, b.amount, b.create_time
               FROM bets b 
               LEFT JOIN users u ON u.id = b.user_id
               WHERE b.lot_id = ?
               ORDER BY b.create_time DESC";
-
     $bets = db_fetch_data($connection, $sql, ['lot_id' => $lot_id]);
 
     return $bets;
@@ -372,38 +341,43 @@ function get_bets_by_lot($connection, $lot_id)
 /**
  * Функция возвращает текущую цену на лот
  *
- * @param $connection array ресурс соединения к БД
- * @param integer $lot_id идентификатор лота
+ * @param       $connection mysqli Ресурс соединения
+ * @param       $lot array массив данных лота
  *
- * @return string
+ * @return int текущая цена лота
  */
-function get_lot_price($connection, $lot)
+function get_lot_price(mysqli $connection, array $lot): int
 {
     $price = $lot['start_price'];
-
     $sql = "SELECT b.amount 
                FROM lots l
                LEFT JOIN bets b ON l.id = b.lot_id
                WHERE l.id = ?
                ORDER BY b.create_time DESC";
-
     $bets = db_fetch_data($connection, $sql, ['lot_id' => $lot['id']], true);
 
-    if($bets['amount']) {
+    if ($bets['amount']) {
         $price = $bets['amount'];
     }
 
     return $price;
 }
 
-    function get_user_bets($connection, $user_id)
+/**
+ * Функция возвращает текущую цену на лот
+ *
+ * @param       $connection mysqli Ресурс соединения
+ * @param       $user_id int идентификатор пользователя
+ *
+ * @return array массив всех ставок пользователя
+ */
+function get_user_bets(mysqli $connection, int $user_id): array
 {
     $sql = "SELECT l.id AS lot_id, l.name AS lot_name, image, end_time, c.name AS category_name, b.amount AS bet_amount
                 FROM lots l
                 LEFT JOIN categories c ON l.category_id = c.id
                 LEFT JOIN bets b ON l.id = b.lot_id
                 WHERE b.user_id = ?";
-
     $bets = db_fetch_data($connection, $sql, ['user_id' => $user_id]);
 
     return $bets;
