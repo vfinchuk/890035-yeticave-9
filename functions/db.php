@@ -93,7 +93,7 @@ function db_get_prepare_stmt(mysqli $connection, string $sql, array $data = []):
  *
  * @return array массив с данными из БД
  */
-function db_fetch_data(mysqli $connection, string $sql, array $data = [], bool $oneItem = false)
+function db_fetch_data(mysqli $connection, string $sql, array $data = [], bool $oneItem = false): ?array
 {
     $result = [];
     $stmt = db_get_prepare_stmt($connection, $sql, $data);
@@ -120,7 +120,7 @@ function db_fetch_data(mysqli $connection, string $sql, array $data = [], bool $
  *
  * @return integer вернет идентификатор добалвеного елемента в талицу
  */
-function db_insert_data(mysqli $connection, string $sql, array $data = []): int
+function db_insert_data(mysqli $connection, string $sql, array $data = []): ?int
 {
     $stmt = db_get_prepare_stmt($connection, $sql, $data);
     $result = mysqli_stmt_execute($stmt);
@@ -139,7 +139,7 @@ function db_insert_data(mysqli $connection, string $sql, array $data = []): int
  *
  * @return      array массив категорий
  */
-function get_categories(mysqli $connection): array
+function get_categories(mysqli $connection): ?array
 {
     $sql = "SELECT * FROM categories";
     $categories = db_fetch_data($connection, $sql);
@@ -155,7 +155,7 @@ function get_categories(mysqli $connection): array
  *
  * @return array масив категории
  */
-function get_category(mysqli $connection, int $id): array
+function get_category(mysqli $connection, int $id): ?array
 {
     $sql = "SELECT id, name, code FROM categories WHERE id = ?;";
     $category = db_fetch_data($connection, $sql, ['id' => $id], true);
@@ -170,7 +170,7 @@ function get_category(mysqli $connection, int $id): array
  *
  * @return array массив лотов
  */
-function get_lots(mysqli $connection): array
+function get_lots(mysqli $connection): ?array
 {
     $sql = "SELECT l.id, end_time, l.name, start_price, image, c.name AS category_name
                 FROM lots l
@@ -189,7 +189,7 @@ function get_lots(mysqli $connection): array
  *
  * @return array массив лота
  */
-function get_lot(mysqli $connection, int $id): array
+function get_lot(mysqli $connection, int $id): ?array
 {
     $sql = "SELECT l.name, l.id, user_id, end_time, start_price, step_rate, content, image, c.name AS category_name
                FROM lots l
@@ -208,7 +208,7 @@ function get_lot(mysqli $connection, int $id): array
  *
  * @return array массив лотов
  */
-function get_lots_by_category(mysqli $connection, int $id): array
+function get_lots_by_category(mysqli $connection, int $id): ?array
 {
     $sql = "SELECT l.id, l.name, end_time, start_price, content, image, c.name AS category_name
                 FROM lots l
@@ -294,7 +294,7 @@ function insert_bet(mysqli $connection, array $bet_data): int
  *
  * @return array массив пользователя
  */
-function get_user_by_email(mysqli $connection, string $email)
+function get_user_by_email(mysqli $connection, string $email): ?array
 {
     $sql = "SELECT * FROM users WHERE email = ?;";
     $user = db_fetch_data($connection, $sql, ['email' => $email], true);
@@ -310,7 +310,7 @@ function get_user_by_email(mysqli $connection, string $email)
  *
  * @return array массив с хешом пароля
  */
-function get_password_by_email(mysqli $connection, string $email)
+function get_password_by_email(mysqli $connection, string $email): ?array
 {
     $sql = "SELECT password FROM users WHERE users.email = ?;";
     $password = db_fetch_data($connection, $sql, ['email' => $email], true);
@@ -326,7 +326,7 @@ function get_password_by_email(mysqli $connection, string $email)
  *
  * @return array массив ставок
  */
-function get_bets_by_lot(mysqli $connection, int $lot_id): array
+function get_bets_by_lot(mysqli $connection, int $lot_id): ?array
 {
     $sql = "SELECT u.name AS user_name, b.amount, b.create_time
               FROM bets b 
@@ -371,7 +371,7 @@ function get_lot_price(mysqli $connection, array $lot): int
  *
  * @return array массив всех ставок пользователя
  */
-function get_user_bets(mysqli $connection, int $user_id): array
+function get_user_bets(mysqli $connection, int $user_id): ?array
 {
     $sql = "SELECT l.id AS lot_id, l.name AS lot_name, image, end_time, c.name AS category_name, b.amount AS bet_amount
                 FROM lots l

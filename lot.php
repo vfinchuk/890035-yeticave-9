@@ -3,8 +3,8 @@ include_once(__DIR__ . '/bootstrap.php');
 
 $lot_id = $_GET['id'] ?? null;
 $categories = get_categories($connection);
-$lot = get_lot($connection, $lot_id);
-$bets = get_bets_by_lot($connection, $lot['id']);
+$lot = get_lot($connection, intval($lot_id));
+$bets = get_bets_by_lot($connection, intval($lot['id']));
 
 if ($bets) {
     $bets = array_slice($bets, 0, 10);
@@ -26,7 +26,7 @@ if ($lot) {
         $bet_data['lot_id'] = $lot['id'];
         $bet_data['user_id'] = $user['id'];
 
-        $errors = validate_bet_form($lot, $bet_data['amount']);
+        $errors = validate_bet_form($lot, intval($bet_data['amount']));
 
         if ($errors) {
 

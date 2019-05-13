@@ -3,7 +3,7 @@ include_once(__DIR__ . '/bootstrap.php');
 $title = 'Добавить новый лот';
 $categories = get_categories($connection);
 
-if(!$user) {
+if (!$user) {
     header('Location: login.php');
     exit();
 }

@@ -7,11 +7,11 @@ const rub = '<b> р</b>';
 /**
  * Возвращает отформатированую цену
  *
- * @param int $price для форматирования
+ * @param       $price int для форматирования
  *
  * @return string отформатированая цена, пример: 25 489 ₽
  */
-function price_format($price)
+function price_format(int $price): string
 {
     $price = strval(ceil($price));
     if ($price >= 1000) {
@@ -26,9 +26,11 @@ function price_format($price)
 /**
  * Возвращает строку сколько часов и минут соталось до следующих суток
  *
- * @return string
+ * @param       $endDate string для форматирования
+ *
+ * @return string времени до следующих суток
  */
-function time_to_end($endDate)
+function time_to_end(string $endDate): string
 {
     $tsEnd = strtotime($endDate);
     $secToEnd = $tsEnd - time();
@@ -38,32 +40,29 @@ function time_to_end($endDate)
     }
 
     $hours = floor($secToEnd / SECOND_PER_HOUR);
-    $minutes = floor(($secToEnd % SECOND_PER_HOUR ) / 60);
+    $minutes = floor(($secToEnd % SECOND_PER_HOUR) / 60);
     $minutes = $minutes < 10 ? '0' . $minutes : $minutes;
     return $hours . ':' . $minutes;
 
 }
 
 /**
- * Вернет true когда останется до следующих суток меньше чем $hours
+ * Функция определяет остаток времени до конца суток
  *
- * @param string $endDate дата в текстовом представлении
- * @param int $hours количество часов до конца суток. Равен 1 по умолчанию
+ * @param       $endDate string дата в текстовом представлении
+ * @param       $hours int сколько нужно отсчитать часов до конца суток. По умолчанию 1час.
  *
  * @return boolean
  */
-function is_timer_finishing($endDate, $hours = 1)
+function is_timer_finishing($endDate, $hours = 1): bool
 {
     $tsEnd = strtotime($endDate);
     $secToEnd = $tsEnd - time();
-
-    if($secToEnd <= 0){
+    if ($secToEnd <= 0) {
         return false;
     }
-
     $hoursToEnd = floor($secToEnd / SECOND_PER_HOUR);
-
-    if($hoursToEnd > $hours){
+    if ($hoursToEnd > $hours) {
         return false;
     }
 
@@ -128,7 +127,7 @@ function get_noun_plural_form(
  *
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = [])
+function include_template($name, array $data = []): string
 {
     $name = 'templates/' . $name;
     $result = '';

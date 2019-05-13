@@ -24,16 +24,15 @@ function is_date_valid(string $date): bool
 /**
  * Проверяет имя лота
  *
- * @param string $name Имя лота
+ * @param       $name string имя лота
  *
  * @return string вернет null или текст ошибки
  */
-function validate_lot_name($name)
+function validate_lot_name(string $name): ?string
 {
     if (empty($name)) {
         return 'Необходимо ввести имя лота';
     }
-
     if (mb_strlen($name) > 128) {
         return 'Имя лота не может превышать 128 символов';
     }
@@ -42,14 +41,14 @@ function validate_lot_name($name)
 }
 
 /**
- * Проверяет поле select категории на наличие ID
+ * Проверяет <select> категории на наличие ID
  *
- * @param array $connection подключение к базе
- * @param int $category идентификатор категории
+ * @param       $connection array подключение к базе
+ * @param       $category int идентификатор категории
  *
  * @return string Вернет null или строку с текстом ошибки.
  */
-function validate_lot_category($connection, $category)
+function validate_lot_category(mysqli $connection, int $category): ?string
 {
     if (!is_numeric($category)) {
         return 'Выберите категорию';
@@ -62,18 +61,17 @@ function validate_lot_category($connection, $category)
 }
 
 /**
- * Проверяет поле для описани лота
+ * Проверяет поле описания лота
  *
- * @param string $content контентнт лота
+ * @param       $content string контентнт лота
  *
  * @return string вернет null или текст ошибки
  */
-function validate_lot_content($content)
+function validate_lot_content(string $content): ?string
 {
     if (empty($content)) {
         return 'Необходимо ввести описание для лота';
     }
-
     if (mb_strlen($content) > 1000) {
         return 'Описание лота не может превышать 1000 символов';
     }
@@ -84,11 +82,11 @@ function validate_lot_content($content)
 /**
  * Проверяет изображение лота
  *
- * @param array $image массив с данными изображения
+ * @param       $image array массив с данными изображения
  *
  * @return string Возвращает null или строку с ошибкой
  */
-function validate_lot_image($image)
+function validate_lot_image(array $image): ?string
 {
     $tmp_name = $image['tmp_name'];
     $path = $image['name'];
@@ -110,11 +108,11 @@ function validate_lot_image($image)
 /**
  * Проверяет стартовую цену лота
  *
- * @param integer $start_price число или строка
+ * @param       $start_price integer число или строка
  *
  * @return string Возвращает null или текст ошибки
  */
-function validate_lot_start_price($start_price)
+function validate_lot_start_price(int $start_price): ?string
 {
     $start_price = trim($start_price);
     if (empty($start_price) && $start_price !== '0') {
@@ -137,23 +135,23 @@ function validate_lot_start_price($start_price)
 /**
  * Проверяет шаг ставки лота
  *
- * @param integer $start_price число или строка
+ * @param       $start_price integer число или строка
  *
  * @return string Возвращает null или текст ошибки
  */
-function validate_lot_step_rate($step_rate)
+function validate_lot_step_rate(int $step_rate): ?string
 {
-    return validate_lot_start_price($step_rate);
+    return validate_lot_start_price(intval($step_rate));
 }
 
 /**
  * Проверяет дату окончания лота
  *
- * @param string $end_time Дата в виде строки
+ * @param       $end_time string дата в виде строки
  *
  * @return string вернет null или текст ошибки
  */
-function validate_lot_end_time($end_time)
+function validate_lot_end_time(string $end_time): ?string
 {
     if (empty($end_time)) {
         $error = 'Введите дату завершения торгов';
@@ -180,38 +178,34 @@ function validate_lot_end_time($end_time)
 /**
  * Функция валидации формы добавления лота
  *
- * @param array $lot_data массив с данными из формы для валидации
+ * @param       $connection mysqli Ресурс соединения
+ * @param       $lot_data array массив с данными из формы
+ * @param       $lot_image array массив с данными изображения лота
  *
  * @return array | bool Вернет null или массив с ошибками
  */
-function validate_lot_form($connection, $lot_data, $lot_image)
+function validate_lot_form(mysqli $connection, array $lot_data, array $lot_image): ?array
 {
     $errors = [];
 
     if ($error = validate_lot_name($lot_data['name'])) {
         $errors['name'] = $error;
     }
-
-    if ($error = validate_lot_category($connection, $lot_data['category'])) {
+    if ($error = validate_lot_category($connection, intval($lot_data['category']))) {
         $errors['category'] = $error;
     }
-
     if ($error = validate_lot_content($lot_data['content'])) {
         $errors['content'] = $error;
     }
-
     if ($error = validate_lot_image($lot_image)) {
         $errors['lot-image'] = $error;
     }
-
-    if ($error = validate_lot_start_price($lot_data['start-price'])) {
+    if ($error = validate_lot_start_price(intval($lot_data['start-price']))) {
         $errors['start-price'] = $error;
     }
-
     if ($error = validate_lot_step_rate($lot_data['step-rate'])) {
         $errors['step-rate'] = $error;
     }
-
     if ($error = validate_lot_end_time($lot_data['end-time'])) {
         $errors['end-time'] = $error;
     }
@@ -226,11 +220,11 @@ function validate_lot_form($connection, $lot_data, $lot_image)
 /**
  * Функция фильтрации данных из формы
  *
- * @param array $form_data массив с данными из формы
+ * @param       $form_data array массив с данными из формы
  *
- * @param return array
+ * @param return array массив отфильтрованных данных из формы
  */
-function filter_form_data($form_data)
+function filter_form_data(array $form_data): array
 {
     $filter = [];
     foreach ($form_data as $form_key => $form_item) {
@@ -244,11 +238,11 @@ function filter_form_data($form_data)
 /**
  * Проверяет Email пользователя
  *
- * @param string $email
+ * @param       $email string имейл пользователя
  *
  * @return string вернет null или текст ошибки
  */
-function validate_user_email($connection, $email)
+function validate_user_email(mysqli $connection, string $email): ?string
 {
     if (empty($email)) {
         return 'Введите Email';
@@ -256,7 +250,6 @@ function validate_user_email($connection, $email)
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return 'Не коректно введен Email';
     }
-
     if (get_user_by_email($connection, $email)) {
         return 'Пользователь с таким Email уже существует';
     }
@@ -267,11 +260,11 @@ function validate_user_email($connection, $email)
 /**
  * Проверяет пароль пользователя
  *
- * @param string $password
+ * @param       $password string пароль пользователя
  *
  * @return string вернет null или текст ошибки
  */
-function validate_user_password($password)
+function validate_user_password(string $password): ?string
 {
     if (empty($password)) {
         return 'Введите пароль';
@@ -289,11 +282,11 @@ function validate_user_password($password)
 /**
  * Проверяет имя пользователя
  *
- * @param string $name
+ * @param       $name string имя пользователя
  *
  * @return string вернет null или текст ошибки
  */
-function validate_user_name($name)
+function validate_user_name(string $name): ?string
 {
     if (empty($name)) {
         return 'Введите Ваше имя';
@@ -308,11 +301,11 @@ function validate_user_name($name)
 /**
  * Проверяет аватар пользователя
  *
- * @param array $avatar
+ * @param       $avatar array массив данных аватара пользователя
  *
  * @return string вернет null или текст ошибки
  */
-function validate_avatar($avatar)
+function validate_avatar(array $avatar): ?string
 {
     $tmp_name = $avatar['tmp_name'];
 
@@ -333,11 +326,11 @@ function validate_avatar($avatar)
 /**
  * Проверяет контакты пользователя
  *
- * @param string $contact
+ * @param       $contact string контакты пользователя
  *
  * @return string вернет null или текст ошибки
  */
-function validate_user_contact($contact)
+function validate_user_contact(string $contact): ?string
 {
     if (empty($contact)) {
         return 'Необходимо ввести контактные даннные';
@@ -352,11 +345,11 @@ function validate_user_contact($contact)
 /**
  * Функция валидации формы нового пользователя
  *
- * @param array $user_data массив с данными нового пользовтаеля
+ * @param       $user_data array массив с данными нового пользовтаеля
  *
  * @return array | bool Вернет null или массив с ошибками
  */
-function validate_user_form($connection, $user_data, $avatar)
+function validate_user_form(mysqli $connection, array $user_data, array $avatar): ?array
 {
     $errors = [];
 
@@ -390,11 +383,11 @@ function validate_user_form($connection, $user_data, $avatar)
 /**
  * Проверяет логин пользователя
  *
- * @param array $login имейл пользователя
+ * @param       $login array имейл пользователя
  *
  * @return string вернет null или текст ошибки
  */
-function validate_auth_login($login)
+function validate_auth_login(string $login): ?string
 {
     if (empty($login)) {
         return 'Введите Email';
@@ -407,13 +400,13 @@ function validate_auth_login($login)
 }
 
 /**
- * Проверяет  пароль
+ * Проверяет пароль пользователя с сохраненным хешем
  *
- * @param string $password пароль
+ * @param       $password string пароль
  *
  * @return string вернет null или текст ошибки
  */
-function validate_auth_password($password)
+function validate_auth_password(string $password): ?string
 {
     if (empty($password)) {
         return 'Введите пароль';
@@ -427,12 +420,12 @@ function validate_auth_password($password)
 /**
  * Функция валидации формы авторизации
  *
- * @param array $user массив данных пользователя
- * @param array $password массив данных авторизации пользователя
+ * @param       $user array массив данных пользователя
+ * @param       $password string массив данных авторизации пользователя
  *
  * @return array вернет null или массив ошибок
  */
-function validate_login($user, $password)
+function validate_login(array $user, string $password): ?array
 {
     $errors = [];
 
@@ -452,32 +445,28 @@ function validate_login($user, $password)
 /**
  * Функция валидации формы новой ставки
  *
- * @param array $lot_data массив данных лота
- * @param array $bet_amount размер ставки
+ * @param       $lot_data array массив данных лота
+ * @param       $amount array размер ставки
  *
  * @return array вернет null или массив ошибок
  */
-function validate_bet_form($lot_data, $amount)
+function validate_bet_form(array $lot_data, int $amount): ?array
 {
     $errors = [];
 
-    if(empty($amount)){
+    if (empty($amount)) {
         $errors['bet'] = 'Введите сумму ставки';
     } else {
 
-        if(!is_numeric($amount)){
-
+        if (!is_numeric($amount)) {
             $errors['bet'] = 'Только числовое значение';
-
-        } elseif(($lot_data['price'] + $lot_data['step_rate']) > $amount) {
-
-            $errors['bet'] = 'Минимальная ставка на этот товар '. ($lot_data['price'] + $lot_data['step_rate']) . ' ';
+        } elseif (($lot_data['price'] + $lot_data['step_rate']) > $amount) {
+            $errors['bet'] = 'Минимальная ставка на этот товар ' . ($lot_data['price'] + $lot_data['step_rate']) . ' ';
             $errors['bet'] .= get_noun_plural_form($lot_data['step_rate'], 'рубль', 'рубля', 'рублей');
-
         }
     }
 
-    if(count($errors)) {
+    if (count($errors)) {
         return $errors;
     }
 

@@ -20,7 +20,8 @@
             </div>
             <div class="lot-item__right">
                 <div class="lot-item__state">
-                    <div class="lot-item__timer timer <?= is_timer_finishing($lot['end_time'], 1) ? 'timer--finishing' : ''; ?>">
+                    <div class="lot-item__timer timer <?= is_timer_finishing($lot['end_time'],
+                        1) ? 'timer--finishing' : ''; ?>">
                         <?= time_to_end($lot['end_time']); ?>
                     </div>
                     <div class="lot-item__cost-state">
@@ -32,31 +33,33 @@
                             Мин. ставка <span><?= $lot['step_rate']; ?> р</span>
                         </div>
                     </div>
-                    <?php if($user && ($lot['user_id'] !== $user['id'])): ?>
-                    <form class="lot-item__form <?= isset($errors) ? 'form--invalid' : false; ?>" action="" method="post" autocomplete="off">
-                        <p class="lot-item__form-item form__item <?= isset($errors['bet']) ? 'form__item--invalid' : false; ?>">
-                            <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="text" name="bet[amount]" maxlength="5" placeholder="12 000" value="<?= $_POST['bet']['amount'] ?? false; ?>">
-                            <span class="form__error"><?= $errors['bet'] ?? null; ?></span>
-                        </p>
-                        <button type="submit" class="button">Сделать ставку</button>
-                    </form>
+                    <?php if ($user && ($lot['user_id'] !== $user['id'])): ?>
+                        <form class="lot-item__form <?= isset($errors) ? 'form--invalid' : false; ?>" action=""
+                              method="post" autocomplete="off">
+                            <p class="lot-item__form-item form__item <?= isset($errors['bet']) ? 'form__item--invalid' : false; ?>">
+                                <label for="cost">Ваша ставка</label>
+                                <input id="cost" type="text" name="bet[amount]" maxlength="5" placeholder="12 000"
+                                       value="<?= $_POST['bet']['amount'] ?? false; ?>">
+                                <span class="form__error"><?= $errors['bet'] ?? null; ?></span>
+                            </p>
+                            <button type="submit" class="button">Сделать ставку</button>
+                        </form>
                     <?php endif; ?>
                 </div>
-                <?php if($user && $bets): ?>
-                <div class="history">
-                    <h3>История ставок (<span>10</span>)</h3>
-                    <table class="history__list">
+                <?php if ($user && $bets): ?>
+                    <div class="history">
+                        <h3>История ставок (<span>10</span>)</h3>
+                        <table class="history__list">
 
-                        <?php foreach ($bets as $bet): ?>
-                            <tr class="history__item">
-                                <td class="history__name"><?= $bet['user_name']; ?></td>
-                                <td class="history__price"><?= $bet['amount'] .RUB; ?></td>
-                                <td class="history__time"><?= $bet['create_time']; ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </div>
+                            <?php foreach ($bets as $bet): ?>
+                                <tr class="history__item">
+                                    <td class="history__name"><?= $bet['user_name']; ?></td>
+                                    <td class="history__price"><?= $bet['amount'] . RUB; ?></td>
+                                    <td class="history__time"><?= $bet['create_time']; ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>

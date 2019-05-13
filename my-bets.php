@@ -6,9 +6,9 @@ $title = 'Yeticave - мои ставки';
 $categories = get_categories($connection);
 $lots = get_lots($connection);
 
-$my_bets = get_user_bets($connection, $user['id']);
+$my_bets = get_user_bets($connection, intval($user['id']));
 
-if(!$user) {
+if (!$user) {
     header('Location: login.php');
     exit();
 }
