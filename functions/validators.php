@@ -112,7 +112,7 @@ function validate_lot_image(array $image): ?string
  *
  * @return string Возвращает null или текст ошибки
  */
-function validate_lot_start_price(int $start_price): ?string
+function validate_lot_start_price(string $start_price): ?string
 {
     $start_price = trim($start_price);
     if (empty($start_price) && $start_price !== '0') {
@@ -139,9 +139,9 @@ function validate_lot_start_price(int $start_price): ?string
  *
  * @return string Возвращает null или текст ошибки
  */
-function validate_lot_step_rate(int $step_rate): ?string
+function validate_lot_step_rate(string $step_rate): ?string
 {
-    return validate_lot_start_price(intval($step_rate));
+    return validate_lot_start_price($step_rate);
 }
 
 /**
@@ -200,7 +200,7 @@ function validate_lot_form(mysqli $connection, array $lot_data, array $lot_image
     if ($error = validate_lot_image($lot_image)) {
         $errors['lot-image'] = $error;
     }
-    if ($error = validate_lot_start_price(intval($lot_data['start-price']))) {
+    if ($error = validate_lot_start_price($lot_data['start-price'])) {
         $errors['start-price'] = $error;
     }
     if ($error = validate_lot_step_rate($lot_data['step-rate'])) {
@@ -421,11 +421,11 @@ function validate_auth_password(string $password): ?string
  * Функция валидации формы авторизации
  *
  * @param       $user array массив данных пользователя
- * @param       $password string массив данных авторизации пользователя
+ * @param       $password string пароль пользователя
  *
  * @return array вернет null или массив ошибок
  */
-function validate_login(array $user, string $password): ?array
+function validate_login(?array $user, string $password)
 {
     $errors = [];
 
@@ -450,7 +450,7 @@ function validate_login(array $user, string $password): ?array
  *
  * @return array вернет null или массив ошибок
  */
-function validate_bet_form(array $lot_data, int $amount): ?array
+function validate_bet_form(array $lot_data, string $amount): ?array
 {
     $errors = [];
 

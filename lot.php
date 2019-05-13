@@ -26,7 +26,7 @@ if ($lot) {
         $bet_data['lot_id'] = $lot['id'];
         $bet_data['user_id'] = $user['id'];
 
-        $errors = validate_bet_form($lot, intval($bet_data['amount']));
+        $errors = validate_bet_form($lot, $bet_data['amount']);
 
         if ($errors) {
 
