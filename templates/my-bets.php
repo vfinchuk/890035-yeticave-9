@@ -14,7 +14,7 @@
             <?php
             if ($my_bets):
                 foreach ($my_bets as $my_bet): ?>
-                    <tr class="rates__item <?= is_bet_end($my_bet['end_time']) ? 'rates__item--end' : ''; ?>">
+                    <tr class="rates__item <?= is_lot_end($my_bet['end_time']) ? 'rates__item--end' : ''; ?>">
                         <td class="rates__info">
                             <div class="rates__img">
                                 <img src="<?= $my_bet['image']; ?>" width="54" height="40" alt="<?= $my_bet['lot_name']; ?>">
@@ -23,7 +23,7 @@
                         </td>
                         <td class="rates__category"><?= $my_bet['category_name']; ?></td>
                         <td class="rates__timer">
-                            <?php if(is_bet_end($my_bet['end_time'])): ?>
+                            <?php if(is_lot_end($my_bet['end_time'])): ?>
                                 <div class="timer timer--end">Торги окончены</div>
                             <?php else: ?>
                                 <div class="timer timer<?= is_timer_finishing($my_bet['end_time'], 1) ? '--finishing' : ''; ?>">

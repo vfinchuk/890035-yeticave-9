@@ -77,7 +77,7 @@ function is_timer_finishing(string $end_date, int $hours = 1): bool
  *
  * @return boolean Вернет true если срок действия лота окончен false
  */
-function is_bet_end(string $bet_end_time): bool
+function is_lot_end(string $bet_end_time): bool
 {
     $ts_lot_end_time = strtotime($bet_end_time);
     $ts_now = strtotime('now');

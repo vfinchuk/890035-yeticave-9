@@ -33,7 +33,7 @@
                             Мин. ставка <span><?= price_format(intval($lot['step_rate']), true); ?></span>
                         </div>
                     </div>
-                    <?php if ($user && ($lot['user_id'] !== $user['id'])): ?>
+                    <?php if ( ($user && ($lot['user_id'] !== $user['id'])) && (!is_lot_end($lot['end_time'])) ): ?>
                         <form class="lot-item__form <?= isset($errors) ? 'form--invalid' : false; ?>" action=""
                               method="post" autocomplete="off">
                             <p class="lot-item__form-item form__item <?= isset($errors['bet']) ? 'form__item--invalid' : false; ?>">
