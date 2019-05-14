@@ -1,10 +1,11 @@
 <?php
 
 return [
-    'timezone' => 'site timezone',
+    'timezone' => 'Europe/Kiev',
     'db'       => [
-        'host'     => 'site db host',
-        'user'     => 'db_user',
-        'password' => 'db_password'
+        'host'     => '127.0.0.1',
+        'user'     => 'root',
+        'password' => 'root',
+        'db_name'  => 'yeticave'
     ]
 ];

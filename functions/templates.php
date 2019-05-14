@@ -1,6 +1,5 @@
 <?php
 const SECOND_PER_HOUR = 3600;
-const SECOND_PER_MINUTE = 3600;
 const RUB = '<b class="rub">р</b>';
 const rub = '<b> р</b>';
 
@@ -41,8 +40,7 @@ function time_to_end(string $endDate): string
 
     $hours = floor($secToEnd / SECOND_PER_HOUR);
     $minutes = floor(($secToEnd % SECOND_PER_HOUR) / 60);
-    $minutes = $minutes < 10 ? '0' . $minutes : $minutes;
-    return $hours . ':' . $minutes;
+    return sprintf('%02d', $hours) . ':' . sprintf('%02d', $minutes);
 
 }
 
@@ -76,15 +74,15 @@ function is_timer_finishing(string $endDate, int $hours = 1): bool
  *
  * @return boolean вернет true если ставка выиграла иначе false
  */
-function is_bet_win(string $lot_end_time): ?bool
+function is_bet_end(string $bet_end_time): ?string
 {
-    $ts_end_time = strtotime($lot_end_time);
+    $ts_lot_end_time = strtotime($bet_end_time);
     $ts_now = strtotime('now');
-    if($ts_now > $ts_end_time) {
-        return true;
+    if($ts_lot_end_time < $ts_now) {
+        return 'rates__item--end';
     }
 
-    return false;
+    return null;
 }
 
 /**
@@ -136,6 +134,23 @@ function get_noun_plural_form(
             return $many;
     }
 }
+
+//function get_rate_time(string $create_time)
+//{
+//    $ts_create_time = strtotime($create_time);
+//    $ts_now = strtotime('now');
+//
+//    $create_seconds = $ts_now - $ts_create_time;
+//
+//    $hours = floor($create_seconds / SECOND_PER_HOUR);
+//    $minutes = floor($create_seconds / ($hours * SECOND_PER_HOUR)) / 60;
+//
+//    var_dump($create_time);
+//    var_dump($hours);
+//    var_dump($minutes);
+//
+//}
+
 
 /**
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент

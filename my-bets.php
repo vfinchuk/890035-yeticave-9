@@ -8,8 +8,6 @@ $lots = get_lots($connection);
 
 $my_bets = get_user_bets($connection, intval($user['id']));
 
-var_dump($my_bets);
-
 if (!$user) {
     header('Location: login.php');
     exit();

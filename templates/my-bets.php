@@ -15,14 +15,12 @@
             <?php
             if ($my_bets):
                 foreach ($my_bets as $my_bet): ?>
-                    <tr class="rates__item">
+                    <tr class="rates__item <?= is_bet_end($my_bet['end_time']); ?>">
                         <td class="rates__info">
                             <div class="rates__img">
-                                <img src="<?= $my_bet['image']; ?>" width="54" height="40"
-                                     alt="<?= $my_bet['lot_name']; ?>">
+                                <img src="<?= $my_bet['image']; ?>" width="54" height="40" alt="<?= $my_bet['lot_name']; ?>">
                             </div>
-                            <h3 class="rates__title"><a href="/lot.php?id=<?= $my_bet['lot_id']; ?>">2014 Rossignol
-                                    District Snowboard</a></h3>
+                            <h3 class="rates__title"><a href="/lot.php?id=<?= $my_bet['lot_id']; ?>"><?= $my_bet['lot_name']; ?></a></h3>
                         </td>
                         <td class="rates__category">
                             Доски и лыжи

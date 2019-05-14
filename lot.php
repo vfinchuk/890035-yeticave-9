@@ -29,8 +29,10 @@ if ($lot) {
         $errors = validate_bet_form($lot, $bet_data['amount']);
 
         /* проверка на повторную ставку */
-        if ($bets[0]['user_id'] == $user['id']) {
-            $errors['bet'] = 'Ваша ставка является последней';
+        if (count($bets)) {
+            if ($bets[0]['user_id'] == $user['id']) {
+                $errors['bet'] = 'Ваша ставка является последней';
+            }
         }
 
         if ($errors) {
