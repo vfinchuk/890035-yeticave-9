@@ -28,8 +28,12 @@ if ($lot) {
 
         $errors = validate_bet_form($lot, $bet_data['amount']);
 
-        if ($errors) {
+        /* проверка на повторную ставку */
+        if ($bets[0]['user_id'] == $user['id']) {
+            $errors['bet'] = 'Ваша ставка является последней';
+        }
 
+        if ($errors) {
             $content = include_template('lot.php', [
                 'categories' => $categories,
                 'lot'        => $lot,
@@ -43,8 +47,6 @@ if ($lot) {
             $bets = insert_bet($connection, $bet_data);
             header('Location: lot.php?id=' . $lot_id);
         }
-
-        var_dump($lot['price']);
 
     } else {
 

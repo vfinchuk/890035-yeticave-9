@@ -328,7 +328,7 @@ function get_password_by_email(mysqli $connection, string $email): ?array
  */
 function get_bets_by_lot(mysqli $connection, int $lot_id): ?array
 {
-    $sql = "SELECT u.name AS user_name, b.amount, b.create_time
+    $sql = "SELECT u.id AS user_id, u.name AS user_name, b.amount, b.create_time
               FROM bets b 
               LEFT JOIN users u ON u.id = b.user_id
               WHERE b.lot_id = ?
@@ -348,9 +348,9 @@ function get_bets_by_lot(mysqli $connection, int $lot_id): ?array
  */
 function get_user_win_bets(mysqli $connection): ?array
 {
-//    $sql = "SELECT * FROM bets b WHERE create_time = (SELECT MAX(create_time) FROM bets GROUP BY lot_id HAVING lot_id = b.lot_id)";
+    $sql = "SELECT * FROM bets b WHERE create_time = (SELECT MAX(create_time) FROM bets GROUP BY lot_id HAVING lot_id = b.lot_id)";
 
-    $sql = "SELECT MAX(create_time) AS create_time, MAX(amount) AS amount FROM bets b GROUP BY lot_id";
+//    $sql = "SELECT MAX(create_time) AS create_time, MAX(amount) AS amount FROM bets b GROUP BY lot_id";
 
     $bet = db_fetch_data($connection, $sql);
 
