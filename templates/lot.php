@@ -27,10 +27,10 @@
                     <div class="lot-item__cost-state">
                         <div class="lot-item__rate">
                             <span class="lot-item__amount">Текущая цена</span>
-                            <span class="lot-item__cost"><?= $lot['price'] . RUB; ?></span>
+                            <span class="lot-item__cost"><?= price_format(intval($lot['price'])); ?></span>
                         </div>
                         <div class="lot-item__min-cost">
-                            Мин. ставка <span><?= $lot['step_rate']; ?> р</span>
+                            Мин. ставка <span><?= price_format(intval($lot['step_rate']), true); ?></span>
                         </div>
                     </div>
                     <?php if ($user && ($lot['user_id'] !== $user['id'])): ?>
@@ -50,12 +50,11 @@
                     <div class="history">
                         <h3>История ставок (<span>10</span>)</h3>
                         <table class="history__list">
-
                             <?php foreach ($bets as $bet): ?>
                                 <tr class="history__item">
                                     <td class="history__name"><?= $bet['user_name']; ?></td>
-                                    <td class="history__price"><?= $bet['amount'] . RUB; ?></td>
-                                    <td class="history__time"><?= $bet['create_time']; ?></td>
+                                    <td class="history__price"><?= price_format(intval($bet['amount']), true); ?></td>
+                                    <td class="history__time"><?= get_bet_time($bet['create_time']); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </table>

@@ -10,16 +10,15 @@ if(!file_exists('config.php')) {
     die('Создайте и сконфигурируйте файл config.php на основе файла config.sample.php');
 }
 
-$config = require(__DIR__ . '/config.php');
-
+$config = require_once(__DIR__ . '/config.php');
 
 /* Get site timezone */
 date_default_timezone_set($config['timezone']);
 
 
 require_once(__DIR__ . '/functions/db/db.php');
-require_once(__DIR__ . '/functions/db/bet.php');
 require_once(__DIR__ . '/functions/db/category.php');
+require_once(__DIR__ . '/functions/db/bet.php');
 require_once(__DIR__ . '/functions/db/lot.php');
 require_once(__DIR__ . '/functions/db/user.php');
 

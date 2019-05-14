@@ -6,11 +6,11 @@ const rub = '<b> р</b>';
 /**
  * Возвращает отформатированую цену
  *
- * @param       $price int для форматирования
+ * @param       $price int значение цены  для форматирования
  *
- * @return string отформатированая цена, пример: 25 489 ₽
+ * @return string  Пример: 25 489 ₽
  */
-function price_format(int $price): string
+function price_format(int $price, $small_icon = false): string
 {
     $price = strval(ceil($price));
     if ($price >= 1000) {
@@ -18,20 +18,23 @@ function price_format(int $price): string
         $price = substr($price, 0, (strlen($price) - 3));
         $price .= ' ' . $strend;
     }
+    if($small_icon) {
+        return $price . rub;
+    }
+
     return $price . RUB;
 }
 
-
 /**
- * Возвращает строку сколько часов и минут соталось до следующих суток
+ * Возвращает строку сколько часов и минут соталось до окончания
  *
- * @param       $endDate string для форматирования
+ * @param       $endDate string Дата окончания лота
  *
- * @return string времени до следующих суток
+ * @return string Часов и минут до окончания
  */
-function time_to_end(string $endDate): string
+function time_to_end(string $end_date): string
 {
-    $tsEnd = strtotime($endDate);
+    $tsEnd = strtotime($end_date);
     $secToEnd = $tsEnd - time();
 
     if ($secToEnd <= 0) {
@@ -45,16 +48,16 @@ function time_to_end(string $endDate): string
 }
 
 /**
- * Функция определяет остаток времени до конца суток
+ * Определяет остаток времени до конца суток
  *
- * @param       $endDate string дата в текстовом представлении
- * @param       $hours int сколько нужно отсчитать часов до конца суток. По умолчанию 1час.
+ * @param       $endDate string Дата в текстовом представлении
+ * @param       $hours int Сколько нужно отсчитать часов до конца суток. По умолчанию 1час.
  *
  * @return boolean
  */
-function is_timer_finishing(string $endDate, int $hours = 1): bool
+function is_timer_finishing(string $end_date, int $hours = 1): bool
 {
-    $tsEnd = strtotime($endDate);
+    $tsEnd = strtotime($end_date);
     $secToEnd = $tsEnd - time();
     if ($secToEnd <= 0) {
         return false;
@@ -68,21 +71,21 @@ function is_timer_finishing(string $endDate, int $hours = 1): bool
 }
 
 /**
- * Функция проверяет выиграла ли ставка пользователя
+ * Проверяет окончания ставки
  *
- * @param       $lot_end_time string дата окончания ставки
+ * @param       $lot_end_time string Дата окончания ставки
  *
- * @return boolean вернет true если ставка выиграла иначе false
+ * @return boolean Вернет true если срок действия лота окончен false
  */
-function is_bet_end(string $bet_end_time): ?string
+function is_bet_end(string $bet_end_time): bool
 {
     $ts_lot_end_time = strtotime($bet_end_time);
     $ts_now = strtotime('now');
-    if($ts_lot_end_time < $ts_now) {
-        return 'rates__item--end';
+    if ($ts_lot_end_time < $ts_now) {
+        return true;
     }
 
-    return null;
+    return false;
 }
 
 /**
@@ -135,22 +138,62 @@ function get_noun_plural_form(
     }
 }
 
-//function get_rate_time(string $create_time)
-//{
-//    $ts_create_time = strtotime($create_time);
-//    $ts_now = strtotime('now');
-//
-//    $create_seconds = $ts_now - $ts_create_time;
-//
-//    $hours = floor($create_seconds / SECOND_PER_HOUR);
-//    $minutes = floor($create_seconds / ($hours * SECOND_PER_HOUR)) / 60;
-//
-//    var_dump($create_time);
-//    var_dump($hours);
-//    var_dump($minutes);
-//
-//}
+/**
+ * Возвращает длительность от начала ставки в человеческом формате
+ *
+ * @param       $create_time string Дата создания ставки
+ *
+ * @return string Вернет длительность ставки
+ */
+function get_bet_time(string $create_time)
+{
+    $result = '';
+    $ts_create_time = strtotime($create_time);
+    $ts_now = strtotime('now');
+    $seconds = $ts_now - $ts_create_time;
 
+    $year = floor($seconds / (SECOND_PER_HOUR * 24 * 30 * 12));
+    $months = floor($seconds / (SECOND_PER_HOUR * 24 * 30));
+    $day = floor($seconds / (SECOND_PER_HOUR * 24));
+    $hours = floor($seconds / SECOND_PER_HOUR);
+    $mins = floor(($seconds - ($hours * SECOND_PER_HOUR)) / 60);
+    $secs = floor($seconds % 60);
+
+    $year_form = get_noun_plural_form($year, 'год', 'года', 'лет');
+    $month_form = get_noun_plural_form($months, 'месяц', 'месяца', 'месяцев');
+    $day_form = get_noun_plural_form($day, 'день', 'дня', 'дней');
+    $hours_form = get_noun_plural_form($hours, 'час', 'часа', 'часов');
+    $mins_form = get_noun_plural_form($mins, 'минута', 'минуты', 'минут');
+    $secs_form = get_noun_plural_form($secs, 'секунда', 'секунды', 'секунд');
+
+    if ($year == 1) {
+        $result = $year_form;
+    } elseif ($year > 1) {
+        $result = $year . ' ' . $year_form;
+    } elseif ($months == 1) {
+        $result = $month_form;
+    } elseif ($months > 1) {
+        $result = $months . ' ' . $month_form;
+    } elseif ($day == 1) {
+        $result = $day_form;
+    } elseif ($day > 1) {
+        $result = $day . ' ' . $day_form;
+    } elseif ($hours == 1) {
+        $result = $hours_form;
+    } elseif ($hours > 1) {
+        $result = $hours . ' ' . $hours_form;
+    } elseif ($mins == 1) {
+        $result = $mins_form;
+    } elseif ($mins > 1) {
+        $result = $mins . ' ' . $mins_form;
+    } elseif ($secs == 1) {
+        $result = $secs_form;
+    } elseif ($secs > 1) {
+        $result = $secs . ' ' . $secs_form;
+    }
+
+    return $result . ' назад';
+}
 
 /**
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент

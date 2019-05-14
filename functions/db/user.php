@@ -36,19 +36,3 @@ function get_user_by_email(mysqli $connection, string $email): ?array
 
     return $user;
 }
-
-/**
- * Функция возвращает хеш пароля по имейлу пользователя
- *
- * @param       $connection mysqli Ресурс соединения
- * @param       $email string имейл пользователя
- *
- * @return array массив с хешом пароля
- */
-function get_password_by_email(mysqli $connection, string $email): ?array
-{
-    $sql = "SELECT password FROM users WHERE users.email = ?;";
-    $password = db_fetch_data($connection, $sql, ['email' => $email], true);
-
-    return $password;
-}

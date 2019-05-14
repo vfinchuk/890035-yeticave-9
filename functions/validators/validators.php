@@ -2,9 +2,9 @@
 /**
  * Функция фильтрации данных из формы
  *
- * @param       $form_data array массив с данными из формы
+ * @param       $form_data array Массив данных из формы
  *
- * @param return array массив отфильтрованных данных из формы
+ * @param return array Массив отфильтрованных данных из формы
  */
 function filter_form_data(array $form_data): array
 {

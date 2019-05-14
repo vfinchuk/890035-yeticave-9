@@ -11,11 +11,10 @@
     <section class="rates container">
         <h2>Мои ставки</h2>
         <table class="rates__list">
-
             <?php
             if ($my_bets):
                 foreach ($my_bets as $my_bet): ?>
-                    <tr class="rates__item <?= is_bet_end($my_bet['end_time']); ?>">
+                    <tr class="rates__item <?= is_bet_end($my_bet['end_time']) ? 'rates__item--end' : ''; ?>">
                         <td class="rates__info">
                             <div class="rates__img">
                                 <img src="<?= $my_bet['image']; ?>" width="54" height="40" alt="<?= $my_bet['lot_name']; ?>">
@@ -28,10 +27,8 @@
                         <td class="rates__timer">
                             <div class="timer timer<?= is_timer_finishing($my_bet['end_time'], 1) ? '--finishing' : ''; ?>"><?= time_to_end($my_bet['end_time']); ?></div>
                         </td>
-                        <td class="rates__price"><?= $my_bet['bet_amount'] . rub; ?></td>
-                        <td class="rates__time">
-                            5 минут назад
-                        </td>
+                        <td class="rates__price"><?= price_format(intval($my_bet['bet_amount']), true); ?></td>
+                        <td class="rates__time"><?= get_bet_time($my_bet['create_time']); ?></td>
                     </tr>
 
                 <?php endforeach; endif; ?>
