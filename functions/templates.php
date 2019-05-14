@@ -54,7 +54,7 @@ function time_to_end(string $endDate): string
  *
  * @return boolean
  */
-function is_timer_finishing($endDate, $hours = 1): bool
+function is_timer_finishing(string $endDate, int $hours = 1): bool
 {
     $tsEnd = strtotime($endDate);
     $secToEnd = $tsEnd - time();
@@ -67,6 +67,24 @@ function is_timer_finishing($endDate, $hours = 1): bool
     }
 
     return true;
+}
+
+/**
+ * Функция проверяет выиграла ли ставка пользователя
+ *
+ * @param       $lot_end_time string дата окончания ставки
+ *
+ * @return boolean вернет true если ставка выиграла иначе false
+ */
+function is_bet_win(string $lot_end_time): ?bool
+{
+    $ts_end_time = strtotime($lot_end_time);
+    $ts_now = strtotime('now');
+    if($ts_now > $ts_end_time) {
+        return true;
+    }
+
+    return false;
 }
 
 /**
@@ -122,8 +140,8 @@ function get_noun_plural_form(
 /**
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
  *
- * @param string $name Путь к файлу шаблона относительно папки templates
- * @param array $data Ассоциативный массив с данными для шаблона
+ * @param       $name string Путь к файлу шаблона относительно папки templates
+ * @param       $data array Ассоциативный массив с данными для шаблона
  *
  * @return string Итоговый HTML
  */

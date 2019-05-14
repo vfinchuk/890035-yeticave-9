@@ -339,6 +339,24 @@ function get_bets_by_lot(mysqli $connection, int $lot_id): ?array
 }
 
 /**
+ * Функция возвращает массив последних ставок на каждый из лотов
+ *
+ * @param       $connection mysqli Ресурс соединения
+ * @param       $lot_id integer идентификатор лота
+ *
+ * @return array массив данных последней ставки
+ */
+function get_user_win_bets(mysqli $connection): ?array
+{
+//    $sql = "SELECT * FROM bets b WHERE create_time = (SELECT MAX(create_time) FROM bets GROUP BY lot_id HAVING lot_id = b.lot_id)";
+
+    $sql = "SELECT MAX(create_time) AS create_time, MAX(amount) AS amount FROM bets b GROUP BY lot_id";
+
+    $bet = db_fetch_data($connection, $sql);
+
+    return $bet;
+}
+/**
  * Функция возвращает текущую цену на лот
  *
  * @param       $connection mysqli Ресурс соединения
