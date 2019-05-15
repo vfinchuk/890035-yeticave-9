@@ -125,3 +125,19 @@ function get_lot_price(mysqli $connection, array $lot): int
 
     return $price;
 }
+
+/**
+ * Поиск по названию и описанию лотов
+ *
+ * @param       $connection mysqli Ресурс соединения
+ * @param       $search string Строка с поисковым запросом
+ *
+ * @return array|null вернет массив лотов
+ */
+function get_search_lots(mysqli $connection, string $search): ?array
+{
+    $sql = "SELECT * FROM lots l WHERE MATCH(name, content) AGAINST(?)";
+    $find = db_fetch_data($connection, $sql, ['lot_ft_search' => $search]);
+
+    return $find;
+}
