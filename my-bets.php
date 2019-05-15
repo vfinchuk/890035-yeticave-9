@@ -1,12 +1,20 @@
 <?php
 include_once(__DIR__ . '/bootstrap.php');
 
-$title = 'Yeticave - 404 Страница не найдена';
+$title = 'Yeticave - мои ставки';
 
 $categories = get_categories($connection);
+$lots = get_lots($connection);
 
-$content = include_template('404.php', [
+$my_bets = get_user_bets($connection, intval($user['id']));
+if (!$user) {
+    header('Location: login.php');
+    exit();
+}
+
+$content = include_template('my-bets.php', [
     'categories' => $categories,
+    'my_bets'    => $my_bets
 ]);
 
 $layout = include_template('layout.php', [
@@ -14,7 +22,6 @@ $layout = include_template('layout.php', [
     'categories' => $categories,
     'content'    => $content,
     'user'       => $user,
-
 ]);
 
 print $layout;

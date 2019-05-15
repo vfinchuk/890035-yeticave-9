@@ -4,7 +4,7 @@ include_once(__DIR__ . '/bootstrap.php');
 $title = 'Yeticave - форма аутентификации';
 $categories = get_categories($connection);
 
-if($user) {
+if ($user) {
     header('Location: index.php');
     exit();
 }
@@ -18,10 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $errors = null;
 
-    if ($error = validate_auth_login($auth_data['email'])){
+    if ($error = validate_auth_login($auth_data['email'])) {
         $errors['email'] = $error;
     }
-    if ($error = validate_auth_password($auth_data['password'])){
+    if ($error = validate_auth_password($auth_data['password'])) {
         $errors['password'] = $error;
     }
 
@@ -53,7 +53,7 @@ $layout = include_template('layout.php', [
     'title'      => $title,
     'categories' => $categories,
     'content'    => $content,
-    'user'      => $user,
+    'user'       => $user,
 ]);
 
 print $layout;

@@ -4,13 +4,13 @@ include_once(__DIR__ . '/bootstrap.php');
 
 $category_id = $_GET['id'] ?? null;
 $categories = get_categories($connection);
-$category = get_category($connection, $category_id);
+$category = get_category($connection, intval($category_id));
 
 if ($category_id && $category) {
 
     $title = "Категория - {$category['name']}";
 
-    $lots = get_lots_by_category($connection, $category_id);
+    $lots = get_lots_by_category($connection, intval($category_id));
 
     $content = include_template('category.php', [
         'categories'       => $categories,

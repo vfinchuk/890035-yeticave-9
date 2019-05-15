@@ -15,7 +15,7 @@ $layout = include_template('layout.php', [
     'title'      => $title,
     'categories' => $categories,
     'content'    => $content,
-    'user'    => $user,
+    'user'       => $user,
 ]);
 
 print $layout;

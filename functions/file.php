@@ -1,15 +1,14 @@
 <?php
 /**
- * Сохранение изображения в uploads
+ * Сохранение изображения в папку uploads
  *
- * @param array $image массив загружаемого изображения
+ * @param       array $image Массив загружаемого изображения
  *
- * @return string ссылка на изображение
+ * @return string|null Строка с сылкой на изображение
  */
-function upload_file($image)
+function upload_file(array $image): ?string
 {
     $tmp_name = $image['tmp_name'] ?? null;
-
     if (empty($tmp_name)) {
         return null;
     }
@@ -30,7 +29,6 @@ function upload_file($image)
     } else {
         return null;
     }
-
 
     return $file_link;
 }

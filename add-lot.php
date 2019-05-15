@@ -3,7 +3,7 @@ include_once(__DIR__ . '/bootstrap.php');
 $title = 'Добавить новый лот';
 $categories = get_categories($connection);
 
-if(!$user) {
+if (!$user) {
     header('Location: login.php');
     exit();
 }
@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $lot_data = $_POST['lot'] ?? null;
     $lot_image = $_FILES['lot-image'] ?? null;
-    $lot_data['user_id'] = $session['id'] ?? null;
+    $lot_data['user_id'] = $user['id'] ?? null;
 
     if (!$lot_data || !$lot_image) {
         die('Отсутствуют данные лота в запросе');
