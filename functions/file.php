@@ -1,10 +1,10 @@
 <?php
 /**
- * Сохранение изображения в uploads
+ * Сохранение изображения в папку uploads
  *
- * @param       $image array массив загружаемого изображения
+ * @param       array $image Массив загружаемого изображения
  *
- * @return string ссылка на изображение
+ * @return string|null Строка с сылкой на изображение
  */
 function upload_file(array $image): ?string
 {

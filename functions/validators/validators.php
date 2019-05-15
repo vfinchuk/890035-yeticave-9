@@ -1,10 +1,10 @@
 <?php
 /**
- * Функция фильтрации данных из формы
+ * Фильтрация массива данных формы
  *
- * @param       $form_data array Массив данных из формы
+ * @param       array $form_data Массив данных формы
  *
- * @return array Массив отфильтрованных данных из формы
+ * @return array Массив отфильтрованных данных формы
  */
 function filter_form_data(array $form_data): array
 {

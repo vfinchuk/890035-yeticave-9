@@ -1,10 +1,10 @@
 <?php
 /**
- * Функция вывода категорий
+ * Возвращает категории из БД
  *
- * @param       $connection mysqli Ресурс соединения
+ * @param       mysqli $connection Ресурс соединения
  *
- * @return      array массив категорий
+ * @return array|null Массив категорий
  */
 function get_categories(mysqli $connection): ?array
 {
@@ -15,12 +15,12 @@ function get_categories(mysqli $connection): ?array
 }
 
 /**
- * Функция вывода категории по идетификатору
+ * Возвращает категорию по идетификатору
  *
- * @param       $connection mysqli Ресурс соединения
- * @param       $id int идентификатор категории
+ * @param       mysqli $connection Ресурс соединения
+ * @param       int $id Идентификатор категории
  *
- * @return array масив категории
+ * @return array|null Массив категории
  */
 function get_category(mysqli $connection, int $id): ?array
 {

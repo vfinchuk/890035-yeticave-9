@@ -1,12 +1,11 @@
 <?php
-
 /**
- * Функция возвращает ставки лота по идентификатору
+ * Возвращает ставки на лот по идентификатору
  *
- * @param       $connection mysqli Ресурс соединения
- * @param       $lot_id integer идентификатор лота
+ * @param       mysqli $connection Ресурс соединения
+ * @param       integer $lot_id Идентификатор лота
  *
- * @return array массив ставок
+ * @return array|null Массив ставок
  */
 function get_bets_by_lot(mysqli $connection, int $lot_id): ?array
 {
@@ -20,34 +19,33 @@ function get_bets_by_lot(mysqli $connection, int $lot_id): ?array
     return $bets;
 }
 
-
 /**
- * Функция возвращает массив последних ставок на каждый из лотов
+ * Возвращает массив из последних ставок на каждый лот
  *
- * @param       $connection mysqli Ресурс соединения
- * @param       $lot_id integer идентификатор лота
+ * @param       mysqli $connection Ресурс соединения
+ * @param       integer $lot_id Идентификатор лота
  *
- * @return array массив данных последней ставки
+ * @return array|null Массив последних ставок на лоты
  */
 function get_user_win_bets(mysqli $connection): ?array
 {
-    $sql = "SELECT * FROM bets b WHERE create_time = (SELECT MAX(create_time) FROM bets GROUP BY lot_id HAVING lot_id = b.lot_id)";
-
-//    $sql = "SELECT MAX(create_time) AS create_time, MAX(amount) AS amount FROM bets b GROUP BY lot_id";
+    $sql = "SELECT * FROM bets b 
+              WHERE create_time = (SELECT MAX(create_time) 
+                                    FROM bets GROUP BY lot_id 
+                                    HAVING lot_id = b.lot_id)";
 
     $bet = db_fetch_data($connection, $sql);
 
     return $bet;
 }
 
-
 /**
- * Функция возвращает текущую цену на лот
+ * Возвращает текущую цену на лот
  *
- * @param       $connection mysqli Ресурс соединения
- * @param       $user_id int идентификатор пользователя
+ * @param       mysqli $connection Ресурс соединения
+ * @param       int $user_id Идентификатор пользователя
  *
- * @return array массив всех ставок пользователя
+ * @return array|null Массив ставок пользователя
  */
 function get_user_bets(mysqli $connection, int $user_id): ?array
 {

@@ -1,11 +1,10 @@
 <?php
-
 /**
- * Функция вывода лотов
+ * Возвращает все лоты из БД
  *
- * @param       $connection mysqli Ресурс соединения
+ * @param       mysqli $connection Ресурс соединения
  *
- * @return array массив лотов
+ * @return array|null Массив всех лотов
  */
 function get_lots(mysqli $connection): ?array
 {
@@ -19,12 +18,12 @@ function get_lots(mysqli $connection): ?array
 }
 
 /**
- * Функция вывода лота по его идентификатору
+ * Возвращает лот по его идентификатору
  *
- * @param       $connection mysqli Ресурс соединения
- * @param       $id int идентификатор лота
+ * @param       mysqli $connection Ресурс соединения
+ * @param       int $id Идентификатор лота
  *
- * @return array массив лота
+ * @return array|null Массив лота
  */
 function get_lot(mysqli $connection, int $id): ?array
 {
@@ -38,12 +37,12 @@ function get_lot(mysqli $connection, int $id): ?array
 }
 
 /**
- * Функция вывода лотов категории по идентификатору
+ *  Возвращает все лоты категории по идентификатору категории
  *
- * @param       $connection mysqli Ресурс соединения
- * @param       $id int идентификатор категории
+ * @param       mysqli $connection Ресурс соединения
+ * @param       int $id идентификатор категории
  *
- * @return array массив лотов
+ * @return array|null Массив лотов
  */
 function get_lots_by_category(mysqli $connection, int $id): ?array
 {
@@ -57,16 +56,17 @@ function get_lots_by_category(mysqli $connection, int $id): ?array
 }
 
 /**
- * Функция добавления лота в БД
+ * Добавляет новый лот в БД
  *
- * @param       $connection mysqli Ресурс соединения
- * @return      $lot_data array массив данных лота
+ * @param       mysqli $connection Ресурс соединения
+ * @return      array $lot_data Данные нового лота
  *
- * @return integer идетификатор нового лота
+ * @return integer|null Идетификатор нового лота
  */
-function insert_lot(mysqli $connection, array $lot_data): int
+function insert_lot(mysqli $connection, array $lot_data): ?int
 {
     $sql = "INSERT INTO lots (user_id, category_id, end_time, name, content, start_price, step_rate, image) VALUE (?, ?, ?, ?, ?, ?, ?, ?);";
+
     $add_lot = db_insert_data($connection, $sql, [
         'user_id'     => $lot_data['user_id'],
         'category_id' => $lot_data['category'],
@@ -82,16 +82,17 @@ function insert_lot(mysqli $connection, array $lot_data): int
 }
 
 /**
- * Функция добавления ставки в БД
+ * Добавления ставки в БД
  *
- * @param       $connection mysqli Ресурс соединения
- * @param       $user_data array данные ставки
+ * @param       mysqli $connection Ресурс соединения
+ * @param       array $user_data Данные ставки
  *
- * @return integer идентификатор новой ставки
+ * @return integer Идентификатор новой ставки
  */
 function insert_bet(mysqli $connection, array $bet_data): int
 {
     $sql = "INSERT INTO bets (user_id, lot_id, amount) VALUE (?, ?, ?)";
+
     $add_bet = db_insert_data($connection, $sql, [
         'user_id' => $bet_data['user_id'],
         'lot_id'  => $bet_data['lot_id'],
@@ -107,7 +108,7 @@ function insert_bet(mysqli $connection, array $bet_data): int
  * @param       mysqli $connection Ресурс соединения
  * @param       array $lot массив данных лота
  *
- * @return int текущая цена лота
+ * @return int Цена на лот
  */
 function get_lot_price(mysqli $connection, array $lot): int
 {
@@ -117,6 +118,7 @@ function get_lot_price(mysqli $connection, array $lot): int
                LEFT JOIN bets b ON l.id = b.lot_id
                WHERE l.id = ?
                ORDER BY b.create_time DESC";
+
     $bets = db_fetch_data($connection, $sql, ['lot_id' => $lot['id']], true);
 
     if ($bets['amount']) {
@@ -127,16 +129,18 @@ function get_lot_price(mysqli $connection, array $lot): int
 }
 
 /**
- * Количество лотов по поисковому запросу
+ * Количество лотов соответствующее поисковому запросу
  *
  * @param       mysqli $connection Ресурс соединения
  * @param       string $search Строка с поисковым запросом
  *
- * @return int|null возвращает количество лотов соответствующее поисковому запросу
+ * @return int|null Количество лотов
  */
 function count_lots_by_search(mysqli $connection, string $search): ?int
 {
-    $sql = "SELECT COUNT(*) AS count FROM lots WHERE MATCH(name, content) AGAINST(?)";
+    $sql = "SELECT COUNT(*) AS count FROM lots 
+              WHERE MATCH(name, content) AGAINST(?)";
+
     $count = db_fetch_data($connection, $sql, ['lot_ft_search' => $search], true);
 
     return $count['count'];
@@ -147,15 +151,22 @@ function count_lots_by_search(mysqli $connection, string $search): ?int
  *
  * @param       mysqli $connection Ресурс соединения
  * @param       string $search Строка с поисковым запросом
+ * @param       int $limit Количество взвращаемых лотов на страницу
+ * @param       int $offset Значение отступа возвращаемых лотов на страницу
  *
- * @return array|null вернет массив лотов
+ * @return array|null Массив лотов
  */
 function get_search_lots_by_page(mysqli $connection, string $search, int $limit, int $offset): ?array
 {
     $sql = "SELECT * FROM lots l 
               WHERE MATCH(name, content) AGAINST(?)
               ORDER BY l.create_time DESC LIMIT ? OFFSET ?";
-    $find = db_fetch_data($connection, $sql, ['lot_ft_search' => $search, 'LIMIT' => $limit, 'OFFSET' => $offset]);
+
+    $find = db_fetch_data($connection, $sql, [
+        'lot_ft_search' => $search,
+        'LIMIT' => $limit,
+        'OFFSET' => $offset]
+    );
 
     return $find;
 }

@@ -2,9 +2,9 @@
 /**
  * Проверяет Email пользователя
  *
- * @param       $email string имейл пользователя
+ * @param       string $email имейл пользователя
  *
- * @return string вернет null или текст ошибки
+ * @return string|null Текст ошибки
  */
 function validate_user_email(mysqli $connection, string $email): ?string
 {
@@ -25,9 +25,9 @@ function validate_user_email(mysqli $connection, string $email): ?string
 /**
  * Проверяет пароль пользователя
  *
- * @param       $password string пароль пользователя
+ * @param       string $password пароль пользователя
  *
- * @return string вернет null или текст ошибки
+ * @return string|null Текст ошибки
  */
 function validate_user_password(string $password): ?string
 {
@@ -47,9 +47,9 @@ function validate_user_password(string $password): ?string
 /**
  * Проверяет имя пользователя
  *
- * @param       $name string имя пользователя
+ * @param       string $name имя пользователя
  *
- * @return string вернет null или текст ошибки
+ * @return string|null Текст ошибки
  */
 function validate_user_name(string $name): ?string
 {
@@ -66,9 +66,9 @@ function validate_user_name(string $name): ?string
 /**
  * Проверяет аватар пользователя
  *
- * @param       $avatar array массив данных аватара пользователя
+ * @param       array $avatar массив данных аватара пользователя
  *
- * @return string вернет null или текст ошибки
+ * @return string|null Текст ошибки
  */
 function validate_avatar(array $avatar): ?string
 {
@@ -91,9 +91,9 @@ function validate_avatar(array $avatar): ?string
 /**
  * Проверяет контакты пользователя
  *
- * @param       $contact string контакты пользователя
+ * @param       string $contact контакты пользователя
  *
- * @return string вернет null или текст ошибки
+ * @return string|null Текст ошибки
  */
 function validate_user_contact(string $contact): ?string
 {
@@ -107,13 +107,12 @@ function validate_user_contact(string $contact): ?string
     return null;
 }
 
-
 /**
- * Функция валидации формы нового пользователя
+ * Валидация формы на добавление нового пользователя
  *
- * @param       $user_data array массив с данными нового пользовтаеля
+ * @param       array $user_data Массив данных нового пользовтаеля
  *
- * @return array | bool Вернет null или массив с ошибками
+ * @return array|null Массив ошибок
  */
 function validate_user_form(mysqli $connection, array $user_data, array $avatar): ?array
 {
@@ -149,9 +148,9 @@ function validate_user_form(mysqli $connection, array $user_data, array $avatar)
 /**
  * Проверяет логин пользователя
  *
- * @param       $login array имейл пользователя
+ * @param       string $login имейл пользователя
  *
- * @return string вернет null или текст ошибки
+ * @return string|null Текст ошибки
  */
 function validate_auth_login(string $login): ?string
 {
@@ -168,9 +167,9 @@ function validate_auth_login(string $login): ?string
 /**
  * Проверяет пароль пользователя с сохраненным хешем
  *
- * @param       $password string пароль
+ * @param       string $password пароль
  *
- * @return string вернет null или текст ошибки
+ * @return string|null Текст ошибки
  */
 function validate_auth_password(string $password): ?string
 {
@@ -184,12 +183,12 @@ function validate_auth_password(string $password): ?string
 }
 
 /**
- * Функция валидации формы авторизации
+ * Валидация формы авторизации
  *
- * @param       $user array массив данных пользователя
- * @param       $password string пароль пользователя
+ * @param       array $user массив данных пользователя
+ * @param       string $password пароль пользователя
  *
- * @return array вернет null или массив ошибок
+ * @return array|null Массив ошибок
  */
 function validate_login(?array $user, string $password)
 {

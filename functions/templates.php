@@ -6,9 +6,10 @@ const rub = '<b> р</b>';
 /**
  * Возвращает отформатированую цену
  *
- * @param       $price int значение цены  для форматирования
+ * @param       int $price Цена для форматирования
+ * @param       boolean $small_icon Флаг если нужно вернуть с маленьким знаком рубляБ пример: 25 000 р
  *
- * @return string  Пример: 25 489 ₽
+ * @return string Возвращает цену, пример: 25 000 ₽ | 25 000 р
  */
 function price_format(int $price, $small_icon = false): string
 {
@@ -26,11 +27,11 @@ function price_format(int $price, $small_icon = false): string
 }
 
 /**
- * Возвращает строку сколько часов и минут соталось до окончания
+ * Возвращает количество часов и минут до даты завершения
  *
- * @param       $endDate string Дата окончания лота
+ * @param       string $end_date Дата завершения
  *
- * @return string Часов и минут до окончания
+ * @return string Осталось часов:минут до окончания
  */
 function time_to_end(string $end_date): string
 {
@@ -48,12 +49,12 @@ function time_to_end(string $end_date): string
 }
 
 /**
- * Определяет остаток времени до конца суток
+ * Определяет остаток времени до конца суток установленной даты
  *
- * @param       $endDate string Дата в текстовом представлении
- * @param       $hours int Сколько нужно отсчитать часов до конца суток. По умолчанию 1час.
+ * @param       string $end_date Дата завершения
+ * @param       int $hours Значение остатка до следующих суток, по умолчанию 1
  *
- * @return boolean
+ * @return boolean Вернет true когда до даты завершения останется меньше 1го часа иначе false
  */
 function is_timer_finishing(string $end_date, int $hours = 1): bool
 {
@@ -73,9 +74,9 @@ function is_timer_finishing(string $end_date, int $hours = 1): bool
 /**
  * Проверяет окончания ставки
  *
- * @param       $lot_end_time string Дата окончания ставки
+ * @param       string $lot_end_time Дата завершения ставки
  *
- * @return boolean Вернет true если срок действия лота окончен false
+ * @return boolean Вернет true если срок действия лота окончен иначе false
  */
 function is_lot_end(string $bet_end_time): bool
 {
@@ -103,10 +104,10 @@ function is_lot_end(string $bet_end_time): bool
  *     );
  * Результат: "Я поставил таймер на 5 минут"
  *
- * @param int $number Число, по которому вычисляем форму множественного числа
- * @param string $one Форма единственного числа: яблоко, час, минута
- * @param string $two Форма множественного числа для 2, 3, 4: яблока, часа, минуты
- * @param string $many Форма множественного числа для остальных чисел
+ * @param       int $number Число, по которому вычисляем форму множественного числа
+ * @param       string $one Форма единственного числа: яблоко, час, минута
+ * @param       string $two Форма множественного числа для 2, 3, 4: яблока, часа, минуты
+ * @param       string $many Форма множественного числа для остальных чисел
  *
  * @return string Рассчитанная форма множественнго числа
  */
@@ -139,11 +140,11 @@ function get_noun_plural_form(
 }
 
 /**
- * Возвращает длительность от начала ставки в человеческом формате
+ * Возвращает пройденого времени от начала ставки в человеческом формате
  *
- * @param       $create_time string Дата создания ставки
+ * @param       string $create_time Дата добавления ставки
  *
- * @return string Вернет длительность ставки
+ * @return string количество пройденного времени, пример: 5 минут назад
  */
 function get_bet_time(string $create_time)
 {
@@ -198,20 +199,18 @@ function get_bet_time(string $create_time)
 /**
  * Постраницая пагинация
  *
- * @param       $lots array Массив лотов для пагинации
- * @param       $per_page int количество выводимое на страницу
+ * @param       array $lots_count Колличество лотов
+ * @param       $per_page int Количество лотов вывода на страницу
  *
- * @return array|null Вернет массив данных для пагинации
+ * @return array|null Вернет массив данных пагинации
  */
 function pagination(int $lots_count, int $per_page): ?array
 {
-
     $pag['current_page'] = $_GET['page'] ?? 1;
     $pag['offset'] = ($pag['current_page'] - 1) * $per_page;
     $pag['pages_count'] = ceil($lots_count / $per_page);;
     $pag['pages'] = range(1, $pag['pages_count']);
     $pag['cur_page'] = $pag['current_page'];
-
     $pag['prev_page'] = ($pag['current_page'] > 1) ? $pag['current_page'] - 1 : $pag['current_page'];
     $pag['next_page'] = (count($pag['pages']) > $pag['current_page']) ? $pag['current_page'] + 1 : $pag['current_page'];
 
@@ -221,8 +220,8 @@ function pagination(int $lots_count, int $per_page): ?array
 /**
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
  *
- * @param       $name string Путь к файлу шаблона относительно папки templates
- * @param       $data array Ассоциативный массив с данными для шаблона
+ * @param       string $name Путь к файлу шаблона относительно папки templates
+ * @param       array $data Ассоциативный массив с данными для шаблона
  *
  * @return string Итоговый HTML
  */

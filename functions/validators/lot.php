@@ -9,7 +9,7 @@
  * is_date_valid('10.10.2010'); // false
  * is_date_valid('10/10/2010'); // false
  *
- * @param string $date Дата в виде строки
+ * @param       string $date Дата в виде строки
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
@@ -24,9 +24,9 @@ function is_date_valid(string $date): bool
 /**
  * Проверяет имя лота
  *
- * @param       $name string имя лота
+ * @param       string $name имя лота
  *
- * @return string вернет null или текст ошибки
+ * @return string|null Текст ошибки
  */
 function validate_lot_name(string $name): ?string
 {
@@ -40,17 +40,13 @@ function validate_lot_name(string $name): ?string
     return null;
 }
 
-
-
-
-
 /**
- * Проверяет <select> категории на наличие ID
+ * Проверяет <select> категории на наличие идентификатора
  *
- * @param       $connection array подключение к базе
- * @param       $category int идентификатор категории
+ * @param       mysqli $connection Ресурс соединения
+ * @param       int $category Идентификатор категории
  *
- * @return string Вернет null или строку с текстом ошибки.
+ * @return string|null Текст ошибки
  */
 function validate_lot_category(mysqli $connection, int $category): ?string
 {
@@ -65,11 +61,11 @@ function validate_lot_category(mysqli $connection, int $category): ?string
 }
 
 /**
- * Проверяет поле описания лота
+ * Проверяет описание лота
  *
- * @param       $content string контентнт лота
+ * @param       string $content контентнт лота
  *
- * @return string вернет null или текст ошибки
+ * @return string|null Текст ошибки
  */
 function validate_lot_content(string $content): ?string
 {
@@ -86,9 +82,9 @@ function validate_lot_content(string $content): ?string
 /**
  * Проверяет изображение лота
  *
- * @param       $image array массив с данными изображения
+ * @param       array $image массив с данными изображения
  *
- * @return string Возвращает null или строку с ошибкой
+ * @return string|null Текст ошибки
  */
 function validate_lot_image(array $image): ?string
 {
@@ -112,9 +108,9 @@ function validate_lot_image(array $image): ?string
 /**
  * Проверяет стартовую цену лота
  *
- * @param       $start_price integer число или строка
+ * @param       string $start_price число или строка
  *
- * @return string Возвращает null или текст ошибки
+ * @return string|null Текст ошибки
  */
 function validate_lot_start_price(string $start_price): ?string
 {
@@ -139,9 +135,9 @@ function validate_lot_start_price(string $start_price): ?string
 /**
  * Проверяет шаг ставки лота
  *
- * @param       $start_price integer число или строка
+ * @param       string $start_price число или строка
  *
- * @return string Возвращает null или текст ошибки
+ * @return string|null Текст ошибки
  */
 function validate_lot_step_rate(string $step_rate): ?string
 {
@@ -151,9 +147,9 @@ function validate_lot_step_rate(string $step_rate): ?string
 /**
  * Проверяет дату окончания лота
  *
- * @param       $end_time string дата в виде строки
+ * @param       string $end_time дата в виде строки
  *
- * @return string вернет null или текст ошибки
+ * @return string|null Текст ошибки
  */
 function validate_lot_end_time(string $end_time): ?string
 {
@@ -180,13 +176,13 @@ function validate_lot_end_time(string $end_time): ?string
 }
 
 /**
- * Функция валидации формы добавления лота
+ * Валидация формы на добавление нового лота
  *
- * @param       $connection mysqli Ресурс соединения
- * @param       $lot_data array массив с данными из формы
- * @param       $lot_image array массив с данными изображения лота
+ * @param       mysqli $connection Ресурс соединения
+ * @param       array $lot_data массив данных из формы
+ * @param       array $lot_image массив данных изображения лота
  *
- * @return array | bool Вернет null или массив с ошибками
+ * @return array|null Массив ошибок
  */
 function validate_lot_form(mysqli $connection, array $lot_data, array $lot_image): ?array
 {

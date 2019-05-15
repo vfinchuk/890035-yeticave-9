@@ -1,15 +1,16 @@
 <?php
 /**
- * Функция добавления пользователя в БД
+ * Добавляет пользователя в БД
  *
- * @param       $connection mysqli Ресурс соединения
- * @param       $user_data array данные пользователя
+ * @param       mysqli $connection Ресурс соединения
+ * @param       array $user_data Данные пользователя
  *
- * @return integer идетификатор нового пользователя
+ * @return integer|null Идетификатор нового пользователя
  */
-function insert_user(mysqli $connection, array $user_data): int
+function insert_user(mysqli $connection, array $user_data): ?int
 {
     $sql = "INSERT INTO users (email, password, name, contact, avatar) VALUE (?, ?, ?, ?, ?)";
+
     $add_user = db_insert_data($connection, $sql, [
         'email'    => $user_data['email'],
         'password' => $user_data['password'],
@@ -22,12 +23,12 @@ function insert_user(mysqli $connection, array $user_data): int
 }
 
 /**
- * Функция вывода пользователя по Email
+ * Возвращает пользователя по Email
  *
- * @param       $connection mysqli Ресурс соединения
- * @param       $email string имейл
+ * @param       mysqli $connection Ресурс соединения
+ * @param       string $email Email пользователя
  *
- * @return array массив пользователя
+ * @return array|null Данные пользователя
  */
 function get_user_by_email(mysqli $connection, string $email): ?array
 {

@@ -1,10 +1,10 @@
 <?php
 /**
- * Функция подключения к БД
+ * Подключение к БД
  *
- * @param       $config_db array массив с данными на подключение к БД
+ * @param       array $config_db конфигурационный массив для подключения к БД
  *
- * @return      $connection mysqli ресурс подключения к БД
+ * @return      mysqli Ресурс соединения с БД
  */
 function db_connect(array $config_db): mysqli
 {
@@ -26,9 +26,9 @@ function db_connect(array $config_db): mysqli
 /**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
  *
- * @param       $connection mysqli Ресурс соединения
- * @param       $sql  string SQL запрос с плейсхолдерами вместо значений
- * @param       $data array Данные для вставки на место плейсхолдеров
+ * @param       mysqli $connection Ресурс соединения
+ * @param       string $sql  SQL запрос с плейсхолдерами вместо значений
+ * @param       array $data Данные для вставки на место плейсхолдеров
  *
  * @return mysqli_stmt Подготовленное выражение
  */
@@ -86,12 +86,12 @@ function db_get_prepare_stmt(mysqli $connection, string $sql, array $data = []):
 /**
  * Получение записей из БД
  *
- * @param       $connection mysqli Ресурс соединения
- * @param       $sql  string SQL запрос с плейсхолдерами вместо значений
- * @param       $data array данные для вставки на место плейсхолдеров
- * @param       $oneItem boolean флаг для вывода одной строки из базы
+ * @param       mysqli $connection Ресурс соединения
+ * @param       string $sql SQL запрос с плейсхолдерами вместо значений
+ * @param       array $data Данные для вставки на место плейсхолдеров
+ * @param       boolean $oneItem Флаг вывода одной строки из базы
  *
- * @return array массив с данными из БД
+ * @return array|null Массив данных из БД
  */
 function db_fetch_data(mysqli $connection, string $sql, array $data = [], bool $oneItem = false): ?array
 {
@@ -114,11 +114,11 @@ function db_fetch_data(mysqli $connection, string $sql, array $data = [], bool $
 /**
  * Добавление / Обновление / Удаление записей в БД
  *
- * @param       $connection mysqli Ресурс соединения
- * @param       $sql  string SQL запрос с плейсхолдерами вместо значений
- * @param       $data array Данные для вставки на место плейсхолдеров
+ * @param       mysqli $connection Ресурс соединения
+ * @param       string $sql SQL запрос с плейсхолдерами вместо значений
+ * @param       array $data Данные для вставки на место плейсхолдеров
  *
- * @return integer вернет идентификатор добалвеного елемента в талицу
+ * @return integer|null Идентификатор новой строки таблицы
  */
 function db_insert_data(mysqli $connection, string $sql, array $data = []): ?int
 {
@@ -131,4 +131,3 @@ function db_insert_data(mysqli $connection, string $sql, array $data = []): ?int
 
     return $result;
 }
-

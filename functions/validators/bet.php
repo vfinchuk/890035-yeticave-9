@@ -1,12 +1,11 @@
 <?php
-
 /**
- * Функция валидации формы новой ставки
+ * Валидация полей формы на добавления новой ставки
  *
- * @param       $lot_data array массив данных лота
- * @param       $amount array размер ставки
+ * @param       array $lot_data Массив данных лота
+ * @param       array $amount Размер ставки
  *
- * @return array вернет null или массив ошибок
+ * @return array|null Массив с ошибками
  */
 function validate_bet_form(array $lot_data, string $amount): ?array
 {
