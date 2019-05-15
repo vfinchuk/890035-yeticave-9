@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if ($search) {
         $search = filter_search_query($search);
         $lots_count = count_lots_by_search($connection, $search);
-        $lots_per_page = 2;
+        $lots_per_page = 3;
 
         if ($lots_count) {
             $pagination = pagination($lots_count, $lots_per_page);
