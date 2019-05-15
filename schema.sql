@@ -86,3 +86,6 @@ CREATE UNIQUE INDEX users_email_udx
 
 CREATE INDEX lots_name_idx
   ON lots (name);
+
+CREATE FULLTEXT INDEX lot_ft_search
+  ON lots (name, content)
