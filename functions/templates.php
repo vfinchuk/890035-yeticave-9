@@ -196,6 +196,29 @@ function get_bet_time(string $create_time)
 }
 
 /**
+ * Постраницая пагинация
+ *
+ * @param       $lots array Массив лотов для пагинации
+ * @param       $per_page int количество выводимое на страницу
+ *
+ * @return array|null Вернет массив данных для пагинации
+ */
+function pagination(int $lots_count, int $per_page): ?array
+{
+
+    $pag['current_page'] = $_GET['page'] ?? 1;
+    $pag['offset'] = ($pag['current_page'] - 1) * $per_page;
+    $pag['pages_count'] = ceil($lots_count / $per_page);;
+    $pag['pages'] = range(1, $pag['pages_count']);
+    $pag['cur_page'] = $pag['current_page'];
+
+    $pag['prev_page'] = ($pag['current_page'] > 1) ? $pag['current_page'] - 1 : $pag['current_page'];
+    $pag['next_page'] = (count($pag['pages']) > $pag['current_page']) ? $pag['current_page'] + 1 : $pag['current_page'];
+
+    return $pag;
+}
+
+/**
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
  *
  * @param       $name string Путь к файлу шаблона относительно папки templates

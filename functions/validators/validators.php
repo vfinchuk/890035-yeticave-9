@@ -4,7 +4,7 @@
  *
  * @param       $form_data array Массив данных из формы
  *
- * @param return array Массив отфильтрованных данных из формы
+ * @return array Массив отфильтрованных данных из формы
  */
 function filter_form_data(array $form_data): array
 {
@@ -17,5 +17,15 @@ function filter_form_data(array $form_data): array
     return $filter;
 }
 
-
+/**
+ * Фильтрация поискового запроса
+ *
+ * @param       string $search данные поискового запроса
+ *
+ * @return string отфильтрованный поисковый запрос
+ */
+function filter_search_query(string $search): string
+{
+    return htmlspecialchars(trim($search));
+}
 

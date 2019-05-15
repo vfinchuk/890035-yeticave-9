@@ -102,10 +102,10 @@ function insert_bet(mysqli $connection, array $bet_data): int
 }
 
 /**
- * Функция возвращает текущую цену на лот
+ * Возвращает текущую цену на лот
  *
- * @param       $connection mysqli Ресурс соединения
- * @param       $lot array массив данных лота
+ * @param       mysqli $connection Ресурс соединения
+ * @param       array $lot массив данных лота
  *
  * @return int текущая цена лота
  */
@@ -127,17 +127,35 @@ function get_lot_price(mysqli $connection, array $lot): int
 }
 
 /**
+ * Количество лотов по поисковому запросу
+ *
+ * @param       mysqli $connection Ресурс соединения
+ * @param       string $search Строка с поисковым запросом
+ *
+ * @return int|null возвращает количество лотов соответствующее поисковому запросу
+ */
+function count_lots_by_search(mysqli $connection, string $search): ?int
+{
+    $sql = "SELECT COUNT(*) AS count FROM lots WHERE MATCH(name, content) AGAINST(?)";
+    $count = db_fetch_data($connection, $sql, ['lot_ft_search' => $search], true);
+
+    return $count['count'];
+}
+
+/**
  * Поиск по названию и описанию лотов
  *
- * @param       $connection mysqli Ресурс соединения
- * @param       $search string Строка с поисковым запросом
+ * @param       mysqli $connection Ресурс соединения
+ * @param       string $search Строка с поисковым запросом
  *
  * @return array|null вернет массив лотов
  */
-function get_search_lots(mysqli $connection, string $search): ?array
+function get_search_lots_by_page(mysqli $connection, string $search, int $limit, int $offset): ?array
 {
-    $sql = "SELECT * FROM lots l WHERE MATCH(name, content) AGAINST(?)";
-    $find = db_fetch_data($connection, $sql, ['lot_ft_search' => $search]);
+    $sql = "SELECT * FROM lots l 
+              WHERE MATCH(name, content) AGAINST(?)
+              ORDER BY l.create_time DESC LIMIT ? OFFSET ?";
+    $find = db_fetch_data($connection, $sql, ['lot_ft_search' => $search, 'LIMIT' => $limit, 'OFFSET' => $offset]);
 
     return $find;
 }
