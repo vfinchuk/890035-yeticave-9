@@ -39,6 +39,23 @@ function get_lot(mysqli $connection, int $id): ?array
 }
 
 /**
+ *  Возвращает количество лотов в категории
+ *
+ * @param       mysqli $connection Ресурс соединения
+ * @param       int    $id         идентификатор категории
+ *
+ * @return integer|null Массив лотов
+ */
+function count_lots_by_category(mysqli $connection, int $id): ?int
+{
+    $sql = "SELECT COUNT(*) AS count FROM lots l
+              WHERE l.category_id = ?";
+    $count = db_fetch_data($connection, $sql, ['category_id' => $id], true);
+
+    return $count['count'];
+}
+
+/**
  *  Возвращает все лоты категории по идентификатору категории
  *
  * @param       mysqli $connection Ресурс соединения
@@ -46,14 +63,18 @@ function get_lot(mysqli $connection, int $id): ?array
  *
  * @return array|null Массив лотов
  */
-function get_lots_by_category(mysqli $connection, int $id): ?array
+function get_lots_by_category_per_page(mysqli $connection, int $id, $limit, $offset): ?array
 {
     $sql
         = "SELECT l.id, l.name, end_time, start_price, content, image, c.name AS category_name
                 FROM lots l
                 LEFT JOIN categories c ON l.category_id = c.id
-                WHERE c.id = ?";
-    $lots = db_fetch_data($connection, $sql, ['id' => $id]);
+                WHERE c.id = ? LIMIT ? OFFSET ?";
+    $lots = db_fetch_data($connection, $sql, [
+        'id' => $id,
+        'LIMIT' => $limit,
+        'OFFSET' => $offset
+        ]);
 
     return $lots;
 }
@@ -62,8 +83,7 @@ function get_lots_by_category(mysqli $connection, int $id): ?array
  * Добавляет новый лот в БД
  *
  * @param       mysqli $connection Ресурс соединения
- *
- * @return      array $lot_data Данные нового лота
+ * @param       array $lot_data Данные нового лота
  *
  * @return integer|null Идетификатор нового лота
  */
