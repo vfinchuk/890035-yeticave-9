@@ -6,7 +6,7 @@ const rub = '<b> р</b>';
 /**
  * Возвращает отформатированую цену
  *
- * @param       int $price Цена для форматирования
+ * @param       int     $price      Цена для форматирования
  * @param       boolean $small_icon Флаг если нужно вернуть с маленьким знаком рубляБ пример: 25 000 р
  *
  * @return string Возвращает цену, пример: 25 000 ₽ | 25 000 р
@@ -19,7 +19,7 @@ function price_format(int $price, $small_icon = false): string
         $price = substr($price, 0, (strlen($price) - 3));
         $price .= ' ' . $strend;
     }
-    if($small_icon) {
+    if ($small_icon) {
         return $price . rub;
     }
 
@@ -52,7 +52,7 @@ function time_to_end(string $end_date): string
  * Определяет остаток времени до конца суток установленной даты
  *
  * @param       string $end_date Дата завершения
- * @param       int $hours Значение остатка до следующих суток, по умолчанию 1
+ * @param       int    $hours    Значение остатка до следующих суток, по умолчанию 1
  *
  * @return boolean Вернет true когда до даты завершения останется меньше 1го часа иначе false
  */
@@ -104,10 +104,10 @@ function is_lot_end(string $bet_end_time): bool
  *     );
  * Результат: "Я поставил таймер на 5 минут"
  *
- * @param       int $number Число, по которому вычисляем форму множественного числа
- * @param       string $one Форма единственного числа: яблоко, час, минута
- * @param       string $two Форма множественного числа для 2, 3, 4: яблока, часа, минуты
- * @param       string $many Форма множественного числа для остальных чисел
+ * @param       int    $number Число, по которому вычисляем форму множественного числа
+ * @param       string $one    Форма единственного числа: яблоко, час, минута
+ * @param       string $two    Форма множественного числа для 2, 3, 4: яблока, часа, минуты
+ * @param       string $many   Форма множественного числа для остальных чисел
  *
  * @return string Рассчитанная форма множественнго числа
  */
@@ -200,7 +200,7 @@ function get_bet_time(string $create_time)
  * Постраницая пагинация
  *
  * @param       array $lots_count Колличество лотов
- * @param       $per_page int Количество лотов вывода на страницу
+ * @param             $per_page   int Количество лотов вывода на страницу
  *
  * @return array|null Вернет массив данных пагинации
  */
@@ -211,8 +211,10 @@ function pagination(int $lots_count, int $per_page): ?array
     $pag['pages_count'] = ceil($lots_count / $per_page);;
     $pag['pages'] = range(1, $pag['pages_count']);
     $pag['cur_page'] = $pag['current_page'];
-    $pag['prev_page'] = ($pag['current_page'] > 1) ? $pag['current_page'] - 1 : $pag['current_page'];
-    $pag['next_page'] = (count($pag['pages']) > $pag['current_page']) ? $pag['current_page'] + 1 : $pag['current_page'];
+    $pag['prev_page'] = ($pag['current_page'] > 1) ? $pag['current_page'] - 1
+        : $pag['current_page'];
+    $pag['next_page'] = (count($pag['pages']) > $pag['current_page'])
+        ? $pag['current_page'] + 1 : $pag['current_page'];
 
     return $pag;
 }
@@ -221,7 +223,7 @@ function pagination(int $lots_count, int $per_page): ?array
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
  *
  * @param       string $name Путь к файлу шаблона относительно папки templates
- * @param       array $data Ассоциативный массив с данными для шаблона
+ * @param       array  $data Ассоциативный массив с данными для шаблона
  *
  * @return string Итоговый HTML
  */

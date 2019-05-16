@@ -1,0 +1,12 @@
+{
+    "name": "yeticave",
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    },
+    "authors": [
+        {
+            "name": "Vladimir Finchuk",
+            "email": "v.finchuk@lucky-labs.com"
+        }
+    ]
+}

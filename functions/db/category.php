@@ -18,7 +18,7 @@ function get_categories(mysqli $connection): ?array
  * Возвращает категорию по идетификатору
  *
  * @param       mysqli $connection Ресурс соединения
- * @param       int $id Идентификатор категории
+ * @param       int    $id         Идентификатор категории
  *
  * @return array|null Массив категории
  */

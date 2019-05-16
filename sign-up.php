@@ -25,7 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $user_data = filter_form_data($user_data);
 
-        $user_data['password'] = password_hash($user_data['password'], PASSWORD_DEFAULT);
+        $user_data['password'] = password_hash($user_data['password'],
+            PASSWORD_DEFAULT);
         $user_data['avatar'] = upload_file($avatar);
         $user_id = insert_user($connection, $user_data);
 

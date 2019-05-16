@@ -27,13 +27,16 @@ function db_connect(array $config_db): mysqli
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
  *
  * @param       mysqli $connection Ресурс соединения
- * @param       string $sql  SQL запрос с плейсхолдерами вместо значений
- * @param       array $data Данные для вставки на место плейсхолдеров
+ * @param       string $sql        SQL запрос с плейсхолдерами вместо значений
+ * @param       array  $data       Данные для вставки на место плейсхолдеров
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt(mysqli $connection, string $sql, array $data = []): mysqli_stmt
-{
+function db_get_prepare_stmt(
+    mysqli $connection,
+    string $sql,
+    array $data = []
+): mysqli_stmt {
     $stmt = mysqli_prepare($connection, $sql);
 
     if ($stmt === false) {
@@ -87,13 +90,18 @@ function db_get_prepare_stmt(mysqli $connection, string $sql, array $data = []):
  * Получение записей из БД
  *
  * @param       mysqli $connection Ресурс соединения
- * @param       string $sql SQL запрос с плейсхолдерами вместо значений
- * @param       array $data Данные для вставки на место плейсхолдеров
- * @param       boolean $oneItem Флаг вывода одной строки из базы
+ * @param       string $sql        SQL запрос с плейсхолдерами вместо значений
+ * @param       array $data        Данные для вставки на место плейсхолдеров
+ * @param       boolean $oneItem   Флаг вывода одной строки из базы
  *
  * @return array|null Массив данных из БД
  */
-function db_fetch_data(mysqli $connection, string $sql, array $data = [], bool $oneItem = false): ?array
+function db_fetch_data(
+    mysqli $connection,
+    string $sql,
+    array $data = [],
+    bool $oneItem = false
+): ?array
 {
     $result = [];
     $stmt = db_get_prepare_stmt($connection, $sql, $data);
@@ -115,8 +123,8 @@ function db_fetch_data(mysqli $connection, string $sql, array $data = [], bool $
  * Добавление / Обновление / Удаление записей в БД
  *
  * @param       mysqli $connection Ресурс соединения
- * @param       string $sql SQL запрос с плейсхолдерами вместо значений
- * @param       array $data Данные для вставки на место плейсхолдеров
+ * @param       string $sql        SQL запрос с плейсхолдерами вместо значений
+ * @param       array  $data       Данные для вставки на место плейсхолдеров
  *
  * @return integer|null Идентификатор новой строки таблицы
  */

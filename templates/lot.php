@@ -13,9 +13,11 @@
         <div class="lot-item__content">
             <div class="lot-item__left">
                 <div class="lot-item__image">
-                    <img src="../<?= $lot['image']; ?>" width="730" height="548" alt="<?= ['name']; ?>">
+                    <img src="../<?= $lot['image']; ?>" width="730" height="548"
+                         alt="<?= ['name']; ?>">
                 </div>
-                <p class="lot-item__category">Категория: <span><?= $lot['category_name']; ?></span></p>
+                <p class="lot-item__category">Категория:
+                    <span><?= $lot['category_name']; ?></span></p>
                 <p class="lot-item__description"><?= $lot['content']; ?></p>
             </div>
             <div class="lot-item__right">
@@ -30,19 +32,30 @@
                             <span class="lot-item__cost"><?= price_format(intval($lot['price'])); ?></span>
                         </div>
                         <div class="lot-item__min-cost">
-                            Мин. ставка <span><?= price_format(intval($lot['step_rate']), true); ?></span>
+                            Мин. ставка
+                            <span><?= price_format(intval($lot['step_rate']),
+                                    true); ?></span>
                         </div>
                     </div>
-                    <?php if ( ($user && ($lot['user_id'] !== $user['id'])) && (!is_lot_end($lot['end_time'])) ): ?>
-                        <form class="lot-item__form <?= isset($errors) ? 'form--invalid' : false; ?>" action=""
+                    <?php if (($user && ($lot['user_id'] !== $user['id']))
+                        && (!is_lot_end($lot['end_time']))
+                    ): ?>
+                        <form class="lot-item__form <?= isset($errors)
+                            ? 'form--invalid' : false; ?>" action=""
                               method="post" autocomplete="off">
-                            <p class="lot-item__form-item form__item <?= isset($errors['bet']) ? 'form__item--invalid' : false; ?>">
+                            <p class="lot-item__form-item form__item <?= isset($errors['bet'])
+                                ? 'form__item--invalid' : false; ?>">
                                 <label for="cost">Ваша ставка</label>
-                                <input id="cost" type="text" name="bet[amount]" maxlength="5" placeholder="12 000"
-                                       value="<?= $_POST['bet']['amount'] ?? false; ?>">
-                                <span class="form__error"><?= $errors['bet'] ?? null; ?></span>
+                                <input id="cost" type="text" name="bet[amount]"
+                                       maxlength="5" placeholder="12 000"
+                                       value="<?= $_POST['bet']['amount'] ??
+                                       false; ?>">
+                                <span class="form__error"><?= $errors['bet'] ??
+                                    null; ?></span>
                             </p>
-                            <button type="submit" class="button">Сделать ставку</button>
+                            <button type="submit" class="button">Сделать
+                                ставку
+                            </button>
                         </form>
                     <?php endif; ?>
                 </div>
@@ -53,7 +66,8 @@
                             <?php foreach ($bets as $bet): ?>
                                 <tr class="history__item">
                                     <td class="history__name"><?= $bet['user_name']; ?></td>
-                                    <td class="history__price"><?= price_format(intval($bet['amount']), true); ?></td>
+                                    <td class="history__price"><?= price_format(intval($bet['amount']),
+                                            true); ?></td>
                                     <td class="history__time"><?= get_bet_time($bet['create_time']); ?></td>
                                 </tr>
                             <?php endforeach; ?>

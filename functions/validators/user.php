@@ -81,7 +81,8 @@ function validate_avatar(array $avatar): ?string
         if ($file_type === 'image/jpeg' || $file_type === 'image/png') {
             return null;
         } else {
-            return $error = 'Неверный формат изображения. Допустимые форматы JPEG и PNG';
+            return $error
+                = 'Неверный формат изображения. Допустимые форматы JPEG и PNG';
         }
     }
 
@@ -114,7 +115,11 @@ function validate_user_contact(string $contact): ?string
  *
  * @return array|null Массив ошибок
  */
-function validate_user_form(mysqli $connection, array $user_data, array $avatar): ?array
+function validate_user_form(
+    mysqli $connection,
+    array $user_data,
+    array $avatar
+): ?array
 {
     $errors = [];
 
@@ -185,7 +190,7 @@ function validate_auth_password(string $password): ?string
 /**
  * Валидация формы авторизации
  *
- * @param       array $user массив данных пользователя
+ * @param       array  $user     массив данных пользователя
  * @param       string $password пароль пользователя
  *
  * @return array|null Массив ошибок

@@ -10,19 +10,23 @@
     </nav>
     <div class="container">
         <section class="lots">
-            <h2>Результаты поиска по запросу «<span><?= $_GET['search'] ?? ''; ?></span>»</h2>
+            <h2>Результаты поиска по запросу «<span><?= $_GET['search'] ??
+                    ''; ?></span>»</h2>
             <?php if (isset($lots)): ?>
                 <ul class="lots__list">
                     <?php foreach ($lots as $lot): ?>
                         <li class="lots__item lot">
                             <div class="lot__image">
-                                <img src="<?= $lot['image'] ?? null; ?>" width="350" height="260"
+                                <img src="<?= $lot['image'] ?? null; ?>"
+                                     width="350" height="260"
                                      alt="<?= $lot['name'] ?? null; ?>">
                             </div>
                             <div class="lot__info">
-                                <span class="lot__category"><?= $lot['category'] ?? null; ?></span>
+                                <span class="lot__category"><?= $lot['category']
+                                    ?? null; ?></span>
                                 <h3 class="lot__title"><a class="text-link"
-                                                          href="lot.php?id=<?= $lot['id'] ?>"><?= $lot['name'] ?? null; ?></a>
+                                                          href="lot.php?id=<?= $lot['id'] ?>"><?= $lot['name']
+                                        ?? null; ?></a>
                                 </h3>
                                 <div class="lot__state">
                                     <div class="lot__rate">
@@ -48,9 +52,12 @@
                     <a href="search.php?search=<?= $pagination['search'] ?>&page=<?= $pagination['prev_page']; ?>">Назад</a>
                 </li>
                 <?php foreach ($pagination['pages'] as $page): ?>
-                    <li class="pagination-item <?php if ($page == $pagination['current_page']) {
+                    <li class="pagination-item <?php if ($page
+                        == $pagination['current_page']
+                    ) {
                         echo 'pagination-item-active';
-                    } ?>"><a href="search.php?search=<?= $pagination['search'] ?>&page=<?= $page; ?>"><?= $page; ?></a>
+                    } ?>">
+                        <a href="search.php?search=<?= $pagination['search'] ?>&page=<?= $page; ?>"><?= $page; ?></a>
                     </li>
                 <?php endforeach; ?>
                 <li class="pagination-item pagination-item-next">

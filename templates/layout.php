@@ -14,14 +14,19 @@
         <div class="main-header__container container">
             <h1 class="visually-hidden">YetiCave</h1>
             <a href="/" class="main-header__logo">
-                <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
+                <img src="../img/logo.svg" width="160" height="39"
+                     alt="Логотип компании YetiCave">
             </a>
-            <form class="main-header__search" method="get" action="search.php" autocomplete="off">
-                <input type="search" name="search" placeholder="Поиск лота" value="<?= $_GET['search'] ?? null; ?>">
-                <input class="main-header__search-btn" type="submit" value="Найти">
+            <form class="main-header__search" method="get" action="search.php"
+                  autocomplete="off">
+                <input type="search" name="search" placeholder="Поиск лота"
+                       value="<?= $_GET['search'] ?? null; ?>">
+                <input class="main-header__search-btn" type="submit"
+                       value="Найти">
             </form>
             <?php if ($user): ?>
-                <a class="main-header__add-lot button" href="/add-lot.php">Добавить лот</a>
+                <a class="main-header__add-lot button" href="/add-lot.php">Добавить
+                    лот</a>
             <?php endif; ?>
             <nav class="user-menu">
                 <?php if ($user): ?>
@@ -29,7 +34,8 @@
                         <p><?= $user['name']; ?></p>
                         <a class="user-menu__bets" href="/my-bets.php">Мои
                             ставки</a>
-                        <a class="user-menu__logout" href="/logout.php">Выход</a>
+                        <a class="user-menu__logout"
+                           href="/logout.php">Выход</a>
                     </div>
                 <?php else: ?>
                     <ul class="user-menu__list">
@@ -111,7 +117,8 @@
             </a>
         </div>
         <?php if ($user): ?>
-            <a class="main-footer__add-lot button" href="/add-lot.php">Добавить лот</a>
+            <a class="main-footer__add-lot button" href="/add-lot.php">Добавить
+                лот</a>
         <?php endif; ?>
         <div class="main-footer__developed-by">
             <span class="visually-hidden">Разработано:</span>

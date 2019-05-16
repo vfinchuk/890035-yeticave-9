@@ -6,7 +6,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
-if(!file_exists('config.php')) {
+if (!file_exists('config.php')) {
     die('Создайте и сконфигурируйте файл config.php на основе файла config.sample.php');
 }
 
@@ -15,6 +15,7 @@ $config = require_once(__DIR__ . '/config.php');
 /* Get site timezone */
 date_default_timezone_set($config['timezone']);
 
+require_once(__DIR__ . '/vendor/autoload.php');
 
 require_once(__DIR__ . '/functions/db/db.php');
 require_once(__DIR__ . '/functions/db/category.php');

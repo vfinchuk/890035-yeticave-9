@@ -44,7 +44,7 @@ function validate_lot_name(string $name): ?string
  * Проверяет <select> категории на наличие идентификатора
  *
  * @param       mysqli $connection Ресурс соединения
- * @param       int $category Идентификатор категории
+ * @param       int    $category   Идентификатор категории
  *
  * @return string|null Текст ошибки
  */
@@ -101,7 +101,8 @@ function validate_lot_image(array $image): ?string
     if ($file_type === 'image/jpeg' || $file_type === 'image/png') {
         return null;
     } else {
-        return $error = 'Неверный формат изображения. Допустимые форматы JPEG и PNG';
+        return $error
+            = 'Неверный формат изображения. Допустимые форматы JPEG и PNG';
     }
 }
 
@@ -179,19 +180,25 @@ function validate_lot_end_time(string $end_time): ?string
  * Валидация формы на добавление нового лота
  *
  * @param       mysqli $connection Ресурс соединения
- * @param       array $lot_data массив данных из формы
- * @param       array $lot_image массив данных изображения лота
+ * @param       array  $lot_data   массив данных из формы
+ * @param       array  $lot_image  массив данных изображения лота
  *
  * @return array|null Массив ошибок
  */
-function validate_lot_form(mysqli $connection, array $lot_data, array $lot_image): ?array
+function validate_lot_form(
+    mysqli $connection,
+    array $lot_data,
+    array $lot_image
+): ?array
 {
     $errors = [];
 
     if ($error = validate_lot_name($lot_data['name'])) {
         $errors['name'] = $error;
     }
-    if ($error = validate_lot_category($connection, intval($lot_data['category']))) {
+    if ($error = validate_lot_category($connection,
+        intval($lot_data['category']))
+    ) {
         $errors['category'] = $error;
     }
     if ($error = validate_lot_content($lot_data['content'])) {
