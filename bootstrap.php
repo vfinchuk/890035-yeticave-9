@@ -15,6 +15,10 @@ $config = require_once(__DIR__ . '/config.php');
 /* Get site timezone */
 date_default_timezone_set($config['timezone']);
 
+if (!file_exists('vendor/autoload.php')) {
+    die(' Установите composer в корневую директорию сайта');
+}
+
 require_once(__DIR__ . '/vendor/autoload.php');
 
 require_once(__DIR__ . '/functions/db/db.php');
