@@ -48,7 +48,8 @@ function get_lot(mysqli $connection, int $id): ?array
  */
 function count_lots_by_category(mysqli $connection, int $id): ?int
 {
-    $sql = "SELECT COUNT(*) AS count FROM lots l
+    $sql
+        = "SELECT COUNT(*) AS count FROM lots l
               WHERE l.category_id = ?";
     $count = db_fetch_data($connection, $sql, ['category_id' => $id], true);
 
@@ -63,7 +64,12 @@ function count_lots_by_category(mysqli $connection, int $id): ?int
  *
  * @return array|null Массив лотов
  */
-function get_lots_by_category_per_page(mysqli $connection, int $id, $limit, $offset): ?array
+function get_lots_by_category_per_page(
+    mysqli $connection,
+    int $id,
+    $limit,
+    $offset
+): ?array
 {
     $sql
         = "SELECT l.id, l.name, end_time, start_price, content, image, c.name AS category_name
@@ -71,10 +77,10 @@ function get_lots_by_category_per_page(mysqli $connection, int $id, $limit, $off
                 LEFT JOIN categories c ON l.category_id = c.id
                 WHERE c.id = ? LIMIT ? OFFSET ?";
     $lots = db_fetch_data($connection, $sql, [
-        'id' => $id,
-        'LIMIT' => $limit,
+        'id'     => $id,
+        'LIMIT'  => $limit,
         'OFFSET' => $offset
-        ]);
+    ]);
 
     return $lots;
 }
@@ -83,7 +89,7 @@ function get_lots_by_category_per_page(mysqli $connection, int $id, $limit, $off
  * Добавляет новый лот в БД
  *
  * @param       mysqli $connection Ресурс соединения
- * @param       array $lot_data Данные нового лота
+ * @param       array  $lot_data   Данные нового лота
  *
  * @return integer|null Идетификатор нового лота
  */
@@ -93,14 +99,14 @@ function insert_lot(mysqli $connection, array $lot_data): ?int
         = "INSERT INTO lots (user_id, category_id, end_time, name, content, start_price, step_rate, image) VALUE (?, ?, ?, ?, ?, ?, ?, ?);";
 
     $add_lot = db_insert_data($connection, $sql, [
-        'user_id' => $lot_data['user_id'],
+        'user_id'     => $lot_data['user_id'],
         'category_id' => $lot_data['category'],
-        'end_time' => $lot_data['end-time'],
-        'name' => $lot_data['name'],
-        'content' => $lot_data['content'],
+        'end_time'    => $lot_data['end-time'],
+        'name'        => $lot_data['name'],
+        'content'     => $lot_data['content'],
         'start_price' => $lot_data['start-price'],
-        'step_rate' => $lot_data['step-rate'],
-        'image' => $lot_data['lot-image'],
+        'step_rate'   => $lot_data['step-rate'],
+        'image'       => $lot_data['lot-image'],
     ]);
 
     return $add_lot;
@@ -207,12 +213,12 @@ function get_search_lots_by_page(
 }
 
 /**
- * Количество лотов соответствующее поисковому запросу
+ * бновляет победителя лота
  *
  * @param       mysqli $connection Ресурс соединения
- * @param       string $search     Строка с поисковым запросом
+ * @param       array  $winner     Данные победителя
  *
- * @return int|null Количество лотов
+ * @return int|null 
  */
 function set_lot_winner(mysqli $connection, array $winner): ?int
 {
@@ -220,7 +226,7 @@ function set_lot_winner(mysqli $connection, array $winner): ?int
 
     $add_winner = db_insert_data($connection, $sql, [
         'winner_id' => $winner['user_winner'],
-        'id'  => $winner['lot_id'],
+        'id'        => $winner['lot_id'],
     ]);
 
     return $add_winner;
