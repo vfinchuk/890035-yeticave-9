@@ -9,7 +9,7 @@
 function get_lots(mysqli $connection): ?array
 {
     $sql
-        = "SELECT l.id, end_time, l.name, start_price, image, c.name AS category_name
+        = "SELECT l.id, end_time, l.name, l.winner_id, start_price, image, c.name AS category_name
                 FROM lots l
                 JOIN categories c ON l.category_id = c.id
                 ORDER BY l.create_time DESC";
@@ -204,4 +204,24 @@ function get_search_lots_by_page(
     );
 
     return $find;
+}
+
+/**
+ * Количество лотов соответствующее поисковому запросу
+ *
+ * @param       mysqli $connection Ресурс соединения
+ * @param       string $search     Строка с поисковым запросом
+ *
+ * @return int|null Количество лотов
+ */
+function set_lot_winner(mysqli $connection, array $winner): ?int
+{
+    $sql = "UPDATE lots SET winner_id = ? WHERE id = ?";
+
+    $add_winner = db_insert_data($connection, $sql, [
+        'winner_id' => $winner['user_winner'],
+        'id'  => $winner['lot_id'],
+    ]);
+
+    return $add_winner;
 }

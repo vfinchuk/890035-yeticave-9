@@ -14,6 +14,9 @@ $recipients = [];
 if (!empty($winners)) {
 
     foreach ($winners as $winner) {
+
+        $set_winner = set_lot_winner($connection, $winner);
+
         $recipients[$winner['email']] = $winner['name'];
     }
 

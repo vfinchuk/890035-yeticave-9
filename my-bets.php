@@ -7,6 +7,7 @@ $categories = get_categories($connection);
 $lots = get_lots($connection);
 
 $my_bets = get_user_bets($connection, intval($user['id']));
+
 if (!$user) {
     header('Location: login.php');
     exit();
@@ -14,7 +15,8 @@ if (!$user) {
 
 $content = include_template('my-bets.php', [
     'categories' => $categories,
-    'my_bets'    => $my_bets
+    'my_bets'    => $my_bets,
+    'user'       => $user,
 ]);
 
 $layout = include_template('layout.php', [
@@ -23,5 +25,6 @@ $layout = include_template('layout.php', [
     'content'    => $content,
     'user'       => $user,
 ]);
+
 
 print $layout;

@@ -31,10 +31,11 @@ function get_bets_by_lot(mysqli $connection, int $lot_id): ?array
 function get_user_bets(mysqli $connection, int $user_id): ?array
 {
     $sql
-        = "SELECT l.id AS lot_id, l.name AS lot_name, image, end_time, c.name AS category_name, b.amount AS bet_amount, b.create_time
+        = "SELECT l.id AS lot_id, l.name AS lot_name, l.winner_id, u.contact, image, end_time, c.name AS category_name, b.amount AS bet_amount, b.create_time
                 FROM lots l
                 LEFT JOIN categories c ON l.category_id = c.id
                 LEFT JOIN bets b ON l.id = b.lot_id
+                LEFT JOIN users u ON u.id = b.user_id
                 WHERE b.user_id = ?
                 ORDER BY b.create_time DESC";
     $bets = db_fetch_data($connection, $sql, ['user_id' => $user_id]);
