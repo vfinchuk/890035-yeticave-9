@@ -40,6 +40,7 @@ CREATE TABLE lots (
   image         VARCHAR(128) NOT NULL,
   start_price   INT NOT NULL,
   step_rate     INT NOT NULL
+  winner_id     INT UNSIGNED,
 );
 
 ALTER TABLE lots

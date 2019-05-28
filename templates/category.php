@@ -46,7 +46,7 @@
                     <?php endforeach; ?>
                 </ul>
             <?php else: ?>
-                <p>Еще никто не добавил лоты в категорию</p>
+                <p>Пока что еще нет лотов в этой категории</p>
             <?php endif; ?>
         </section>
         <?php if ($pagination && ($pagination['pages_count'] > 1)): ?>
@@ -55,9 +55,7 @@
                     <a href="category.php?id=<?= $pagination['category_id']; ?>&page=<?= $pagination['prev_page']; ?>">Назад</a>
                 </li>
                 <?php foreach ($pagination['pages'] as $page): ?>
-                    <li class="pagination-item <?php if ($page
-                        == $pagination['current_page']
-                    ) {
+                    <li class="pagination-item <?php if ($page == $pagination['current_page']) {
                         echo 'pagination-item-active';
                     } ?>">
                         <a href="category.php?id=<?= $pagination['category_id']; ?>&page=<?= $page; ?>"><?= $page; ?></a>

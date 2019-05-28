@@ -44,7 +44,7 @@ function get_lot(mysqli $connection, int $id): ?array
  * @param       mysqli $connection Ресурс соединения
  * @param       int    $id         идентификатор категории
  *
- * @return integer|null Массив лотов
+ * @return integer|null Количество лотов в категории
  */
 function count_lots_by_category(mysqli $connection, int $id): ?int
 {
