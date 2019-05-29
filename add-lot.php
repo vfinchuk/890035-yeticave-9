@@ -8,7 +8,7 @@ if (!$user) {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $lot_data = $_POST['lot'] ?? null;
     $lot_image = $_FILES['lot-image'] ?? null;

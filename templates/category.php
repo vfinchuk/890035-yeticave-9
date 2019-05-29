@@ -3,9 +3,7 @@
     <nav class="nav">
         <ul class="nav__list container">
             <?php foreach ($categories as $category): ?>
-                <li class="nav__item <?php if ($current_category['id']
-                    === $category['id']
-                ): ?>nav__item--current<?php endif; ?>">
+                <li class="nav__item <?php if ($current_category['id'] === $category['id']): ?>nav__item--current<?php endif; ?>">
                     <a href="/category.php?id=<?= $category['id']; ?>"><?= $category['name']; ?></a>
                 </li>
             <?php endforeach; ?>
@@ -55,7 +53,7 @@
                     <a href="category.php?id=<?= $pagination['category_id']; ?>&page=<?= $pagination['prev_page']; ?>">Назад</a>
                 </li>
                 <?php foreach ($pagination['pages'] as $page): ?>
-                    <li class="pagination-item <?php if ($page == $pagination['current_page']) {
+                    <li class="pagination-item <?php if ($page === $pagination['current_page']) {
                         echo 'pagination-item-active';
                     } ?>">
                         <a href="category.php?id=<?= $pagination['category_id']; ?>&page=<?= $page; ?>"><?= $page; ?></a>

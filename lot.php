@@ -16,7 +16,7 @@ if ($lot) {
 
     $lot['price'] = get_lot_price($connection, $lot);
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $bet_data = $_POST['bet'] ?? null;
         if (!$bet_data) {
@@ -30,7 +30,7 @@ if ($lot) {
 
         /* проверка на повторную ставку */
         if (count($bets)) {
-            if ($bets[0]['user_id'] == $user['id']) {
+            if ($bets[0]['user_id'] === $user['id']) {
                 $errors['bet'] = 'Ваша ставка является последней';
             }
         }

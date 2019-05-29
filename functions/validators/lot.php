@@ -100,10 +100,9 @@ function validate_lot_image(array $image): ?string
 
     if ($file_type === 'image/jpeg' || $file_type === 'image/png') {
         return null;
-    } else {
-        return $error
-            = 'Неверный формат изображения. Допустимые форматы JPEG и PNG';
     }
+
+    return $error = 'Неверный формат изображения. Допустимые форматы JPEG и PNG';
 }
 
 /**

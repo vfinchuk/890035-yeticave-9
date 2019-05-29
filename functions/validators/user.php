@@ -80,10 +80,9 @@ function validate_avatar(array $avatar): ?string
 
         if ($file_type === 'image/jpeg' || $file_type === 'image/png') {
             return null;
-        } else {
-            return $error
-                = 'Неверный формат изображения. Допустимые форматы JPEG и PNG';
         }
+
+        return $error = 'Неверный формат изображения. Допустимые форматы JPEG и PNG';
     }
 
     return null;

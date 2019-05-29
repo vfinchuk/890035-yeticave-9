@@ -14,7 +14,7 @@
             <?php
             if ($my_bets):
                 foreach ($my_bets as $my_bet):
-                    if($user['id'] == $my_bet['winner_id']){
+                    if($user['id'] === $my_bet['winner_id']){
                         $class_lot_item = 'rates__item--win';
                     } else {
                         $class_lot_item = 'rates__item--end';
@@ -28,7 +28,7 @@
                             </div>
                             <div>
                                 <h3 class="rates__title"><a href="/lot.php?id=<?= $my_bet['lot_id']; ?>"><?= $my_bet['lot_name']; ?></a></h3>
-                                <?php if($user['id'] == $my_bet['winner_id']): ?>
+                                <?php if($user['id'] === $my_bet['winner_id']): ?>
                                     <p><?= $my_bet['contact']; ?></p>
                                 <?php endif; ?>
                             </div>
@@ -36,7 +36,7 @@
                         <td class="rates__category"><?= $my_bet['category_name']; ?></td>
                         <td class="rates__timer">
                             <?php if (is_lot_end($my_bet['end_time'])): ?>
-                                <?php if($user['id'] == $my_bet['winner_id']): ?>
+                                <?php if($user['id'] === $my_bet['winner_id']): ?>
                                     <div class="timer timer--win">Ставка выиграла</div>
                                    <?php else: ?>
                                     <div class="timer timer--end">Торги окончены</div>

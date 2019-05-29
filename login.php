@@ -9,7 +9,7 @@ if ($user) {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $auth_data = $_POST['auth'] ?? null;
     if (!$auth_data) {

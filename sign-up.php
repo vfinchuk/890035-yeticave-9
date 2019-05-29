@@ -4,7 +4,7 @@ include_once(__DIR__ . '/bootstrap.php');
 $title = 'Yeticave - форма регистрации нового пользователя';
 $categories = get_categories($connection);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $user_data = $_POST['user'] ?? null;
     $avatar = $_FILES['avatar'] ?? null;

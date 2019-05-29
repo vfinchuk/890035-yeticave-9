@@ -33,25 +33,19 @@
                         </div>
                         <div class="lot-item__min-cost">
                             Мин. ставка
-                            <span><?= price_format(intval($lot['step_rate']),
-                                    true); ?></span>
+                            <span><?= price_format(intval($lot['step_rate']), true); ?></span>
                         </div>
                     </div>
                     <?php if (($user && ($lot['user_id'] !== $user['id']))
                         && (!is_lot_end($lot['end_time']))
                     ): ?>
-                        <form class="lot-item__form <?= isset($errors)
-                            ? 'form--invalid' : false; ?>" action=""
+                        <form class="lot-item__form <?= isset($errors) ? 'form--invalid' : false; ?>" action=""
                               method="post" autocomplete="off">
-                            <p class="lot-item__form-item form__item <?= isset($errors['bet'])
-                                ? 'form__item--invalid' : false; ?>">
+                            <p class="lot-item__form-item form__item <?= isset($errors['bet']) ? 'form__item--invalid' : false; ?>">
                                 <label for="cost">Ваша ставка</label>
-                                <input id="cost" type="text" name="bet[amount]"
-                                       maxlength="5" placeholder="12 000"
-                                       value="<?= $_POST['bet']['amount'] ??
-                                       false; ?>">
-                                <span class="form__error"><?= $errors['bet'] ??
-                                    null; ?></span>
+                                <input id="cost" type="text" name="bet[amount]" placeholder="12 000"
+                                       value="<?= $_POST['bet']['amount'] ?? false; ?>">
+                                <span class="form__error"><?= $errors['bet'] ?? null; ?></span>
                             </p>
                             <button type="submit" class="button">Сделать
                                 ставку

@@ -218,7 +218,7 @@ function get_search_lots_by_page(
  * @param       mysqli $connection Ресурс соединения
  * @param       array  $winner     Данные победителя
  *
- * @return int|null 
+ * @return int|null
  */
 function set_lot_winner(mysqli $connection, array $winner): ?int
 {

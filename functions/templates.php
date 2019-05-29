@@ -167,27 +167,27 @@ function get_bet_time(string $create_time)
     $mins_form = get_noun_plural_form($mins, 'минута', 'минуты', 'минут');
     $secs_form = get_noun_plural_form($secs, 'секунда', 'секунды', 'секунд');
 
-    if ($year == 1) {
+    if ($year === 1) {
         $result = $year_form;
     } elseif ($year > 1) {
         $result = $year . ' ' . $year_form;
-    } elseif ($months == 1) {
+    } elseif ($months === 1) {
         $result = $month_form;
     } elseif ($months > 1) {
         $result = $months . ' ' . $month_form;
-    } elseif ($day == 1) {
+    } elseif ($day === 1) {
         $result = $day_form;
     } elseif ($day > 1) {
         $result = $day . ' ' . $day_form;
-    } elseif ($hours == 1) {
+    } elseif ($hours === 1) {
         $result = $hours_form;
     } elseif ($hours > 1) {
         $result = $hours . ' ' . $hours_form;
-    } elseif ($mins == 1) {
+    } elseif ($mins === 1) {
         $result = $mins_form;
     } elseif ($mins > 1) {
         $result = $mins . ' ' . $mins_form;
-    } elseif ($secs == 1) {
+    } elseif ($secs === 1) {
         $result = $secs_form;
     } elseif ($secs > 1) {
         $result = $secs . ' ' . $secs_form;
