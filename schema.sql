@@ -39,8 +39,8 @@ CREATE TABLE lots (
   content       VARCHAR(1024) NOT NULL,
   image         VARCHAR(128) NOT NULL,
   start_price   INT NOT NULL,
-  step_rate     INT NOT NULL
-  winner_id     INT UNSIGNED,
+  step_rate     INT NOT NULL,
+  winner_id     INT UNSIGNED
 );
 
 ALTER TABLE lots

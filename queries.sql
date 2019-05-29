@@ -15,9 +15,9 @@ INSERT INTO categories (name, code)
 
  /* Добавление новых пользователей */
 INSERT INTO users (email, name, password, contact)
-    VALUE ('andrey123@gmail.com', 'Андрей Иванов', 'qwerty12345', 'Kiev, Ukraine'),
-          ('dima777@mail.ru', 'Дмитрий Сидоров', '123456789', 'Москва, Центральная 47, кв7'),
-          ('nataly@ukr.net', 'Наталья Смирнова', 'nata12345', 'Броварской проспект 34, кв123');
+    VALUE ('vova192@ukr.net', 'Андрей Иванов', '$2y$10$eBsAuMfx42kuY7SkcpUGee8Xk.I6GJIP8K5eD/G1gPHIVyms1f5Dy', 'Kiev, Ukraine'),
+          ('vanter777@gmail.com', 'Дмитрий Сидоров', '$2y$10$eBsAuMfx42kuY7SkcpUGee8Xk.I6GJIP8K5eD/G1gPHIVyms1f5Dy', 'Москва, Центральная 47, кв7'),
+          ('a@gmail.com', 'Наталья Смирнова', '$2y$10$eBsAuMfx42kuY7SkcpUGee8Xk.I6GJIP8K5eD/G1gPHIVyms1f5Dy', 'Броварской проспект 34, кв123');
 
  /* Добавление новых лотов */
 INSERT INTO lots (user_id, category_id, end_time, name, content, image, start_price, step_rate)
