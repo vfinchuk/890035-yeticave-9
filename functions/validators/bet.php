@@ -26,10 +26,6 @@ function validate_bet_form(array $lot_data, string $amount): ?array
                     'рубль', 'рубля', 'рублей');
             }
 
-            if($amount > 99999) {
-                $errors['bet'] = 'Максимальнодопустимое значение ставки не должно привышать 99999 рублей';
-            }
-
         }
     }
 

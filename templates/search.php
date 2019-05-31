@@ -52,8 +52,7 @@
                     <a href="search.php?search=<?= $pagination['search'] ?>&page=<?= $pagination['prev_page']; ?>">Назад</a>
                 </li>
                 <?php foreach ($pagination['pages'] as $page): ?>
-                    <li class="pagination-item <?php if ($page
-                        == $pagination['current_page']
+                    <li class="pagination-item <?php if ($page === $pagination['current_page']
                     ) {
                         echo 'pagination-item-active';
                     } ?>">

@@ -6,7 +6,7 @@ $title = 'Yeticave - страница поиска';
 $categories = get_categories($connection);
 $lots = null;
 $pagination = null;
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $search = $_GET['search'] ?? '';
 
